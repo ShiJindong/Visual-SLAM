@@ -1,0 +1,30 @@
+[CMake]
+Build Directory Count=1
+Current Build Directory Index-Host System=0
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=/home/jindong/projects/Geometry_Exercise/build
+Build Type=Debug
+CMake Binary=/usr/local/bin/cmake
+CMake Executable=/usr/local/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
+Runtime=Host System
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=debug
+Configured Launchers=gdb
+Name=geometry_exercise
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Project Target=Geometry_Exercise,geometry_exercise
+Working Directory=file:///home/jindong/projects/Geometry_Exercise/build/
+isExecutable=false
+
+[Project]
+VersionControlSupport=

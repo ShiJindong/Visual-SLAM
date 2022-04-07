@@ -1,0 +1,5 @@
+从零开始一起学习SLAM | 理解图优化，一步步带你看懂g2o代码
+https://zhuanlan.zhihu.com/p/55133492
+
+g2o的结构
+https://www.cnblogs.com/gaoxiang12/p/5304272.html

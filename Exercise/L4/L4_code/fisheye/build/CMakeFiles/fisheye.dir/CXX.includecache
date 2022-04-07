@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jindong/SLAM/Chap4/L4_code/fisheye/fisheye.cpp
+opencv2/opencv.hpp
+-
+cmath
+-
+

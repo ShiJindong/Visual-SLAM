@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/jindong/SLAM/Chap7/L7_code/BA_in_large/build",
+  "command": "/usr/bin/c++   -I/usr/local/include/eigen3 -I/usr/include/suitesparse -isystem /usr/local/include/opencv  -O3 -O3 -DNDEBUG   -std=gnu++17 -o CMakeFiles/BA_in_large.dir/BA_in_large.cpp.o -c /home/jindong/SLAM/Chap7/L7_code/BA_in_large/BA_in_large.cpp",
+  "file": "/home/jindong/SLAM/Chap7/L7_code/BA_in_large/BA_in_large.cpp"
+}
+]

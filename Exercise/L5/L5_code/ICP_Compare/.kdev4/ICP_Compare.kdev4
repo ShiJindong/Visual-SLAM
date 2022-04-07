@@ -1,0 +1,31 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x16\x00I\x00C\x00P\x00_\x00C\x00o\x00m\x00p\x00a\x00r\x00e)
+
+[CMake]
+Build Directory Count=1
+Current Build Directory Index-Host System=0
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=/home/jindong/SLAM/Chap5/L5_code/ICP_Compare/build
+Build Type=Debug
+CMake Binary=/usr/local/bin/cmake
+CMake Executable=/usr/local/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
+Runtime=Host System
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=ICP_Compare
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Configured from ProjectItem=ICP_Compare,ICP_Compare
+Project Target=ICP_Compare,ICP_Compare
+Working Directory=file:///home/jindong/SLAM/Chap5/L5_code/ICP_Compare/build/
+isExecutable=false

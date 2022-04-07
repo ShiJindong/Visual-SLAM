@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jindong/SLAM/Chap1/CMake_Exercise/test_folder/useHello.cpp
+hello.h
+/home/jindong/SLAM/Chap1/CMake_Exercise/test_folder/hello.h
+

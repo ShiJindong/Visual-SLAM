@@ -1,0 +1,31 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\n\x00G\x00N\x00_\x00B\x00A)
+
+[CMake]
+Build Directory Count=1
+Current Build Directory Index-Host System=0
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=/home/jindong/SLAM/Chap5/L5_code/GN_BA/build
+Build Type=Debug
+CMake Binary=/usr/local/bin/cmake
+CMake Executable=/usr/local/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
+Runtime=Host System
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=GN_BA
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Configured from ProjectItem=GN_BA,GN_BA
+Project Target=GN_BA,GN_BA
+Working Directory=file:///home/jindong/SLAM/Chap5/L5_code/GN_BA/build/
+isExecutable=false

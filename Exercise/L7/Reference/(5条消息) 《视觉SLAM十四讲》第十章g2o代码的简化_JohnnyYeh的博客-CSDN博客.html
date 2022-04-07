@@ -1,0 +1,2099 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <link rel="canonical" href="https://blog.csdn.net/johnnyyeh/article/details/79310655"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="report" content='{"pid": "blog", "spm":"1001.2101"}'>
+    <meta name="referrer" content="always">
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <meta name="applicable-device" content="pc">
+    <link  href="https://g.csdnimg.cn/static/logo/favicon32.ico"  rel="shortcut icon" type="image/x-icon" />
+    <title>《视觉SLAM十四讲》第十章g2o代码的简化_JohnnyYeh的博客-CSDN博客</title>
+    <script>
+      (function(){ 
+        var el = document.createElement("script"); 
+        el.src = "https://s3a.pstatp.com/toutiao/push.js?1abfa13dfe74d72d41d83c86d240de427e7cac50c51ead53b2e79d40c7952a23ed7716d05b4a0f683a653eab3e214672511de2457e74e99286eb2c33f4428830"; 
+        el.id = "ttzz"; 
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(el, s);
+      })(window)
+    </script>
+        <meta name="keywords" content="《视觉SLAM十四讲》第十章g2o代码的简化">
+        <meta name="csdn-baidu-search"  content='{"autorun":true,"install":true,"keyword":"《视觉SLAM十四讲》第十章g2o代码的简化"}'>
+    <meta name="description" content="       在学习SLAM过程中，第十章的解决大规模BA问题的g2o代码比较难读懂，不太适合我这种slam小白，于是我写了一个简化的版本，不过基本是参考书上的代码写的，尽最大的可能写的简单一些，同时也是在学习g2o的用法。数据集可以在这里下载：http://grail.cs.washington.edu/projects/bal/ 文件会出现这种格式：前三行为旋转向量，四五六行为平移向...">
+    <script src="//g.csdnimg.cn/tingyun/1.8.5/blog.js" type='text/javascript'></script>
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-58f5fbcf9b.min.css">
+    <script type="application/ld+json">{"@context":"https://ziyuan.baidu.com/contexts/cambrian.jsonld","@id":"https://blog.csdn.net/johnnyyeh/article/details/79310655","appid":"1638831770136827","pubDate":"2018-02-11T14:47:36","title":"《视觉SLAM十四讲》第十章g2o代码的简化_JohnnyYeh的博客-CSDN博客","upDate":"2018-02-11T14:47:36"}</script>
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-blackboard/skin-blackboard-3adcc2c475.min.css">
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var isCorporate = false;//注释删除enterprise
+        var username =  "JohnnyYeh";
+        var skinImg = "white";
+        var blog_address = "https://blog.csdn.net/JohnnyYeh";
+        var currentUserName = "weixin_46326425";
+        var isOwner = false;
+        var loginUrl = "http://passport.csdn.net/account/login?from=https://blog.csdn.net/johnnyyeh/article/details/79310655";
+        var blogUrl = "https://blog.csdn.net/";
+        var avatar = "https://profile.csdnimg.cn/8/1/8/3_johnnyyeh";
+        var articleTitle = "《视觉SLAM十四讲》第十章g2o代码的简化";
+        var articleDesc = "       在学习SLAM过程中，第十章的解决大规模BA问题的g2o代码比较难读懂，不太适合我这种slam小白，于是我写了一个简化的版本，不过基本是参考书上的代码写的，尽最大的可能写的简单一些，同时也是在学习g2o的用法。数据集可以在这里下载：http://grail.cs.washington.edu/projects/bal/ 文件会出现这种格式：前三行为旋转向量，四五六行为平移向...";
+        var articleTitles = "《视觉SLAM十四讲》第十章g2o代码的简化_JohnnyYeh的博客-CSDN博客";
+        var nickName = "JohnnyYeh";
+        var articleDetailUrl = "https://blog.csdn.net/JohnnyYeh/article/details/79310655";
+        if(window.location.host.split('.').length == 3) {
+            blog_address = blogUrl + username;
+        }
+        var skinStatus = "White";
+        var blogStaticHost = "https://csdnimg.cn/release/blogv2/"
+    </script>
+    <script src="https://g.csdnimg.cn/??fixed-sidebar/1.1.6/fixed-sidebar.js" type="text/javascript"></script>
+    <script src='//g.csdnimg.cn/common/csdn-report/report.js' type='text/javascript'></script>
+    <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+    <script src="https://dup.baidustatic.com/js/ds.js"></script>
+</head>
+<body class="nodata " style="">
+        <script>
+            var toolbarSearchExt = '{"landingWord":[],"queryWord":"","tag":["视觉Slam","g2o","Bundle Adjustment in Large"],"title":"《视觉SLAM十四讲》第十章g2o代码的简化"}';
+        </script>
+    <script src="https://g.csdnimg.cn/common/csdn-toolbar/csdn-toolbar.js" type="text/javascript"></script>
+    <script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+    </script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css" />
+<div class="main_father clearfix d-flex justify-content-center" style="height:100%;"> 
+    <div class="container clearfix" id="mainBox">
+        <main>
+<script type="text/javascript">
+    function getQueryString(name) {   
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象  
+      var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+      if( r != null ) return decodeURIComponent( r[2] ); return '';   
+    }
+    function stripscript(s){ 
+      var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%]") 
+      var rs = ""; 
+      for (var i = 0; i < s.length; i++) { 
+        rs = rs+s.substr(i, 1).replace(pattern, ''); 
+      } 
+      return rs; 
+    }
+    var blogHotWords = stripscript(getQueryString('utm_term')).length > 1 ? stripscript(getQueryString('utm_term')) : ''
+</script>
+<div class="blog-content-box">
+        <div class="article-header-box">
+        <div class="article-header">
+            <div class="article-title-box">
+                <h1 class="title-article" id="articleContentId">《视觉SLAM十四讲》第十章g2o代码的简化</h1>
+            </div>
+            <div class="article-info-box">
+                <div class="article-bar-top">
+                    <img class="article-type-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/original.png" alt="">
+                    <div class="bar-content">
+                    <a class="follow-nickName " href="https://blog.csdn.net/JohnnyYeh" target="_blank" rel="noopener">JohnnyYeh</a>
+                    <span class="time">2018-02-11 14:47:36</span>
+                    <img class="article-read-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes.png" alt="">
+                    <span class="read-count">2522</span>
+                    <a id="blog_detail_zk_collection" class="un-collection" data-report-click='{"mod":"popu_823","spm":"1001.2101.3001.4232","ab":"new"}'>
+                        <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect.png" alt="">
+                        <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive.png" alt="">
+                        <span class="name">收藏</span>
+                        <span class="get-collection">
+                            14
+                        </span>
+                    </a>
+                    </div>
+                </div>
+                <div class="blog-tags-box">
+                    <div class="tags-box artic-tag-box">
+                            <span class="label">分类专栏：</span>
+                                <a class="tag-link" href="https://blog.csdn.net/johnnyyeh/category_7454859.html" target="_blank" rel="noopener">SLAM</a>
+                            <span class="label">文章标签：</span>
+                                <a data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"视觉Slam","ab":"new"}' class="tag-link" href="https://www.csdn.net/tags/MtTaEg3sMTU2NDktYmxvZwO0O0OO0O0O.html" target="_blank" rel="noopener">视觉Slam</a>
+                                <a data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"g2o","ab":"new"}' class="tag-link" href="https://so.csdn.net/so/search/s.do?q=g2o&amp;t=blog&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=" target="_blank" rel="noopener">g2o</a>
+                                <a data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"Bundle Adjustment in Large","ab":"new"}' class="tag-link" href="https://so.csdn.net/so/search/s.do?q=Bundle Adjustment in Large&amp;t=blog&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=" target="_blank" rel="noopener">Bundle Adjustment in Large</a>
+                    </div>
+                </div>
+                <div class="slide-content-box">
+                    <div class="article-copyright">
+                        <div class="creativecommons">
+                            版权声明：本文为博主原创文章，遵循<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。
+                        </div>
+                        <div class="article-source-link">
+                            本文链接：<a href="https://blog.csdn.net/johnnyyeh/article/details/79310655" target="_blank">https://blog.csdn.net/johnnyyeh/article/details/79310655</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="operating">
+                    <a class="href-article-edit slide-toggle">版权</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div id="blogColumnPayAdvert">
+            <div class="column-group">
+                <div class="column-group-item column-group0 column-group-item-one">
+                    <div class="item-l">
+                        <a class="item-target" href="https://blog.csdn.net/johnnyyeh/category_7454859.html" target="_blank" title="SLAM"
+                        data-report-view='{"spm":"1001.2101.3001.6332"}'
+                        data-report-click='{"spm":"1001.2101.3001.6332"}'>
+                            <img class="item-target" src="https://img-blog.csdnimg.cn/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="">
+                            <span class="title item-target">SLAM</span>
+                        </a>
+                        <span class="dec">专栏收录该内容</span>
+                    </div>
+                    <div class="item-m">
+                        <span>3 篇文章</span>
+                        <span>0 订阅</span>
+                    </div>
+                    <div class="item-r">
+                            <a class="item-target article-column-bt articleColumnFreeBt" data-id="7454859">订阅专栏</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <article class="baidu_pl">
+        <div id="article_content" class="article_content clearfix">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-1a85854398.css">
+                <div id="content_views" class="htmledit_views">
+                    <p><strong>       </strong>在学习SLAM过程中&#xff0c;第十章的解决大规模BA问题的g2o代码比较难读懂&#xff0c;不太适合我这种slam小白&#xff0c;于是我写了一个简化的版本&#xff0c;不过基本是参考书上的代码写的&#xff0c;尽最大的可能写的简单一些&#xff0c;同时也是在学习g2o的用法。数据集可以在这里下载&#xff1a;<a href="http://grail.cs.washington.edu/projects/bal/">http://grail.cs.washington.edu/projects/bal/ </a></p> 
+<p>文件会出现这种格式&#xff1a;</p> 
+<pre class="has"><code>前三行为旋转向量&#xff0c;四五六行为平移向量&#xff0c;剩下为f , k1 , k2
+1.5741515942940262e-02  
+-1.2790936163850642e-02  
+-4.4008498081980789e-03  
+-3.4093839577186584e-02  
+-1.0751387104921525e-01  
+1.1202240291236032e&#43;00  
+3.9975152639358436e&#43;02  
+-3.1770643852803579e-07  
+5.8820490534594022e-13  </code></pre> 
+<p><strong> 代码附上&#xff1a;</strong></p> 
+<pre class="has"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;string&gt;
+#include &lt;Eigen/Core&gt;
+#include &lt;Eigen/Dense&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+
+#include &#34;g2o/core/base_vertex.h&#34;
+#include &#34;g2o/core/base_binary_edge.h&#34;
+
+#include &#34;g2o/stuff/sampler.h&#34;
+#include &#34;g2o/core/sparse_optimizer.h&#34;
+#include &#34;g2o/core/block_solver.h&#34;
+#include &#34;g2o/core/solver.h&#34;
+#include &#34;g2o/core/robust_kernel_impl.h&#34;
+#include &#34;g2o/core/batch_stats.h&#34;
+#include &#34;g2o/core/optimization_algorithm_levenberg.h&#34;
+#include &#34;g2o/core/optimization_algorithm_dogleg.h&#34;
+#include &#34;g2o/solvers/cholmod/linear_solver_cholmod.h&#34;
+#include &#34;g2o/solvers/dense/linear_solver_dense.h&#34;
+#include &#34;g2o/solvers/eigen/linear_solver_eigen.h&#34;
+#include &#34;g2o/solvers/pcg/linear_solver_pcg.h&#34;
+#include &#34;g2o/types/sba/types_six_dof_expmap.h&#34;
+#include &#34;g2o/solvers/structure_only/structure_only_solver.h&#34;
+#include &lt;sophus/se3.h&gt;
+
+
+using namespace Eigen;
+using namespace std;
+using namespace cv;
+using Sophus::SE3;
+using Sophus::SO3;
+
+//定义求解器 pose&#xff1a;九维 路标点&#xff1a;三维
+typedef g2o::BlockSolver&lt;g2o::BlockSolverTraits&lt;9,3&gt; &gt; BalBlockSolver;
+typedef Eigen::Matrix&lt; double, 9, 1 &gt; Vector9d;
+
+
+void World2Camera(const Vector9d camera, const Eigen::Vector3d P_w, Eigen::Vector3d&amp; P_c);
+void SolveBALProblem(const string filename);
+inline void CamProjectionWithDistortion(const Vector9d camera, const Vector3d point, Vector2d&amp; u);
+
+
+//BAL相机顶点
+class VertexCameraBAL : public g2o::BaseVertex&lt;9,Vector9d&gt;
+{
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+    VertexCameraBAL() {}
+    virtual void setToOriginImpl() {}
+
+    virtual void oplusImpl ( const double* update )
+    {
+        Vector9d::ConstMapType v ( update );
+        _estimate &#43;&#61; v;
+    }
+
+    virtual bool read ( std::istream&amp; in ) { return false;}
+    virtual bool write ( std::ostream&amp; out ) const {return false;}
+};
+
+//BAL 空间点顶点
+class VertexPointBAL : public g2o::BaseVertex&lt;3, Eigen::Vector3d&gt;
+{
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+    VertexPointBAL() {}
+    virtual void setToOriginImpl() {}
+
+    virtual void oplusImpl ( const double* update )
+    {
+        Eigen::Vector3d::ConstMapType v ( update );
+        _estimate &#43;&#61; v;
+    }
+
+    virtual bool read ( std::istream&amp; in ) { return false;}
+    virtual bool write ( std::ostream&amp; out ) const {return false;}
+};
+
+//BAL 边
+class EdgeObservationBAL : public g2o::BaseBinaryEdge&lt;2, Eigen::Vector2d,VertexCameraBAL, VertexPointBAL&gt;
+{
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+    EdgeObservationBAL() {}
+
+    virtual bool read ( std::istream&amp; in ) {return false;}
+    virtual bool write ( std::ostream&amp; out ) const {return false;}
+
+    //使用G20数值导,不像书上调用ceres的自动求导功能.
+    virtual void computeError() override
+    {
+        //这里将第0个顶点&#xff0c;相机位姿取出来。
+        const VertexCameraBAL* cam &#61; static_cast&lt;const VertexCameraBAL*&gt; ( vertex ( 0 ) );
+        //这里将第1个顶点&#xff0c;空间点位置取出来。
+        const VertexPointBAL* point &#61; static_cast&lt;const VertexPointBAL*&gt; ( vertex ( 1 ) );
+
+        Eigen::Vector2d u;
+        CamProjectionWithDistortion(cam-&gt;estimate(), point-&gt;estimate(), u );
+        _error[0] &#61; u[0] - _measurement[0];
+        _error[1] &#61; u[1] - _measurement[1];
+
+    }
+};
+
+//加载BAL的文本文件
+class LoadBALProblem
+{
+public:
+    LoadBALProblem( string filename ):filename_(filename) {}
+    ~LoadBALProblem()
+    {
+        delete[] point_index_;
+        delete[] camera_index_;
+        delete[] observations_;
+        delete[] observations_cameras;
+        delete[] observations_points;
+    }
+    //返回相机数量,空间点数量&#xff0c;观测点数量
+    int num_cameras()        const{ return num_cameras_;     }
+    int num_points()         const{ return num_points_;      }
+    int num_observations()   const{ return num_observations_;}
+
+    double num_observations_cameras(int index)   { return observations_cameras[index];}
+    double num_observations_points(int index)   { return observations_points[index];}
+    double num_observations_uv(int index)   { return observations_[index];}
+
+    int point_index(int index)   { return point_index_[index];}
+    int camera_index(int index)   { return camera_index_[index];}
+
+    //读取数据
+    void ReadData();
+    //将pose和point生成点云.
+    void WriteToPLYFile(const std::string&amp; filename);
+    //当优化完成,重新将数据写入数组,覆盖原来未被优化的数据
+    double* ReWritePoses(){return observations_cameras;}
+    double* ReWritePoints(){return observations_points;}
+
+    //坐标系操作,相机坐标转换到世界坐标
+    void Camera2World(const cv::Mat angleAxis, const Eigen::Vector3d P_c, Eigen::Vector3d&amp; P_w);
+
+private:
+    int num_cameras_;
+    int num_points_;
+    int num_observations_;
+    int observations_cameras_;
+    int observations_points_;
+    string filename_;
+
+    int* point_index_;
+    int* camera_index_;
+    double* observations_;
+    double* observations_cameras;
+    double* observations_points;
+};
+
+
+int main(int argc, char** argv)
+{
+
+    const string filename &#61; &#34;../problem-16-22106-pre.txt&#34;;
+    //const string filename &#61; &#34;../problem-52-64053-pre.txt&#34;;
+    SolveBALProblem(filename);
+
+    return 0;
+}
+
+/***
+ * 解决BAL问题
+ * &#64;param filename 将.txt文件传进来,最后将优化的后点云输出
+ */
+void SolveBALProblem(const string filename)
+{
+    //生成初始数据
+    LoadBALProblem loadBALProblem(filename);
+    loadBALProblem.ReadData();
+
+    //生成初始为未被优化的ply点云文件
+    loadBALProblem.WriteToPLYFile(&#34;../old.ply&#34;);
+
+    //创建一个稀疏优化器对象
+    g2o::SparseOptimizer optimizer;
+
+    //使用稀疏求解器
+    g2o::LinearSolver&lt;BalBlockSolver::PoseMatrixType&gt;* linearSolver &#61;
+            new g2o::LinearSolverCholmod&lt;BalBlockSolver::PoseMatrixType&gt;();
+    dynamic_cast&lt;g2o::LinearSolverCholmod&lt;BalBlockSolver::PoseMatrixType&gt;* &gt;(linearSolver)-&gt;setBlockOrdering(true);
+
+    //矩阵块求解器
+    BalBlockSolver* solver_ptr &#61; new BalBlockSolver(linearSolver);
+
+    //使用LM算法
+    g2o::OptimizationAlgorithmLevenberg* solver &#61; new g2o::OptimizationAlgorithmLevenberg(solver_ptr);
+    //优化器构建完成
+    optimizer.setAlgorithm(solver);
+    //打开调试输出
+    optimizer.setVerbose(true);
+
+    //增加pose顶点
+    const int num_cam &#61; loadBALProblem.num_cameras();
+    for(int i &#61; 0; i &lt; num_cam; i&#43;&#43;)
+    {
+        Vector9d temVecCamera;
+        for (int j &#61; 0; j &lt; 9; j&#43;&#43;)
+        {
+            temVecCamera[j] &#61; loadBALProblem.num_observations_cameras(9*i&#43;j);
+        }
+        VertexCameraBAL* pCamera &#61; new VertexCameraBAL();
+        pCamera-&gt;setEstimate(temVecCamera);
+        pCamera-&gt;setId(i);
+
+        optimizer.addVertex(pCamera);
+
+    }
+
+    //增加路标顶点
+    const int point_num &#61; loadBALProblem.num_points();
+    for(int i &#61; 0; i &lt; point_num; i&#43;&#43;)
+    {
+        Vector3d temVecPoint;
+        for (int j &#61; 0; j &lt; 3; j&#43;&#43;)
+        {
+            temVecPoint[j] &#61; loadBALProblem.num_observations_points(3*i&#43;j);
+        }
+        VertexPointBAL* pPoint &#61; new VertexPointBAL();
+        pPoint-&gt;setEstimate(temVecPoint);
+
+        //这里加上pose的数量,避免跟pose的ID重复
+        pPoint-&gt;setId(i &#43; num_cam);
+
+        pPoint-&gt;setMarginalized(true);
+        optimizer.addVertex(pPoint);
+    }
+    //增加边
+    const int  num_observations &#61;loadBALProblem.num_observations();
+    for(int i &#61; 0; i &lt; num_observations; &#43;&#43;i)
+    {
+        EdgeObservationBAL* bal_edge &#61; new EdgeObservationBAL();
+
+        //得到相机ID和空间点ID
+        const int camera_id &#61; loadBALProblem.camera_index(i);
+        const int point_id &#61; loadBALProblem.point_index(i) &#43; num_cam;
+
+        //使用了鲁棒核函数
+        g2o::RobustKernelHuber* rk &#61; new g2o::RobustKernelHuber;
+        rk-&gt;setDelta(1.0);
+        bal_edge-&gt;setRobustKernel(rk);
+
+
+        bal_edge-&gt;setVertex(0,dynamic_cast&lt;VertexCameraBAL*&gt;(optimizer.vertex(camera_id)));
+        bal_edge-&gt;setVertex(1,dynamic_cast&lt;VertexPointBAL*&gt;(optimizer.vertex(point_id)));
+        bal_edge-&gt;setInformation(Eigen::Matrix2d::Identity());
+        bal_edge-&gt;setMeasurement(Eigen::Vector2d(loadBALProblem.num_observations_uv(2*i &#43; 0),
+                                                 loadBALProblem.num_observations_uv(2*i &#43; 1)));
+
+        optimizer.addEdge(bal_edge);
+    }
+
+    optimizer.initializeOptimization();
+    optimizer.setVerbose(true);
+    optimizer.optimize(20);
+
+    double* cameras &#61; loadBALProblem.ReWritePoses();
+    for(int i &#61; 0; i &lt; num_cam; i&#43;&#43;)
+    {
+        VertexCameraBAL* pCamera &#61; dynamic_cast&lt;VertexCameraBAL*&gt;(optimizer.vertex(i));
+        Vector9d NewCameraVec &#61; pCamera-&gt;estimate();
+        memcpy(cameras &#43; i * 9, NewCameraVec.data(), sizeof(double) * 9);
+    }
+
+    double* points &#61; loadBALProblem.ReWritePoints();
+    for(int j &#61; 0; j &lt; point_num; j&#43;&#43;)
+    {
+        VertexPointBAL* pPoint &#61; dynamic_cast&lt;VertexPointBAL*&gt;(optimizer.vertex(j &#43; num_cam));
+        Eigen::Vector3d NewPointVec &#61; pPoint-&gt;estimate();
+        memcpy(points &#43; j * 3, NewPointVec.data(), sizeof(double) * 3);
+    }
+
+    loadBALProblem.WriteToPLYFile(&#34;../new.ply&#34;);
+    cout&lt;&lt;&#34;finished...&#34; &lt;&lt;endl;
+}
+
+/***
+ * 实现将空间点坐标转换成相机坐标系所看到的点,即 Pc &#61; Tcw * Pw
+ * &#64;param camera 相机的9的数据&#xff0c;实际上只用到前面6个数据
+ * &#64;param P_w 世界坐标系下的空间点
+ * &#64;param P_c 相机坐标系下的空间点
+ */
+void World2Camera(const Vector9d camera, const Eigen::Vector3d P_w, Eigen::Vector3d&amp; P_c)
+{
+    cv::Mat angleAxis &#61; (cv::Mat_&lt;double&gt;(1,3)&lt;&lt;camera[0],camera[1], camera[2]);
+    cv::Mat Rcw;
+    //这里调用opencv将旋转向量转换成旋转矩阵的API
+    cv::Rodrigues(angleAxis,Rcw);
+    Eigen::Matrix4d T;
+    T &lt;&lt;    Rcw.at&lt;double&gt;(0,0),Rcw.at&lt;double&gt;(0,1),Rcw.at&lt;double&gt;(0,2), camera[3],
+            Rcw.at&lt;double&gt;(1,0),Rcw.at&lt;double&gt;(1,1),Rcw.at&lt;double&gt;(1,2), camera[4],
+            Rcw.at&lt;double&gt;(2,0),Rcw.at&lt;double&gt;(2,1),Rcw.at&lt;double&gt;(2,2), camera[5],
+            0,0,0,1;
+
+    //这里的非齐次坐标的变换要注意
+    Vector4d Pw(P_w[0],P_w[1],P_w[2],1);
+    Vector4d P &#61; T*Pw;
+    P_c[0] &#61; P[0];
+    P_c[1] &#61; P[1];
+    P_c[2] &#61; P[2];
+}
+
+/***
+ * 去畸变&#xff0c;世界坐标下的空间点转换成相机坐标系下的空间,最后变成像素坐标的像素点,基本跟书上的一致
+ * 思想如下&#xff1a;
+ * P  &#61;  R * X &#43; t       (conversion from world to camera coordinates)
+ * p  &#61; -P / P.z         (perspective division) 这里有个负号需要注意
+ * p&#39; &#61;  f * r(p) * p    (conversion to pixel coordinates)
+ * r(p) &#61; 1.0 &#43; k1 * ||p||^2 &#43; k2 * ||p||^4.
+ * &#64;param camera 相机的9的数据&#xff0c;实际上只用到前面6个数据
+ * &#64;param point 世界坐标系下的空间点
+ * &#64;param u 像素坐标的像素点
+ */
+inline void CamProjectionWithDistortion(const Vector9d camera, const Vector3d point, Vector2d&amp; u)
+{
+
+    Eigen::Vector3d p;
+    World2Camera(camera, point, p);
+
+    // Compute the center fo distortion
+    double xp &#61; -p[0]/p[2];
+    double yp &#61; -p[1]/p[2];
+
+    // Apply second and fourth order radial distortion
+    const double k1 &#61; camera[7];
+    const double k2 &#61; camera[8];
+
+    double r2 &#61; xp*xp &#43; yp*yp;
+    double distortion &#61; 1.0 &#43; r2 * k1 &#43; k2*r2*r2 ;
+
+    const double f &#61; camera[6];
+    u[0] &#61; f * distortion * xp;
+    u[1] &#61; f * distortion * yp;
+
+}
+
+/***
+ * 实现将pose转换到世界坐标系
+ * &#64;param angleAxis 旋转向量
+ * &#64;param P_c pose的t
+ * &#64;param P_w 世界坐标系pose的t
+ */
+void LoadBALProblem::Camera2World( const cv::Mat angleAxis, const Eigen::Vector3d P_c, Eigen::Vector3d&amp; P_w)
+{
+    cv::Mat Rcw;
+    //这里调用opencv将旋转向量转换成旋转矩阵的API
+    cv::Rodrigues(angleAxis,Rcw);
+    Eigen::Matrix4d Tcw;
+    Tcw &lt;&lt; Rcw.at&lt;double&gt;(0,0),Rcw.at&lt;double&gt;(0,1),Rcw.at&lt;double&gt;(0,2),P_c[0],
+            Rcw.at&lt;double&gt;(1,0),Rcw.at&lt;double&gt;(1,1),Rcw.at&lt;double&gt;(1,2),P_c[1],
+            Rcw.at&lt;double&gt;(2,0),Rcw.at&lt;double&gt;(2,1),Rcw.at&lt;double&gt;(2,2),P_c[2],
+            0,0,0,1;
+    Eigen::Matrix4d Twc;
+    //Twc &#61; Tcw^-1
+    Twc &#61; Tcw.inverse();
+    P_w[0] &#61; Twc(0,3);
+    P_w[1] &#61; Twc(1,3);
+    P_w[2] &#61; Twc(2,3);
+}
+
+/***
+ *生成点云文件,基本跟书上一样
+ * &#64;param filename
+ */
+void LoadBALProblem::WriteToPLYFile(const std::string&amp; filename)
+{
+    std::ofstream of(filename.c_str());
+
+    of&lt;&lt; &#34;ply&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;format ascii 1.0&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;element vertex &#34; &lt;&lt; num_cameras_ &#43; num_points_
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;property float x&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;property float y&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;property float z&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;property uchar red&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;property uchar green&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;property uchar blue&#34;
+      &lt;&lt; &#39;\n&#39; &lt;&lt; &#34;end_header&#34; &lt;&lt; std::endl;
+
+    for(int i &#61; 0; i &lt; num_cameras(); &#43;&#43;i)
+    {
+
+
+        Eigen::Vector3d P_c;
+        Eigen::Vector3d P_w;
+
+        cv::Mat angleAxis &#61; (cv::Mat_&lt;double&gt;(1,3)&lt;&lt;observations_cameras[9*i&#43;0],
+                                              observations_cameras[9*i&#43;1],
+                                              observations_cameras[9*i&#43;2]);
+
+        P_c[0] &#61; observations_cameras[9*i&#43;3];
+        P_c[1] &#61; observations_cameras[9*i&#43;4];
+        P_c[2] &#61; observations_cameras[9*i&#43;5];
+
+        Camera2World(angleAxis,P_c, P_w);
+        of &lt;&lt; P_w[0] &lt;&lt; &#39; &#39; &lt;&lt; P_w[1] &lt;&lt; &#39; &#39; &lt;&lt; P_w[2]&lt;&lt; &#39; &#39;
+           &lt;&lt; &#34;0 255 0&#34; &lt;&lt; &#39;\n&#39;;
+    }
+
+    // Export the structure (i.e. 3D Points) as white points.
+    for(int i &#61; 0; i &lt; num_points(); &#43;&#43;i){
+        for(int j &#61; 0; j &lt; 3; &#43;&#43;j)
+        {
+            of &lt;&lt; observations_points[3*i&#43;j] &lt;&lt; &#39; &#39;;
+        }
+        //加上颜色
+        of &lt;&lt; &#34;255 255 255\n&#34;;
+    }
+
+    of.close();
+}
+
+/***
+ * 读取txt文件,这里思路跟书上一致,但是换了一种读取文件的办法.
+ */
+void LoadBALProblem::ReadData()
+{
+    ifstream fin(filename_);
+    if(!fin)
+    {
+        cout&lt;&lt; &#34;Error opening .txt file&#34;&lt;&lt; endl;
+        return;
+    }
+    fin&gt;&gt;num_cameras_;
+    fin&gt;&gt;num_points_;
+    fin&gt;&gt;num_observations_;
+
+    //输出第一行数据,这里包括&#xff0c;相机的姿态数量,空间点的数量,观测数据数量
+    std::cout &lt;&lt; &#34;pose number: &#34; &lt;&lt; num_cameras_ &lt;&lt;endl;
+    std::cout &lt;&lt; &#34;point number: &#34; &lt;&lt; num_points_  &lt;&lt;endl;
+    std::cout &lt;&lt; &#34;observations number: &#34; &lt;&lt; num_observations_ &lt;&lt;endl;
+
+    //根据读入的数据来初始化数组
+    point_index_ &#61; new int[num_observations_];
+    camera_index_ &#61; new int[num_observations_];
+    observations_ &#61; new double[2 * num_observations_];
+
+    //开始读取观测数据
+    for (int i &#61; 0; i &lt; num_observations_; &#43;&#43;i)
+    {
+        fin&gt;&gt;camera_index_[i];
+        fin&gt;&gt;point_index_[i];
+        fin&gt;&gt;observations_[2*i];
+        fin&gt;&gt;observations_[2*i&#43;1];
+    }
+
+    //这里读取本文文件里一行一个数字的内容,相机的参数有9个&#xff0c;分别为R,t,f,k1,k2,这个R是旋转向量,空间为三个一组
+    observations_cameras_ &#61; 9*num_cameras_;
+    observations_points_ &#61; 3*num_points_;
+    observations_cameras &#61; new double[observations_cameras_];
+    observations_points &#61; new double[observations_points_];
+
+    //读取相机初始数据
+    for (int i &#61; 0; i &lt; observations_cameras_; &#43;&#43;i)
+    {
+        fin&gt;&gt;observations_cameras[i];
+    }
+
+    //读取空间初始数据
+    for (int i &#61; 0; i &lt; observations_points_; &#43;&#43;i)
+    {
+        fin&gt;&gt;observations_points[i];
+    }
+}</code></pre> 
+<p>CMakeLists文件&#xff1a;</p> 
+<pre class="has"><code class="language-plain">cmake_minimum_required( VERSION 2.8 )
+project( BAL )
+
+set( CMAKE_BUILD_TYPE &#34;Release&#34; )
+set( CMAKE_CXX_FLAGS &#34;-std&#61;c&#43;&#43;11 -O3&#34; )
+
+list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules )
+
+# 寻找G2O Cholmod eigen3
+find_package( G2O REQUIRED )
+find_package( Cholmod )
+include_directories( 
+    ${G2O_INCLUDE_DIRS} ${CHOLMOD_INCLUDE_DIR}
+    &#34;/usr/include/eigen3&#34;
+)
+
+# sophus
+find_package( Sophus REQUIRED )
+include_directories( ${Sophus_INCLUDE_DIRS} )
+
+#OpenCV
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+
+add_executable( BAL main.cpp )
+
+target_link_libraries( BAL
+
+        g2o_types_slam2d
+        g2o_types_slam3d
+        g2o_core
+        g2o_stuff
+        g2o_types_sclam2d
+        ${CHOLMOD_LIBRARIES}
+        ${Sophus_LIBRARIES}
+        ${OpenCV_LIBRARIES}
+        )</code></pre> 
+<p>终端运行效果如下&#xff1a;</p> 
+<p> </p> 
+<p><img alt="" class="has" src="https://img-blog.csdn.net/20180211142832889?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvSm9obm55WWVo/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70" /></p> 
+<p>使用meshlab 打开ply文件 命令为meshlab xxx.ply</p> 
+<p style="text-align:center;"><img alt="" class="has" height="507" src="https://img-blog.csdn.net/20180902145355877?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0pvaG5ueVllaA&#61;&#61;/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA&#61;&#61;/dissolve/70" width="650" /></p> 
+<p>下一篇博客会实际写出雅克比矩阵&#xff0c;而不是使用g2o帮住求导。</p> 
+<p>点这里到达下一篇<a href="https://blog.csdn.net/JohnnyYeh/article/details/82315543">https://blog.csdn.net/JohnnyYeh/article/details/82315543</a></p> 
+<p>如果本文有什么错误的地方&#xff0c;请联系我&#xff0c;我及时修改。</p> 
+<p>转载请注明出处&#xff1a;http://blog.csdn.net/johnnyyeh/article/details/79310655</p>
+                </div>
+        </div>
+    </article>
+</div>
+<div class="more-toolbox-new" id="toolBarBox">
+    <div class="left-toolbox">
+        <div class="toolbox-left">
+            <div class="profile-box"><a class="profile-href" target="_blank" href="https://blog.csdn.net/JohnnyYeh"><img class="profile-img" src="https://profile.csdnimg.cn/8/1/8/3_johnnyyeh"><span class="profile-name">JohnnyYeh</span></a></div>
+            <div class="profile-attend">
+                    <a class="tool-attend tool-bt-button tool-bt-attend" href="javascript:;" data-report-view='{"mod":"1592215036_002","spm":"1001.2101.3001.4232","extend1":"关注"}'>关注</a>
+                <a class="tool-item-follow active-animation" style="display:none;">关注</a>
+            </div>
+        </div>
+        <div class="toolbox-middle">
+        <ul class="toolbox-list">
+            <li class="tool-item tool-item-size tool-active is-like" id="is-like">
+            <a class="tool-item-href">
+                <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt="">
+                <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2021Active.png" alt="">
+                <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2021White.png" alt="">  
+                <span id="spanCount" class="count ">
+                        5
+                </span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">点赞</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike">
+            <a class="tool-item-href">
+                <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newUnHeart2021Active.png" alt="">
+                <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newUnHeart2021White.png" alt="">
+                <span id="unlikeCount" class="count "></span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">踩</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-item-comment">
+            <a class="tool-item-href" href="#commentBox">
+                <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newComment2021White.png" alt="">
+                <span class="count">
+                    17
+                </span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">评论</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-collection ">
+            <a class="tool-item-href" href="javascript:;" data-report-click='{"mod":"popu_824","spm":"1001.2101.3001.4130","ab":"new"}'>
+                <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive.png" alt="">
+                <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectWhite.png" alt="">
+                <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt="">
+                <span class="count get-collection " id="get-collection">
+                    14
+                </span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">收藏</span></div>
+            </li>
+            <li class="tool-item tool-active">
+                <a class="" href="javascript:;">
+                    <img class="company active" id="health-companies" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHealthCompanies1Active.gif" alt="一键三连">
+                </a>
+                <div class="tool-hover-tip three-click"><span class="text">一键三连</span></div>
+            </li>
+            <li class="tool-item tool-item-bar">
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-QRcode" id="tool-share">
+                <a class="tool-item-href" href="javascript:;" data-report-click='{"mod":"1582594662_002","spm":"1001.2101.3001.4129","ab":"new"}'>
+                    <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newShareWhite.png" alt="">
+                </a>
+                <div class="QRcode" id="tool-QRcode">
+                    <p class="title">
+                    扫一扫，分享海报
+                    </p>
+                    <div id='shareCode'></div>
+                </div>
+            </li>
+        </ul>
+        </div>
+        <div class="toolbox-right">
+                <div class="tool-directory">
+                    <a class="bt-columnlist-show"
+                    data-id="7454859"
+                    data-free="true"
+                    data-subscribe="false"
+                    data-title="SLAM"
+                    data-img="https://img-blog.csdnimg.cn/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64"
+                    data-url="https://blog.csdn.net/johnnyyeh/category_7454859.html"
+                    data-sum="3"
+                    data-people="0"
+                    data-price="0"
+                    data-oldprice="0"
+                    data-join="false"
+                    data-studyvip="false"
+                    data-studysubscribe="false"
+                    data-report-view='{"spm":"1001.2101.3001.6334","extend1":"专栏目录"}'
+                    data-report-click='{"spm":"1001.2101.3001.6334","extend1":"专栏目录"}'
+                    >专栏目录</a>
+                </div>
+        </div>
+    </div>  
+</div>
+<script type=text/javascript crossorigin src="https://csdnimg.cn/release/phoenix/production/qrcode-7c90a92189.min.js"></script>
+<script src="//g.csdnimg.cn/??sharewx/1.2.1/sharewx.js" type="text/javascript"></script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/user-login/3.0.1/user-login.js"></script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/collection-box/2.0.6/collection-box.js"></script>
+                <div id="dmp_ad_58" style="width:100%;overflow-x:hidden"><div id="kp_box_58" data-pid="58"><iframe  src="https://kunpeng-sc.csdnimg.cn/?timestamp=1623163941/#/preview/8359?positionId=58&queryWord=&spm=1001.2101.3001.5002" frameborder="0" width= "100%"  height= "75px" scrolling="no" ></iframe><img class="pre-img-lasy"  data-src="https://kunyu.csdn.net/1.png?p=58&a=5101&c=8359&k=&spm=1001.2101.3001.5002&d=1&t=3&u=f91b11994eb34d97962ec72ad8dbfedc" style="display: block;width: 0px;height: 0px;"></div></div>
+            <div class="second-recommend-box recommend-box">
+<div class="recommend-item-box type_download clearfix" data-url="http://download.csdn.net/download/weixin_38684976/14036062"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-1.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"1","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/weixin_38684976/14036062"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="http://download.csdn.net/download/weixin_38684976/14036062" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-1.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"1","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/weixin_38684976/14036062"}'  data-report-query='spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">《<em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em><em>》</em>笔记</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">01-06</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="http://download.csdn.net/download/weixin_38684976/14036062" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-1.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"1","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/weixin_38684976/14036062"}'  data-report-query='spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">1. <em>视觉</em><em>SLAM</em> 系统概述
+<em>SLAM</em> 是Simultaneous Localization and Mapp<em>in</em>g 的缩写，中文译作&ldquo;同时定位与地图构建&rdquo; 。它是指搭载特定传感器的主体，在没有环境先验信息的情况下，于运动过程中建立环境的模型，同时估计自己的运动。如果这里的传感器主要为相机，那就称为&ldquo;<em>视觉</em><em>SLAM</em>&rdquo;。
+
+<em>视觉</em><em>SLAM</em>流程分为以下几步
+传感器信息读取。在<em>视觉</em><em>SLAM</em> 中主要为相机图像信息的读取和预处理。
+<em>视觉</em>里程计。<em>视觉</em>里程计任务是估算相邻图像间相机的运动，以及局部地图的样子。
+后端优化。后端接受不同时刻<em>视觉</em>里程计测量的相机位姿，以及回环检测的信息，对它们进行优化，得到全局一致的</div>
+			</a>
+		</div>
+	</div>
+</div>
+            </div>
+<a id="commentBox" name="commentBox"></a>
+<div class="comment-box">
+	<div class="comment-edit-box d-flex">
+		<a id="commentsedit"></a>
+		<div class="user-img">
+			<a href="https://blog.csdn.net/weixin_46326425" target="_blank">
+				<img class="" src="https://profile.csdnimg.cn/E/9/2/3_weixin_46326425">
+			</a>
+		</div>
+		<form id="commentform">
+			<img class="comment-sofa-flag" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentFlag@2x.png">
+      <textarea class="comment-content" name="comment_content" id="comment_content" placeholder="请发表有价值的评论， 博客评论不欢迎灌水，良好的社区氛围需大家一起维护。" maxlength="1000"></textarea>
+			<div class="comment-emoticon"><img class="comment-emoticon-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/emoticon.png" alt="表情包"></div> 
+      <span class="comment-emoticon-tip">插入表情</span>
+      <div class="comment-emoticon-box">
+        <div class="comment-emoticon-img-box"></div>
+			</div>
+      <div class="opt-box">
+				<div id="ubbtools" class="add_code">
+					<a href="#insertcode" code="code" target="_self"><i class="icon iconfont icon-daima"></i></a>
+				</div>
+				<input type="hidden" id="comment_replyId" name="comment_replyId">
+				<input type="hidden" id="article_id" name="article_id" value="79310655">
+				<input type="hidden" id="comment_userId" name="comment_userId" value="">
+				<input type="hidden" id="commentId" name="commentId" value="">
+				<div class="dropdown" id="myDrap">
+					<a class="dropdown-face d-flex align-items-center" data-toggle="dropdown" role="button"
+						aria-haspopup="true" aria-expanded="false">
+						<div class="txt-selected text-truncate">添加代码片</div>
+						<svg class="icon d-block" width="200px" height="100.00px" viewBox="0 0 2048 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path  d="M597.33333292 298.666667h853.333334L1023.99999992 725.333333 597.33333292 298.666667z"  /></svg>
+					</a>
+					<ul class="dropdown-menu" id="commentCode" aria-labelledby="drop4">
+						<li><a data-code="html">HTML/XML</a></li>
+						<li><a data-code="objc">objective-c</a></li>
+						<li><a data-code="ruby">Ruby</a></li>
+						<li><a data-code="php">PHP</a></li>
+						<li><a data-code="csharp">C</a></li>
+						<li><a data-code="cpp">C++</a></li>
+						<li><a data-code="javascript">JavaScript</a></li>
+						<li><a data-code="python">Python</a></li>
+						<li><a data-code="java">Java</a></li>
+						<li><a data-code="css">CSS</a></li>
+						<li><a data-code="sql">SQL</a></li>
+						<li><a data-code="plain">其它</a></li>
+					</ul>
+				</div>
+				<div class="right-box" id="rightBox" data-type="2">
+							<span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span>
+							<a data-report-click='{"mod":"1582594662_003","spm":"1001.2101.3001.4227","ab":"new"}'><input type="submit"
+									class="btn btn-sm btn-comment" value="发表评论"></a>
+				</div>
+			</div>
+		</form>
+		<input type="button" class="bt-comment-show" value="评论">
+	</div>
+	<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div>
+		</div>
+	</div>
+</div>            <div class="recommend-box insert-baidu-box">
+                <div class="recommend-item-box clearfix" style="display:none"></div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/weixin_42001184/article/details/118917033"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"2","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/weixin_42001184/article/details/118917033"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/weixin_42001184/article/details/118917033" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"2","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/weixin_42001184/article/details/118917033"}'  data-report-query='spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>视觉</em><em>slam</em>14<em>讲</em>第九章<em>代码</em>阅BA优化<em>g2o</em>部分</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/weixin_42001184" target="_blank"><span class="blog-title">weixin_42001184的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">07-19</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					38
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/weixin_42001184/article/details/118917033" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"2","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/weixin_42001184/article/details/118917033"}'  data-report-query='spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">#<em>in</em>clude &lt;<em>g2o</em>/core/base_vertex.h&gt;
+#<em>in</em>clude &lt;<em>g2o</em>/core/base_b<em>in</em><em>ar</em>y_edge.h&gt;
+#<em>in</em>clude &lt;<em>g2o</em>/core/block_solver.h&gt;
+#<em>in</em>clude &lt;<em>g2o</em>/core/optimization_algorithm_levenberg.h&gt;
+#<em>in</em>clude &lt;<em>g2o</em>/solvers/csp<em>ar</em>se/l<em>in</em>e<em>ar</em>_solver_csp<em>ar</em>se.h&gt;
+#<em>in</em>clude</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/zhiwei121/article/details/90321527"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-3.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"3","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/zhiwei121/article/details/90321527"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/zhiwei121/article/details/90321527" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-3.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"3","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/zhiwei121/article/details/90321527"}'  data-report-query='spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>视觉</em><em>slam</em><em>第十章</em> BA<em>代码</em><em>简化</em>，针对新版<em>g2o</em>和data文件夹</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/zhiwei121" target="_blank"><span class="blog-title">zhiwei121的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">05-18</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					408
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/zhiwei121/article/details/90321527" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-3.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"3","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/zhiwei121/article/details/90321527"}'  data-report-query='spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">原文来自https://blog.csdn.net/johnnyyeh/<em>ar</em>ticle/details/79310655
+
+在学习<em>SLAM</em>过程中，<em>第十章</em>的解决大规模BA问题的<em>g2o</em><em>代码</em>比较难读懂，参考上文博主的<em>代码</em>，<em>简化</em>了一下<em>代码</em>。**针对新版的<em>g2o</em>指针问题，和使用data文件夹，进行了修改。 **数据集可以在这里下载：http://grail.cs.wash<em>in</em>gton.edu/projec...</div>
+			</a>
+		</div>
+	</div>
+</div>
+		<dl id="recommend-item-box-tow" class="recommend-item-box type_blog clearfix">
+			
+		</dl>
+<div class="recommend-item-box type_download clearfix" data-url="http://download.csdn.net/download/qq_41934573/18372304"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-4.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"4","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/qq_41934573/18372304"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="http://download.csdn.net/download/qq_41934573/18372304" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-4.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"4","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/qq_41934573/18372304"}'  data-report-query='spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>PPT</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">05-04</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="http://download.csdn.net/download/qq_41934573/18372304" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-4.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"4","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/qq_41934573/18372304"}'  data-report-query='spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">精品课程PPT分享，<em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>配套PPT， 全网唯一资源</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_download clearfix" data-url="https://download.csdn.net/download/hchild1/10717172"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-5.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"5","strategy":"2~default~CTRLIST~default","dest":"https://download.csdn.net/download/hchild1/10717172"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://download.csdn.net/download/hchild1/10717172" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-5.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"5","strategy":"2~default~CTRLIST~default","dest":"https://download.csdn.net/download/hchild1/10717172"}'  data-report-query='spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-5.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-5.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">高翔<em>slam</em><em>十四</em><em>讲</em>包含<em>代码</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">10-12</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://download.csdn.net/download/hchild1/10717172" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-5.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"5","strategy":"2~default~CTRLIST~default","dest":"https://download.csdn.net/download/hchild1/10717172"}'  data-report-query='spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-5.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-5.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">高翔<em>slam</em><em>十四</em><em>讲</em>包含<em>代码</em>，完整版。高翔<em>slam</em><em>十四</em><em>讲</em>包含<em>代码</em>，完整版。高翔<em>slam</em><em>十四</em><em>讲</em>包含<em>代码</em>，完整版。</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/JohnnyYeh/article/details/82315543"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-6.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"6","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/JohnnyYeh/article/details/82315543" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-6.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"6","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543"}'  data-report-query='spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">《<em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em><em>》</em>中<em>第十章</em><em>代码</em>中雅克比的具体形式推导</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/JohnnyYeh" target="_blank"><span class="blog-title">JohnnyYeh的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-03</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2644
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/JohnnyYeh/article/details/82315543" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-6.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"6","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543"}'  data-report-query='spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">在上一篇文章《<em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em><em>》</em><em>第十章</em><em>g2o</em><em>代码</em>的<em>简化</em>中，求解BA的雅克比矩阵，我直接使用了<em>g2o</em>的数值导，因为这个雅克比矩阵自己写还真的很容易出错，不过还是有一些小伙伴想要了解具体的形式，所以在这一篇文章中会具体进行推导。
+
+1 雅克比矩阵数学推导
+
+    如果对数学推导不感兴趣的，可以直接跳到<em>代码</em>那里看，另外这里会使用李群和李代数的知识，不清楚的可以看一下《...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/weixin_40486179/article/details/109250273"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-7.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"7","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/weixin_40486179/article/details/109250273"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/weixin_40486179/article/details/109250273" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-7.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"7","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/weixin_40486179/article/details/109250273"}'  data-report-query='spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em><em>第十</em><em>讲</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/weixin_40486179" target="_blank"><span class="blog-title">weixin_40486179的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">10-24</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					329
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/weixin_40486179/article/details/109250273" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-7.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"7","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/weixin_40486179/article/details/109250273"}'  data-report-query='spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1"><em>第十</em><em>讲</em>：后端 1
+本节目标
+
+理解后端的概念。
+理解以 EKF 为代表的滤波器后端工作原理。
+理解非线性优化的后端，明白稀疏性是如何被利用的。
+使用 <em>g2o</em> 和 Ceres 实际操作后端优化。
+一、概述
+1）状态估计的概率解释
+在后端优化中，我们通常考虑一个更长时间内（或所有时间内）的状态估计问题，而且不仅使用过去的信息更新自己的状态，也会用未来的信息来更新自己，这种处理方式不妨称为&ldquo;批量的&rdquo;（Batch）。否则，如果当前的状态只由过去的时刻决定，甚至只由前一个时刻决定，那不妨称为**&ldquo;渐进的&rdquo;（<em>In</em>cre</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/KYJL888/article/details/104367110"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-8.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"8","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/KYJL888/article/details/104367110"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/KYJL888/article/details/104367110" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-8.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"8","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/KYJL888/article/details/104367110"}'  data-report-query='spm=1001.2101.3001.6650.8&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">学习<em>SLAM</em>《<em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>（高翔著）<em>》</em> 第10<em>讲</em>笔记(BA优化）</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/KYJL888" target="_blank"><span class="blog-title">开源节流</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">02-17</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					75
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/KYJL888/article/details/104367110" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-8.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"8","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/KYJL888/article/details/104367110"}'  data-report-query='spm=1001.2101.3001.6650.8&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1"><em>代码</em>实践
+
+文章目录
+
+ 10.3实践：<em>g2o</em>
+ 10.4实践：Ceres
+ 程序的详细注释可关注rob<em>in</em>hjwy和zkk9527的CSDN博客。
+
+10.3实践：<em>g2o</em>
+
+用<em>g2o</em>求解BA问题。
+程序的编译运行方法：
+
+mkdir build
+cd build
+cmake ..
+make
+./<em>g2o</em>_cu<em>st</em>om<em>Bundle</em> -<em>in</em>put ../data/problem-16...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://zengtaiping.blog.csdn.net/article/details/72722409"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-9.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"9","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://zengtaiping.blog.csdn.net/article/details/72722409"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://zengtaiping.blog.csdn.net/article/details/72722409" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-9.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"9","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://zengtaiping.blog.csdn.net/article/details/72722409"}'  data-report-query='spm=1001.2101.3001.6650.9&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-9.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-9.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>g2o</em>: 如何使用<em>g2o</em>的例子</div>
+					<div class="tag">热门推荐</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/ziqian0512" target="_blank"><span class="blog-title">旧人赋荒年</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">05-25</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1万+
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://zengtaiping.blog.csdn.net/article/details/72722409" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-9.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"9","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://zengtaiping.blog.csdn.net/article/details/72722409"}'  data-report-query='spm=1001.2101.3001.6650.9&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-9.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-9.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1"><em>g2o</em>的<em>讲</em>解教程已经很多了, 但是<em>g2o</em>官方<em>代码</em>的说明,注释真的是太少了. 本文的目的是说明一下如何使用<em>g2o</em><em>代码</em>的例子,为自己所用. 希望自己的疑惑能够被记录下来, 也是一次总结.
+<em>g2o</em> 重要的文献:1.论文 Grisetti, Giorgio, et al. &ldquo;A tutorial on graph-based <em>SLAM</em>.&rdquo; IEEE <em>In</em>tellige<em>nt</em> Transportation Sy</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/dahailuoa6/article/details/94011418"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-10.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"10","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/dahailuoa6/article/details/94011418"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/dahailuoa6/article/details/94011418" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-10.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"10","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/dahailuoa6/article/details/94011418"}'  data-report-query='spm=1001.2101.3001.6650.10&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-10.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-10.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">【读书笔记】《<em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>（高翔著）<em>》</em> 第10<em>讲</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/dahailuoa6" target="_blank"><span class="blog-title">dahailuoa6的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">06-28</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					672
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/dahailuoa6/article/details/94011418" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-10.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"10","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/dahailuoa6/article/details/94011418"}'  data-report-query='spm=1001.2101.3001.6650.10&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-10.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-10.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">文章目录10.3实践：<em>g2o</em>10.4实践：Ceres程序的详细注释可关注rob<em>in</em>hjwy和zkk9527的CSDN博客。
+10.3实践：<em>g2o</em>
+程序的编译运行方法：
+mkdir build
+cd build
+cmake ..
+make
+./<em>g2o</em>_cu<em>st</em>om<em>Bundle</em> -<em>in</em>put ../data/problem-16-22106-pre.txt
+
+以上是成功编译运行程序，会在build文件...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_download clearfix" data-url="http://download.csdn.net/download/Laney_Midory/13217333"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-11.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"11","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/Laney_Midory/13217333"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="http://download.csdn.net/download/Laney_Midory/13217333" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-11.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"11","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/Laney_Midory/13217333"}'  data-report-query='spm=1001.2101.3001.6650.11&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-11.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-11.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>配套<em>代码</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">12-02</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="http://download.csdn.net/download/Laney_Midory/13217333" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~CTRLIST~default-11.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"11","strategy":"2~default~CTRLIST~default","dest":"http://download.csdn.net/download/Laney_Midory/13217333"}'  data-report-query='spm=1001.2101.3001.6650.11&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-11.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7ECTRLIST%7Edefault-11.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1"><em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>配套<em>代码</em></div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/try_again_later/article/details/82221244"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-12.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"12","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/try_again_later/article/details/82221244"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/try_again_later/article/details/82221244" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-12.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"12","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/try_again_later/article/details/82221244"}'  data-report-query='spm=1001.2101.3001.6650.12&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-12.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-12.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">《<em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>精品总结<em>》</em>10.3: 添加<em>g2o</em>优化位姿T</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/try_again_later" target="_blank"><span class="blog-title">try_again_later的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">08-30</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1086
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/try_again_later/article/details/82221244" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-12.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"12","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/try_again_later/article/details/82221244"}'  data-report-query='spm=1001.2101.3001.6650.12&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-12.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-12.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">0.3版本的VO就是在0.2的基础上增加了<em>g2o</em>优化:&nbsp;
+1、在visual_odometry.cpp中的poseE<em>st</em>imationPNP()函数中，用PNP求出T_c_r_e<em>st</em>imated_后，增加了<em>g2o</em>优化，对位姿进行优化。&nbsp;
+2、同时增加的还有<em>g2o</em>相关的头文件和源文件：<em>g2o</em>_types.h和<em>g2o</em>_types.cpp
+
+visual_odometry.cpp
+
+
+    //使用B...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/qq_23225073/article/details/78777311"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-13.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"13","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/qq_23225073/article/details/78777311"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/qq_23225073/article/details/78777311" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-13.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"13","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/qq_23225073/article/details/78777311"}'  data-report-query='spm=1001.2101.3001.6650.13&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-13.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-13.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>视觉</em><em>slam</em>14<em>讲</em>&mdash;&mdash;第10<em>讲</em>后端1</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/qq_23225073" target="_blank"><span class="blog-title">leeayu的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">12-12</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					3835
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/qq_23225073/article/details/78777311" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-13.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"13","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/qq_23225073/article/details/78777311"}'  data-report-query='spm=1001.2101.3001.6650.13&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-13.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-13.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">本系列文章是记录学习高翔所著《<em>视觉</em><em>slam</em>14<em>讲</em><em>》</em>的内容总结，文中的主要文字和<em>代码</em>、图片都是引用自课本和高翔博士的博客。<em>代码</em>运行效果是在自己电脑上实际运行得出。手动记录主要是为了深入理解 
+涉及到的主要内容如下
+理解后端的概念
+理解以EKF为代表的滤波器后端工作原理
+理解非线性优化的后端，明白稀疏性是如何利用的
+使用<em>g2o</em>和Ceres实际操作后端优化
+前端<em>视觉</em>里程计能给出一个短时间内的轨迹和地图，但</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/xdzhangzhenhao/article/details/81462695"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-14.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"14","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/xdzhangzhenhao/article/details/81462695"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/xdzhangzhenhao/article/details/81462695" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-14.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"14","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/xdzhangzhenhao/article/details/81462695"}'  data-report-query='spm=1001.2101.3001.6650.14&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>视觉</em><em>SLAM</em><em>十四</em><em>讲</em>：最小二乘和非线性优化相关课后程序理解</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/xdzhangzhenhao" target="_blank"><span class="blog-title">xdzhangzhenhao的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">08-06</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1177
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/xdzhangzhenhao/article/details/81462695" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-14.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"14","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/xdzhangzhenhao/article/details/81462695"}'  data-report-query='spm=1001.2101.3001.6650.14&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">1. 使用ceres进行曲线的拟合
+
+
+#<em>in</em>clude &<em>am</em>p;lt;io<em>st</em>re<em>am</em>&<em>am</em>p;gt;
+#<em>in</em>clude &<em>am</em>p;lt;opencv2/core/core.hpp&<em>am</em>p;gt;
+#<em>in</em>clude &<em>am</em>p;lt;opencv2/highgui/highgui.hpp&<em>am</em>p;gt;
+#<em>in</em>clude &<em>am</em>p;lt;ceres/ceres.h&<em>am</em>p;gt;
+#<em>in</em>clude &<em>am</em>p;lt;chrono&<em>am</em>p;gt;
+
+us<em>in</em>g n<em>am</em>espac...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://yanqs.blog.csdn.net/article/details/84065627"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-15.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"15","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://yanqs.blog.csdn.net/article/details/84065627"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://yanqs.blog.csdn.net/article/details/84065627" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-15.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"15","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://yanqs.blog.csdn.net/article/details/84065627"}'  data-report-query='spm=1001.2101.3001.6650.15&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>SLAM</em>从入门到放弃：<em>SLAM</em><em>十四</em><em>讲</em><em>第十章</em>习题（1-4）</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/u012348774" target="_blank"><span class="blog-title">Yan</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">11-14</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					909
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://yanqs.blog.csdn.net/article/details/84065627" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-15.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"15","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://yanqs.blog.csdn.net/article/details/84065627"}'  data-report-query='spm=1001.2101.3001.6650.15&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">以下均为简单笔记，如有错误，请多多指教。
+
+
+证明式K=P&ol<em>in</em>e;kCkT(CkP&ol<em>in</em>e;kCkT+Qk)&m<em>in</em>us;1K=\overl<em>in</em>e{P}_kC_k^T(C_k\overl<em>in</em>e{P}_kC_k^T+Q_k)^{-1}K=Pk​CkT​(Ck​Pk​CkT​+Qk​)&m<em>in</em>us;1。
+答：由于课本上已经推导了大部分的公式，则已知
+P^k=(1&m<em>in</em>us;KCk)P&ol<em>in</em>e;k\widehat{P}_k=(1-KC_k)\overl<em>in</em>e...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/robinhjwy/article/details/78114098"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-16.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"16","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78114098"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/robinhjwy/article/details/78114098" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-16.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"16","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78114098"}'  data-report-query='spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>第十章</em><em>g2o</em>BA的<em>g2o</em>_bal_class.h</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/robinhjwy" target="_blank"><span class="blog-title">robinhjwy的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-27</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1296
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/robinhjwy/article/details/78114098" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-16.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"16","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78114098"}'  data-report-query='spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">解读<em>代码</em></div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://yongqi.blog.csdn.net/article/details/105259976"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.17","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-17.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"17","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://yongqi.blog.csdn.net/article/details/105259976"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://yongqi.blog.csdn.net/article/details/105259976" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.17","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-17.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"17","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://yongqi.blog.csdn.net/article/details/105259976"}'  data-report-query='spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>SLAM</em>从0到1之图优化<em>g2o</em>：从看懂<em>代码</em>到动手编写（长文）</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/Yong_Qi2015" target="_blank"><span class="blog-title">3D视觉工坊</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">04-01</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					3615
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://yongqi.blog.csdn.net/article/details/105259976" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.17","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-17.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"17","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://yongqi.blog.csdn.net/article/details/105259976"}'  data-report-query='spm=1001.2101.3001.6650.17&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-17.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">点击上方&ldquo;3D<em>视觉</em>工坊&rdquo;，选择&ldquo;星标&rdquo;干货第一时间送达本文由知乎作者yikang授权转载，不得擅自二次转载。原文链接：https://zhuanlan.zhihu.com/p/1216...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_download clearfix" data-url="https://download.csdn.net/download/Mmnnnbb123/36941566"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.18","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-18.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"18","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/Mmnnnbb123/36941566"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://download.csdn.net/download/Mmnnnbb123/36941566" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.18","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-18.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"18","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/Mmnnnbb123/36941566"}'  data-report-query='spm=1001.2101.3001.6650.18&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-18.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-18.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">江苏诗台市创新学校2015_2016学年高一数学5月月考试题无答案.doc</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">11-04</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://download.csdn.net/download/Mmnnnbb123/36941566" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.18","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-18.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"18","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/Mmnnnbb123/36941566"}'  data-report-query='spm=1001.2101.3001.6650.18&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-18.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-18.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">江苏诗台市创新学校2015_2016学年高一数学5月月考试题无答案.doc</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_download clearfix" data-url="https://download.csdn.net/download/yhsbzl/36959073"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.19","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-19.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"19","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/yhsbzl/36959073"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://download.csdn.net/download/yhsbzl/36959073" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.19","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-19.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"19","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/yhsbzl/36959073"}'  data-report-query='spm=1001.2101.3001.6650.19&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-19.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-19.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">陕西省西藏民族学院附属中学2015_2016学年八年级数学下学期期末考试试题扫描版新人教版.doc</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">11-04</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://download.csdn.net/download/yhsbzl/36959073" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.19","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-19.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"19","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/yhsbzl/36959073"}'  data-report-query='spm=1001.2101.3001.6650.19&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-19.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-19.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">陕西省西藏民族学院附属中学2015_2016学年八年级数学下学期期末考试试题扫描版新人教版.doc</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_download clearfix" data-url="https://download.csdn.net/download/xingwang218/37304370"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.20","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-20.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"20","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/xingwang218/37304370"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://download.csdn.net/download/xingwang218/37304370" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.20","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-20.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"20","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/xingwang218/37304370"}'  data-report-query='spm=1001.2101.3001.6650.20&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-20.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-20.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">二年级数学下册期末考试题完整.pdf</div>
+					<div class="tag">最新发布</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info display-flex">
+					<span class="info-block">11-05</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://download.csdn.net/download/xingwang218/37304370" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.20","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-download-2~default~BlogCommendHotData~default-20.no_search_link\",\"dist_request_id\":\"1636224854594_85719\"}","dist_request_id":"1636224854594_85719","ab_strategy":"ctrlist","index":"20","strategy":"2~default~BlogCommendHotData~default","dest":"https://download.csdn.net/download/xingwang218/37304370"}'  data-report-query='spm=1001.2101.3001.6650.20&utm_medium=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-20.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-download-2%7Edefault%7EBlogCommendHotData%7Edefault-20.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">二年级数学下册期末考试题完整.pdf</div>
+			</a>
+		</div>
+	</div>
+</div>
+            </div>
+            <div class="template-box">
+                <span>©️2021 CSDN</span>
+                <span>皮肤主题: 技术黑板</span>
+                <span> 设计师:CSDN官方博客</span>
+                <span>
+                    <a href="https://blog.csdn.net/" class="back-home c-blue c-blue-hover c-blue-focus">返回首页</a>
+                </span>
+            </div>
+<div class="blog-footer-bottom" style="margin-top:10px;"></div>
+<script src="https://g.csdnimg.cn/common/csdn-footer/csdn-footer.js" data-isfootertrack="false" type="text/javascript"></script>
+<script type="text/javascript">
+    window.csdn.csdnFooter.options = {
+        el: '.blog-footer-bottom',
+        type: 2
+    }
+</script>        </main>
+<aside class="blog_container_aside">
+	<div id="asideProfile" class="aside-box">
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/JohnnyYeh" data-report-click='{"mod":"popu_379","spm":"1001.2101.3001.4121","dest":"https://blog.csdn.net/JohnnyYeh","ab":"new"}'>
+                <img src="https://profile.csdnimg.cn/8/1/8/3_johnnyyeh" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex flex-column profile-intro-name-box">
+            <div class="profile-intro-name-boxTop">
+                <a href="https://blog.csdn.net/JohnnyYeh" class="" id="uid" title="JohnnyYeh" data-report-click='{"mod":"popu_379","spm":"1001.2101.3001.4122","dest":"https://blog.csdn.net/JohnnyYeh","ab":"new"}'>
+                    <span class="name " username="JohnnyYeh">JohnnyYeh</span>
+                </a>
+                <span>
+                </span>
+                <span class="flag expert-blog">
+                <span class="bubble">CSDN认证博客专家</span>
+                </span>
+                <span class="flag company-blog">
+                <span class="bubble">CSDN认证企业博客</span>
+                </span>
+            </div>
+            <div class="profile-intro-name-boxFooter">
+                <span class="personal-home-page personal-home-years">码龄5年</span>
+                    <span class="personal-home-page">
+                    <a class="personal-home-certification" href="https://i.csdn.net/#/uc/profile?utm_source=14998968" target="_blank" title="暂无认证">
+                    <img src="https://csdnimg.cn/identity/nocErtification.png" alt="">
+                    暂无认证
+                    </a>
+                    </span>
+            </div>
+        </div>
+    </div>
+    <div class="data-info d-flex item-tiling">
+        <dl class="text-center" title="7">
+            <a href="https://blog.csdn.net/JohnnyYeh" data-report-click='{"mod":"1598321000_001","spm":"1001.2101.3001.4310"}' data-report-query="t=1">  
+                <dt><span class="count">7</span></dt>
+                <dd class="font">原创</dd>
+            </a>
+        </dl>
+        <dl class="text-center" data-report-click='{"mod":"1598321000_002","spm":"1001.2101.3001.4311"}' title="967482">
+            <a href="https://blog.csdn.net/rank/list/weekly" target="_blank">
+                <dt><span class="count">96万+</span></dt>
+                <dd class="font">周排名</dd>
+            </a>
+        </dl>
+        <dl class="text-center" title="493801">
+            <a href="https://blog.csdn.net/rank/list/total" data-report-click='{"mod":"1598321000_003","spm":"1001.2101.3001.4312"}' target="_blank">
+                <dt><span class="count">49万+</span></dt>
+                <dd class="font">总排名</dd>
+            </a>
+        </dl>
+        <dl class="text-center" style="min-width:58px" title="12590">  
+            <dt><span class="count">1万+</span></dt>
+            <dd>访问</dd>
+        </dl>
+        <dl class="text-center" title="2级,点击查看等级说明">
+            <dt><a href="https://blog.csdn.net/blogdevteam/article/details/103478461" target="_blank">
+                <img class="level" src="https://csdnimg.cn/identity/blog2.png">
+            </a>
+            </dt>
+            <dd>等级</dd>
+        </dl>
+    </div>
+    <div class="item-rank"></div>
+    <div class="data-info d-flex item-tiling">
+        <dl class="text-center" title="235">
+            <dt><span class="count">235</span></dt>
+            <dd>积分</dd>
+        </dl>
+         <dl class="text-center" id="fanBox" title="23">
+            <dt><span class="count" id="fan">23</span></dt>
+            <dd>粉丝</dd>
+        </dl>
+        <dl class="text-center" title="13">
+            <dt><span class="count">13</span></dt>
+            <dd>获赞</dd>
+        </dl>
+        <dl class="text-center" title="32">
+            <dt><span class="count">32</span></dt>
+            <dd>评论</dd>
+        </dl>
+        <dl class="text-center" title="35">
+            <dt><span class="count">35</span></dt>
+            <dd>收藏</dd>
+        </dl>
+    </div>
+    <div class="aside-box-footer" data-report-view='{"spm":"3001.4296"}'>
+        <div class="badge-box d-flex">
+            <div class="badge d-flex">
+                <div class="icon-badge" title="勤写标兵Lv1">
+                    <div class="mouse-box">
+                        <img class="medal-img" data-report-click='{"spm":"3001.4296"}' src="https://csdnimg.cn/medal/qixiebiaobing1@240.png" alt="勤写标兵Lv1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-intro-name-boxOpration">
+        <div class="opt-letter-watch-box">
+        <a class="bt-button personal-letter" href="https://im.csdn.net/chat/JohnnyYeh" target="_blank" rel="noopener">私信</a>
+        </div>
+        <div class="opt-letter-watch-box"> 
+            <a class="personal-watch bt-button" id="btnAttent" >关注</a>  
+        </div>
+    </div>
+</div>
+<div id="asideSearchArticle" class="aside-box">
+	<div class="aside-content search-comter">
+    <div class="aside-search aside-search-blog">         
+        <input type="text" class="input-serch-blog" name="" autocomplete="off" value="" id="search-blog-words" placeholder="搜博主文章">
+        <a class="btn-search-blog">
+                    <img src="//csdnimg.cn/cdn/content-toolbar/csdn-sou.png?v=1587021042">
+        </a>
+    </div>
+    </div>
+</div>
+
+
+<div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list">
+			<li>
+				<a href="https://blog.csdn.net/JohnnyYeh/article/details/82315543" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543","ab":"new"}'>
+				《视觉SLAM十四讲》中第十章代码中雅克比的具体形式推导
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">2639</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/JohnnyYeh/article/details/79310655" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/JohnnyYeh/article/details/79310655","ab":"new"}'>
+				《视觉SLAM十四讲》第十章g2o代码的简化
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">2517</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/JohnnyYeh/article/details/77101135" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/JohnnyYeh/article/details/77101135","ab":"new"}'>
+				python爬取豆瓣读书的书名与简介
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">2273</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/JohnnyYeh/article/details/79723555" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/JohnnyYeh/article/details/79723555","ab":"new"}'>
+				ubuntu 16.04安装LSDSLAM的一些问题解决
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">1714</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/JohnnyYeh/article/details/81709156" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/JohnnyYeh/article/details/81709156","ab":"new"}'>
+				《概率机器人》学习系列（一）——贝叶斯滤波
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">1611</span>
+                </a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="asideCategory" class="aside-box ">
+    <h3 class="aside-title">分类专栏</h3>
+    <div class="aside-content">
+        <ul>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7076147.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7076147.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756930.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">stm32</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7093877.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7093877.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">网络爬虫</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7454859.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7454859.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">SLAM</span>
+                    </span>
+                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7923173.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7923173.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756916.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">激光SLAM</span>
+                    </span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7940552.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7940552.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">概率机器人</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_18635568" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_18635568","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_18635568","ab":"new"}'>《视觉SLAM十四讲》中第十章代码中雅克比的具体形式推导</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/nick__dong" class="user-name" target="_blank">nick__dong: </a>
+                    <span class="code-comments">博主，你好，有个地方一直不明白，为什么要自定义顶点和边呢？相机位姿和路标点对应的顶点在个g2o里不是早就定义好了吗？还有两者之间的约束也就是边，也是定义好的，为什么要自定义呢？</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_17523929" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_17523929","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_17523929","ab":"new"}'>《视觉SLAM十四讲》中第十章代码中雅克比的具体形式推导</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/qq_20158359" class="user-name" target="_blank">qq_20158359: </a>
+                    <span class="code-comments">请问在更新部分，为什么直接将相机平移(t)部分_estimate[3-5]赋给李代数的(rho)，而不是通过旋转矩阵和平移部分给se3初始化</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13993869" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13993869","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13993869","ab":"new"}'>《视觉SLAM十四讲》中第十章代码中雅克比的具体形式推导</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/qq_39861376" class="user-name" target="_blank">AA_BUYI工作室: </a>
+                    <span class="code-comments">谢谢</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13949804" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13949804","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13949804","ab":"new"}'>《视觉SLAM十四讲》中第十章代码中雅克比的具体形式推导</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/JohnnyYeh" class="user-name" target="_blank">JohnnyYeh: </a>
+                    <span class="code-comments">感谢指出</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13949763" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13949763","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543#comments_13949763","ab":"new"}'>《视觉SLAM十四讲》中第十章代码中雅克比的具体形式推导</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/JohnnyYeh" class="user-name" target="_blank">JohnnyYeh: </a>
+                    <span class="code-comments">3*1向量可以直接写成反对称矩阵用来做叉乘运算，se3的那个推导，在十四讲第二版有了具体推导，可以看看</span>
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="asideNewNps" class="aside-box">
+    <h3 class="aside-title">您愿意向朋友推荐“博客详情页”吗？</h3>
+    <div class="aside-content">
+        <ul class="newnps-list">
+            <li class="newnps-item" data-type="强烈不推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel1.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey1.png" alt="">
+                </div>
+                <div class="newnps-text">强烈不推荐</div>
+            </li>
+            <li class="newnps-item" data-type="不推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel2.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey2.png" alt="">
+                </div>
+                <div class="newnps-text">不推荐</div>
+            </li>
+            <li class="newnps-item" data-type="一般般">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel3.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey3.png" alt="">
+                </div>
+                <div class="newnps-text">一般般</div>
+            </li>
+            <li class="newnps-item" data-type="推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel4.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey4.png" alt="">
+                </div>
+                <div class="newnps-text">推荐</div>
+            </li>
+            <li class="newnps-item" data-type="强烈推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel5.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey5.png" alt="">
+                </div>
+                <div class="newnps-text">强烈推荐</div>
+            </li>
+        </ul>
+        <div class="newnps-form-box">
+        <div class="newnps-form">
+            <input type="text" placeholder="请输入建议或反馈后点击提交" class="newnps-input">
+            <span class="newnps-btn">提交</span>
+        </div>
+        </div>
+    </div>
+</div>
+<div id="asideArchive" class="aside-box" style="display:block!important; width:300px;">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix">
+            <li class="clearfix">
+            <a href="https://blog.csdn.net/JohnnyYeh/article/details/78764560" target="_blank" data-report-click='{"mod":"popu_382","spm":"1001.2101.3001.4136","dest":"https://blog.csdn.net/JohnnyYeh/article/details/78764560","ab":"new"}' data-report-view='{"mod":"popu_382","dest":"https://blog.csdn.net/JohnnyYeh/article/details/78764560","ab":"new"}'>vs2015配置opencv3.2+vtk8.0.1+viz模块</a>
+            </li>
+            <li class="clearfix">
+            <a href="https://blog.csdn.net/JohnnyYeh/article/details/82315543" target="_blank" data-report-click='{"mod":"popu_382","spm":"1001.2101.3001.4136","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543","ab":"new"}' data-report-view='{"mod":"popu_382","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543","ab":"new"}'>《视觉SLAM十四讲》中第十章代码中雅克比的具体形式推导</a>
+            </li>
+            <li class="clearfix">
+            <a href="https://blog.csdn.net/JohnnyYeh/article/details/81709156" target="_blank" data-report-click='{"mod":"popu_382","spm":"1001.2101.3001.4136","dest":"https://blog.csdn.net/JohnnyYeh/article/details/81709156","ab":"new"}' data-report-view='{"mod":"popu_382","dest":"https://blog.csdn.net/JohnnyYeh/article/details/81709156","ab":"new"}'>《概率机器人》学习系列（一）——贝叶斯滤波</a>
+            </li>
+        </ul>
+        <div class="archive-bar"></div>
+        <div class="archive-box">
+                <div class="archive-list-item"><a href="https://blog.csdn.net/JohnnyYeh/article/month/2020/05" target="_blank" data-report-click='{"mod":"popu_538","spm":"1001.2101.3001.4138","ab":"new","dest":""}'><span class="year">2020年</span><span class="num">1篇</span></a></div>
+                <div class="archive-list-item"><a href="https://blog.csdn.net/JohnnyYeh/article/month/2018/09" target="_blank" data-report-click='{"mod":"popu_538","spm":"1001.2101.3001.4138","ab":"new","dest":""}'><span class="year">2018年</span><span class="num">4篇</span></a></div>
+                <div class="archive-list-item"><a href="https://blog.csdn.net/JohnnyYeh/article/month/2017/08" target="_blank" data-report-click='{"mod":"popu_538","spm":"1001.2101.3001.4138","ab":"new","dest":""}'><span class="year">2017年</span><span class="num">2篇</span></a></div>
+        </div>
+    </div>
+</div>
+	<div id="footerRightAds" class="isShowFooterAds">
+		<div class="aside-box">
+			<div id="kp_box_57" data-pid="57"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- PC-博客详情页-矩形-左下视窗（自适应） -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1076724771190722"
+     data-ad-slot="1894159733"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script><img class="pre-img-lasy" data-src="https://kunyu.csdn.net/1.png?p=57&a=707&c=0&k=&spm=1001.2101.3001.5001&d=1&t=3&u=b96170d03f4040df82729fde4f94726a" style="display: block;width: 0px;height: 0px;"></div>
+		</div>
+	</div>
+    <!-- 详情页显示目录 -->
+<!--文章目录-->
+<div id="asidedirectory" class="aside-box">
+    <div class='groupfile' id="directory">
+        <h3 class="aside-title">目录</h3>
+        <div class="align-items-stretch group_item">
+            <div class="pos-box">
+            <div class="scroll-box">
+                <div class="toc-box"></div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+</aside>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).parents("p.text-center").remove();
+	})
+</script>
+<script type="text/javascript"  src="https://g.csdnimg.cn/user-tooltip/2.5/user-tooltip.js"></script>
+<script type="text/javascript"  src="https://g.csdnimg.cn/user-medal/1.0.7/user-medal.js"></script>    </div>
+<div class="recommend-right  align-items-stretch clearfix" id="rightAside" data-type="recommend">
+    <aside class="recommend-right_aside">
+        <div id="recommend-right" >
+                        <div class='flex-column aside-box groupfile' id="groupfile">
+                <div class="groupfile-div">
+                <h3 class="aside-title">目录</h3>
+                <div class="align-items-stretch group_item">
+                    <div class="pos-box">
+                        <div class="scroll-box">
+                            <div class="toc-box"></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+                <div id="recommendAdBox">
+                    <div id="kp_box_479" data-pid="479"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- PC-博客详情页-右侧视窗（自适应） -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1076724771190722"
+     data-ad-slot="3484057394"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script><img class="pre-img-lasy" data-src="https://kunyu.csdn.net/1.png?p=479&a=3267&c=0&k=&spm=1001.2101.3001.4834&d=1&t=3&u=039e5e83449f45899fc2eb0a5782a2a6" style="display: block;width: 0px;height: 0px;"></div>
+                </div>
+            <div class='aside-box kind_person d-flex flex-column'>
+                    <h3 class="aside-title">分类专栏</h3>
+                    <div class="align-items-stretch kindof_item" id="kind_person_column">
+                        <div class="aside-content">
+                            <ul>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7076147.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7076147.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756930.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">stm32</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7093877.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7093877.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">网络爬虫</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7454859.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7454859.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756724.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">SLAM</span>
+                                        </span>
+                                        <span class="count float-right">3篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7923173.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7923173.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756916.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">激光SLAM</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/johnnyyeh/category_7940552.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/johnnyyeh/category_7940552.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">概率机器人</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+</div>
+<div class="mask-dark"></div>
+<script>
+    var articleId = 79310655;
+    var commentscount = 17;
+    var curentUrl = "https://blog.csdn.net/johnnyyeh/article/details/79310655";
+    var myUrl = "https://my.csdn.net/";
+    var highlight = ["adjustment","bundlee","large","slam","bundle","stm","arg","adj","g2o","sla","ar","ad","und","lam","代码","st","am","dl","视觉","men","rge","g2","dj","nt","sl","简化","第十章","第十","讲","in","十四","》","十章"];//高亮数组
+    var isRecommendModule = true;
+    var isBaiduPre = true;
+    var baiduCount = 2;
+    var share_card_url = "https://app-blog.csdn.net/share?article_id=79310655&username=JohnnyYeh"
+	var articleType = 1;
+    var baiduKey = "《视觉SLAM十四讲》第十章g2o代码的简化";
+    var userNewReport = false;
+    var needInsertBaidu = true;
+    var recommendRegularDomainArr = ["blog.csdn.net/.+/article/details/","download.csdn.net/download/","edu.csdn.net/course/detail/","ask.csdn.net/questions/","bbs.csdn.net/topics/","www.csdn.net/gather_.+/"]
+    var codeStyle = "atom-one-dark";
+    var baiduSearchType = "title";
+    var canRead = true;
+    var blogMoveHomeArticle = false;
+    var showPcWindowAd = false;
+    var showHeadWord = true;
+    var showSearchText = "";
+    var linkPage = true;
+    var articleSource = 1;
+    var articleReport = '{"pid": "blog", "spm":"1001.2101"}';
+    var isShowToQuestion = false;
+    var baiduSearchChannel = 'pc_relevant'
+    var baiduSearchIdentification = '.no_search_link'
+    var distRequestId = '1636224854594_85719'
+    var initRewardObject = {
+        giver: "weixin_46326425",
+        anchor: "johnnyyeh",
+        articleId: "79310655",
+        sign: "2dba89af367aef41095f9543ad7f7871",
+    }
+    var isLikeStatus = false;
+    var isUnLikeStatus = false;
+    var studyLearnWord = "赠3个月"
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.4/js/sandalstrap.min.js"></script>
+<div class="skin-boxshadow"></div>
+<div class="directory-boxshadow"></div>
+<div class="pay-code">
+    <div class="pay-money">实付<span class="pay-money-span" data-nowprice='' data-oldprice=''>元</span></div>
+    <div class="content-blance"><a class="blance-bt" href="javascript:;">使用余额支付</a></div>
+    <div class="content-code">
+    <div id="payCode" data-id="">
+            <div class="renovate">
+                <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png">
+                <span>点击重新获取</span>
+            </div>
+        </div>
+        <div class="pay-style"><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png"></span><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png"></span><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png"></span><span class="text">扫码支付</span></div>
+    </div>
+    <div class="bt-close"><svg t="1567152543821" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10924" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12"><defs><style type="text/css"></style></defs><path d="M512 438.378667L806.506667 143.893333a52.032 52.032 0 1 1 73.6 73.621334L585.621333 512l294.485334 294.485333a52.074667 52.074667 0 0 1-73.6 73.642667L512 585.621333 217.514667 880.128a52.053333 52.053333 0 1 1-73.621334-73.642667L438.378667 512 143.893333 217.514667a52.053333 52.053333 0 1 1 73.621334-73.621334L512 438.378667z" fill="" p-id="10925"></path></svg></div>
+    <!-- <p style="margin-top: 8px;font-size: 14px;" class="text-center">支付成功即可阅读</p> -->
+    <div class="pay-balance">
+    <input type="radio" class="pay-code-radio" data-type="details"> 
+    <span class="span">钱包余额</span>
+    <span class="balance" style="color:#FC5531;font-size:14px;">0</span>  
+    <div class="pay-code-tile">
+        <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png" alt="">
+        <div class="pay-code-content">
+            <div class="span">
+                <p class="title">抵扣说明：</p>
+                <p> 1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。<br> 2.余额无法直接购买下载，可以购买VIP、C币套餐、付费专栏及课程。</p>
+            </div>
+        </div>
+    </div>
+    </div>
+    <a class="pay-balance-con" href="https://i.csdn.net/#/wallet/balance/recharge" target="_blank"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png" alt=""><span  >余额充值</span></a>
+</div>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+</body>
+    <!-- 富文本柱状图  -->
+	<link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/chart.css"/>
+	<script type="text/javascript" src="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/lib/chart.min.js"></script>
+    <script type="text/javascript" src="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/chart/widget2chart.js"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/components/js/pc_wap_highlight-a6777dccd0.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/components/js/pc_wap_common-48322534fc.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/components/js/edit_copy_code-1320dfe85c.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-dark.css">
+<script>
+ // 全局声明
+ if (window.csdn === undefined) {
+      window.csdn = {};
+    }
+    window.csdn.sideToolbar = {
+        options: {
+            report:{
+                isShow: true,
+            },
+            qr: {
+                isShow: false,
+            },
+            guide: {
+                isShow: true
+            }
+        }
+    }
+    $(function(){
+        $(document).on('click',"a.option-box[data-type='report']",function() {
+            window.csdn.userLogin.loadAjax(function(res){
+                if(userNewReport){
+                     window.csdn.feedback({
+                        "type":'blog',
+                        "rtype":'article',
+                        "rid":articleId,
+                        "reportedName":username,
+                        "submitOptions":{
+                            "title":articleTitle,
+                            "contentUrl":articleDetailUrl
+                        },
+                        "callback":function(){
+                            showToast({
+                                text: "感谢您的举报，我们会尽快审核！",
+                                bottom: '10%', //toast距离页面底部的距离
+                                zindex: 9000, //为了防止被其他控件遮盖，z-index默认为2
+                                speed: 500, //toast的显示速度
+                                time: 1500//toast显示多久以后消失
+                            });
+                        }
+                     })
+                }else{
+                    showReport(false,articleTitles);
+                }
+            })
+        });
+    })
+</script>
+    <script src="https://g.csdnimg.cn/baidu-search/1.0.9/baidu-search.js"  type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/download/old_static/js/qrcode.js"></script>
+<script src="https://g.csdnimg.cn/lib/qrcode/1.0.0/qrcode.min.js"></script>
+<script src="https://g.csdnimg.cn/user-ordercart/3.0.0/user-ordercart.js" type="text/javascript"></script>
+<script src="https://g.csdnimg.cn/user-ordertip/4.1.3/user-ordertip.js" type="text/javascript" ></script>
+<script src="https://g.csdnimg.cn/order-payment/3.0.2/order-payment.js" type="text/javascript" ></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/pc/js/common-8738548423.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/pc/js/detail-af0503e895.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/pc/js/column-c7621afc01.min.js" type="text/javascript"></script>
+<script src="https://g.csdnimg.cn/side-toolbar/3.0/side-toolbar.js" type="text/javascript"></script>
+<script src="https://g.csdnimg.cn/copyright/1.0.4/copyright.js" type="text/javascript"></script>
+<script>
+    $(".MathJax").remove();
+    if ($('div.markdown_views pre.prettyprint code.hljs').length > 0) {
+        $('div.markdown_views')[0].className = 'markdown_views';
+    }
+</script>
+<script type="text/javascript" src="https://csdnimg.cn/release/blog_mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none",
+                ignoreClass:"title-article"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/common/csdn-login-box/csdn-login-box.js"></script></html>

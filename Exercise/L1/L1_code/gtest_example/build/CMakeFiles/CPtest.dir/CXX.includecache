@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jindong/SLAM/Chap1/L1_code/gtest_example/gtest_sum.cpp
+iostream
+-
+gtest/gtest.h
+-
+

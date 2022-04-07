@@ -1,0 +1,31 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x0e\x00L\x003\x00_\x00c\x00o\x00d\x00e)
+
+[CMake]
+Build Directory Count=1
+Current Build Directory Index-Host System=0
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=/home/jindong/SLAM/Chap3/L3_code/build
+Build Type=Debug
+CMake Binary=/usr/local/bin/cmake
+CMake Executable=/usr/local/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
+Runtime=Host System
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=debug
+Configured Launchers=gdb
+Name=draw_trajectory
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Configured from ProjectItem=L3_code,draw_trajectory
+Project Target=L3_code,draw_trajectory
+Working Directory=file:///home/jindong/SLAM/Chap3/L3_code/build/
+isExecutable=false

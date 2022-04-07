@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin-when-crossorigin" />
+    <meta name="description" content="本节介绍了g2o的结构，并给出一个单目双视图Bundle Adjustment的例子。" />
+    <meta property="og:description" content="本节介绍了g2o的结构，并给出一个单目双视图Bundle Adjustment的例子。" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>深入理解图优化与g2o：g2o篇 - 半闲居士 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.svg" type="image/svg+xml" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=2QcNOT-4cswJU0WkEU_iaIrw-XzvspTBfocrOZeeg7A" />
+    <link id="MainCss" rel="stylesheet" href="/skins/blacklowkey/bundle-blacklowkey.min.css?v=1gj9-XJKL9BZFkjdvROYQPiPWjQXk-hsXXZGtqkfaSc" />
+    <link type="text/css" rel="stylesheet" href="/css/hljs/cnblogs.css?v=2spjdq1Snjw5rAm9auWVRax8Gb7nftS4ORu-8fQ7JGM" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/blacklowkey/bundle-blacklowkey-mobile.min.css?v=33KeagzZphPYYmWUJu-XgsC0EHvMP-otJo_LafYAUDY" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/gaoxiang12/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/gaoxiang12/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/gaoxiang12/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 176897;
+        var currentBlogApp = 'gaoxiang12';
+        var cb_enable_mathjax = true;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'BlackLowKey';
+        var visitorUserId = '';
+        var hasCustomScript = false;
+        try {
+            if (hasCustomScript && document.referrer && document.referrer.indexOf('baidu.com') >= 0) {
+                Object.defineProperty(document, 'referrer', { value: '' });
+                Object.defineProperty(Document.prototype, 'referrer', { get: function(){ return ''; } });
+            }
+        } catch(error) { }
+    </script>
+        <script>
+            var currentPostDateAdded = '2016-03-22 12:20';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=8yHqQbEMVqWgCEBNqpXAa87B4C2SyNErr7L-TCIg-A0"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']], processClass: 'math', processEscapes: true },
+        TeX: {
+        equationNumbers: { autoNumber: ['AMS'], useLabelIds: true },
+        extensions: ['extpfeil.js', 'mediawiki-texvc.js'],
+        Macros: {bm: "\\boldsymbol"}
+        },
+        'HTML-CSS': { linebreaks: { automatic: true } },
+        SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://mathjax.cnblogs.com/2_7_5/MathJax.js?config=TeX-AMS-MML_HTMLorMML&amp;v=20200504"></script>
+    
+    <script type="text/javascript">
+        window.codeHighlightEngine = 1
+        window.enableCodeLineNumber = false
+    </script>
+</head>
+<body class="skin-blacklowkey has-navbar has-bannerbar">
+    <a name="top"></a>
+        <img src="https://img2020.cnblogs.com/blog/35695/202111/35695-20211105105426393-708940416.jpg" style="display:none" onload="countImpressions('ad', 'C0-baidu')" />
+        <a target="_blank" href="https://cloud.baidu.com/campaign/20211111/index.html?track=cp:bokeyuan|pf:pc|pp:H-bokeyuan-21shuangshiyi-C0neiyedingbuPCtonglanbanner-cpc|pu:21shuangshiyi-C0neiyedingbuPCtonglanbanner-cpc|ci:21ssy|kw:10511932" onclick="clickBanner(497);countClicks('ad', 'C0-baidu')">
+            <div class="bannerbar aliyun forpc" style="background-size: contain; background-image: url(https://img2020.cnblogs.com/blog/35695/202111/35695-20211105105426393-708940416.jpg)">
+            </div>
+        </a>     
+        <div id="bannerbar" class="bannerbar-mobile formobile">
+            <a href="https://shunshun.com/huodong/cnblogs202111" onclick="countClicks('M2-shunshun')">
+                <img src="https://img2020.cnblogs.com/blog/35695/202111/35695-20211105210829195-421847446.jpg" alt="" />
+            </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="/images/logo.svg?v=R9M0WmLAIPVydmdzE2keuvnjl-bPR7_35oHqtiBzGsM" alt="博客园Logo" /></a></li>
+                <li><a href="/" onclick="countClicks('skin-navbar-sitehome')">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-news')">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-q')">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-brands')">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-ing')">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="countClicks('nav', 'skin-navbar-edu')">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3" />
+                        <button type="submit" id="zzk_search_button">
+                            <img src="/images/aggsite/search.svg" alt="搜索" />
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔">
+                        <img id="new_post_icon" class="navbar-icon" src="/images/aggsite/newpost.svg" alt="写随笔" />
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客">
+                        <img id="myblog_icon" class="navbar-icon" src="/images/aggsite/myblog.svg" alt="我的博客" />
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息">
+                        <img id="msg_icon" class="navbar-icon" src="/images/aggsite/message.svg?v=J0WS2P2iPgaIVgXxcAhliw4AFZIpaTWxtdoNAv9eiCA" alt="短消息" />
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="/images/aggsite/avatar-default.svg" alt="用户头像" />
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="/images/lite-mode-check.svg" class="hide" /><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/gaoxiang12/"><img id="blogLogo" src="/skins/custom/images/logo.gif" alt="返回主页" /></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/gaoxiang12/">半闲居士</a>
+</h1>
+<h2></h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/gaoxiang12/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%8D%8A%E9%97%B2%E5%B1%85%E5%A3%AB">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/gaoxiang12/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class = "postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/gaoxiang12/p/5304272.html">
+    <span>深入理解图优化与g2o：g2o篇</span>
+    
+
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                    <div id="cnblogs_post_description" style="display: none">
+        
+        本节介绍了g2o的结构，并给出一个单目双视图Bundle Adjustment的例子。
+    </div>
+<div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<h2>内容提要</h2>
+<p>　　讲完了优化的基本知识，我们来看一下g2o的结构。本篇将讨论g2o的代码结构，并带着大家一起写一个简单的双视图bundle adjustment：从两张图像中估计相机运动和特征点位置。你可以把它看成一个基于稀疏特征点的单目VO。</p>
+<hr>
+<h2>g2o的结构</h2>
+<p>　　g2o全称是什么？来跟我大声说一遍：General Graph Optimization！你可以叫它g土o，g二o，g方o，总之我也不知道该怎么叫它……</p>
+<p>　　所谓的通用图优化。</p>
+<p>　　为何叫通用呢？g2o的核里带有各种各样的求解器，而它的顶点、边的类型则多种多样。通过自定义顶点和边，事实上，只要一个优化问题能够表达成图，那么就可以用g2o去求解它。常见的，比如bundle adjustment，ICP，数据拟合，都可以用g2o来做。甚至我还在想神经网络能不能写成图优化的形式呢……</p>
+<p>　　从代码层面来说，g2o是一个c++编写的项目，用cmake构建。它的github地址在：https://github.com/RainerKuemmerle/g2o&nbsp;</p>
+<p>　　它是一个重度模板类的c++项目，其中矩阵数据结构多来自Eigen。首先我们来扫一眼它的目录下面都有什么吧：</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto" src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160321232204761-2101600227.png" alt=""></p>
+<p>　　如你所见，g2o项目中含有若干文件夹。刨开那些gitignore之类的零碎文件，主要有以下几个：</p>
+<ul>
+<li>EXTERNAL　　三方库，有ceres, csparse, freeglut，可以选择性地编译；</li>
+<li>cmake_modules　　给cmake用来寻找库的文件。我们用g2o时也会用它里头的东西，例如FindG2O.cmake</li>
+<li>doc　　　　　文档。包括g2o自带的说明书（难度挺大的一个说明文档）。</li>
+<li>g2o　　　　　　最重要的源代码都在这里！</li>
+<li>script　　　　在android等其他系统编译用的脚本，由于我们在ubuntu下就没必要多讲了。</li>
+</ul>
+<p>&nbsp;　　综上所述，最重要的就是g2o的源代码文件啦！所以我们要进一步展开看一看！</p>
+<p><img src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160321232831870-761923581.png" alt=""></p>
+<p>　　 我们同样地介绍一下各文件夹的内容：</p>
+<ul>
+<li>apps　　　　一些应用程序。好用的g2o_viewer就在这里。其他还有一些不常用的命令行工具等。</li>
+<li>core　　　　核心组件，<span style="color: rgba(128, 0, 0, 1)">很重要</span>！基本的顶点、边、图结构的定义，算法的定义，求解器接口的定义在这里。</li>
+<li>examples　　一些例程，可以参照着这里的东西来写。不过注释不太多。</li>
+<li>solvers　　　　求解器的实现。主要来自choldmod, csparse。在使用g2o时要先选择其中一种。</li>
+<li>stuff　　　　对用户来讲可有可无的一些工具函数。</li>
+<li>types　　　　各种顶点和边，<span style="color: rgba(128, 0, 0, 1)">很重要</span>！我们用户在构建图优化问题时，先要想好自己的顶点和边是否已经提供了定义。如果没有，要自己实现。如果有，就用g2o提供的即可。</li>
+</ul>
+<p>　　就经验而言，solvers给人的感觉是大同小异，而 types 的选取，则是 g2o 用户主要关心的内容。然后 core 下面的内容，我们要争取弄的比较熟悉，才能确保使用中出现错误可以正确地应对。</p>
+<p>　　那么，g2o最基本的类结构是怎么样的呢？我们如何来表达一个Graph，选择求解器呢？我们祭出一张图：</p>
+<p><img src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160321233900042-681579456.png" alt="" width="631" height="398"></p>
+<p>　　这个图第一次看，可能觉得有些混乱。但是随着g2o越用越多，你会发现越来越喜欢这个图……现在请读者跟着我的顺序来看这个图。</p>
+<p><span style="color: rgba(128, 0, 0, 1)">　　先看上半部分。SparseOptimizer</span> 是我们最终要维护的东东。它是一个Optimizable Graph，从而也是一个Hyper Graph。一个 <span style="color: rgba(128, 0, 0, 1)">SparseOptimizer</span> 含有很多个顶点 （都继承自 Base Vertex）和很多个边（继承自 BaseUnaryEdge, BaseBinaryEdge或BaseMultiEdge）。这些 Base Vertex 和 Base Edge 都是抽象的基类，而实际用的顶点和边，都是它们的派生类。我们用 <span style="color: rgba(128, 0, 0, 1)">SparseOptimizer</span>.addVertex 和 <span style="color: rgba(128, 0, 0, 1)">SparseOptimizer</span>.addEdge 向一个图中添加顶点和边，最后调用 <span style="color: rgba(128, 0, 0, 1)">SparseOptimizer</span>.optimize 完成优化。</p>
+<p>　　在优化之前，需要指定我们用的求解器和迭代算法。从图中下半部分可以看到，一个 <span style="color: rgba(128, 0, 0, 1)">SparseOptimizer</span> 拥有一个 Optimization Algorithm，继承自Gauss-Newton, Levernberg-Marquardt, Powell's dogleg 三者之一（我们常用的是GN或LM）。同时，这个 Optimization Algorithm 拥有一个Solver，它含有两个部分。一个是 SparseBlockMatrix ，用于计算稀疏的雅可比和海塞； 一个是用于计算迭代过程中最关键的一步 $$H \Delta x = -b $$ 这就需要一个线性方程的求解器。而这个求解器，可以从 PCG, CSparse, Choldmod 三者选一。</p>
+<p>　　综上所述，在g2o中选择优化方法一共需要三个步骤：</p>
+<ol>
+<li>选择一个线性方程求解器，从 PCG, CSparse, Choldmod中选，实际则来自 g2o/solvers 文件夹中定义的东东。</li>
+<li>选择一个 BlockSolver 。</li>
+<li>选择一个迭代策略，从GN, LM, Doglog中选。</li>
+</ol>
+<p>　　这样一来，读者是否对g2o就更清楚的认识了呢？</p>
+<p>　　小萝卜：师兄你慢点，我已经晕了……</p>
+<hr>
+<h2>双视图bundle adjustment：</h2>
+<p>　　既然小萝卜同学已经晕了，想必我们也成功地把读者朋友都绕进去了。既绕之则绕之，下面我们来通过一个实例，更深入地理解 g2o 的用法。这个实例是什么呢？我们来写一个双视图的bundle adjustment吧！</p>
+<blockquote>
+<p>　　代码的git地址：https://github.com/gaoxiang12/g2o_ba_example</p>
+</blockquote>
+<p>　　首先，师兄还是拿出那两张万年不变的老图：</p>
+<p><img src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160322104617636-832992062.png" alt="" width="434" height="203"></p>
+<p>　　我们的目标是估计这两个图之间的运动。虽然我们在《一起做》里讲过这件事怎么做了，但那是在RGBD的条件下。现在，我们没有深度图，只有这两张图像和相机内参，请问如何估计相机的运动？</p>
+<p>　　呃，这个问题好像还挺复杂的。我们需要用一点数学来描述它。所以请大家耐心看我推一会儿公式。</p>
+<p>　　求解这个问题，当下有两种思路。其一是通过特征点来求，其二是直接通过像素来求。第一种也叫做 sparse 方式，第二种叫做相对的 dense 方式。由于主流仍在用特征点，所以我们例程也用特征点。</p>
+<p>　　特征点方法的观点是：<span style="color: rgba(128, 0, 0, 1)">一个图像可以用几百个具有代表性的，比较稳定的点来表示</span>。一旦我们有了这些点，就可以忽略图中的其余部分，而只关注这些点。（dense 思路则反对这一观点，认为它丢弃了图像大部分信息，毕竟一个640x480的图有30万个点，而特征点只有几百个）。</p>
+<p>　　采用特征点的思路，那么问题变为：给定$N$个两张图中一一对应的点，记作：$${z_1} = \left\{ {z_1^1,z_1^2, \ldots ,z_1^N} \right\},{z_2} = \left\{ {z_2^1,z_2^2, \ldots ,z_2^N} \right\} $$ 以及相机内参矩阵 $C$，求解两个图中的相机运动$R,t$。</p>
+<p>　　注：字符$z$的上标不是几次方的意思，而是第几个点。采用上标的原因是为了避免双下标带来的麻烦。同时，每个点的具体值$z$，是指该点对应的像素坐标：$z_i^j = [u,v]_i^j$，它们是二维的。</p>
+<p>　　<img src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160322112148104-1501438735.png" alt="" width="523" height="392"></p>
+<p>&nbsp;　小萝卜：师兄啊，这图一股浓浓的山寨味啊。</p>
+<p>　　不管它，总之，假设相机1的位姿为单位矩阵，对于任意一个特征点，它在三维空间的真实坐标位于 $X^j$，而在两个相机坐标系上看来是 $z_1^j, z_2^j$。根据投影关系，我们有：</p>
+<p>\[ \begin{equation} {\lambda _1}\left[ \begin{array}{l}<br>z_1^j\\<br>1<br>\end{array} \right] = C{X^j},\quad {\lambda _2}\left[ \begin{array}{l}<br>z_2^j\\<br>1<br>\end{array} \right] = C\left( {R{X^j} + t} \right) \end{equation}\]</p>
+<p>&nbsp;　　这里的 $\lambda_1, \lambda_2$ 表示两个像素的深度值，说白了也就是相机1坐标下$X^j$的$z$坐标。虽然我们不知道这个实际的$X^j$是什么，但它和$z$之间的关系，是可以列写出来的。</p>
+<p>&nbsp;　　这个问题的传统求解方式，是把两个方程中的$X^j$消去，得到只关于$z, R, t$的关系式，然后进行优化。这条道路通向对极几何和基础矩阵（Essential Matrix），理论上，我们需要大于八个的匹配点就能计算出$R,t$。但这里我们并不这样做，因为我们是在介绍图优化嘛。</p>
+<p>　　在图优化中，我们构建一个优化问题，并表示成图去求解。这里的优化问题是什么呢？这可以这样写：</p>
+<p>\[ \begin{equation} \mathop {\min }\limits_{{X^j},R,t} {\left\| {\frac{1}{{{\lambda _1}}}C{X^j} - {{\left[ {z_1^j,1} \right]}^T}} \right\|^2} + {\left\| {\frac{1}{{{\lambda _2}}}C\left( {R{X^j} + t} \right) - {{\left[ {z_2^j,1} \right]}^T}} \right\|^2} \end{equation} \]&nbsp;</p>
+<p>　　由于各种噪声的存在，投影关系不能完美满足，所以我们转而优化它们误差的二范数。那么对每一个特征点，我们都能写出这样一个二范数的误差项。对它们进行求和，就得到了整个优化问题：</p>
+<p>\[ \begin{equation} \mathop {\min }\limits_{X,R,t} \sum\limits_{j = 1}^N {{{\left\| {\frac{1}{{{\lambda _1}}}C{X^j} - {{\left[ {z_1^j,1} \right]}^T}} \right\|}^2} + {{\left\| {\frac{1}{{{\lambda _2}}}C\left( {R{X^j} + t} \right) - {{\left[ {z_2^j,1} \right]}^T}} \right\|}^2}} \end{equation} \]</p>
+<p>　　它叫做最小化重投影误差问题（Minimization of Reprojection error）。当然，它很遗憾地，是个非线性，非凸的优化问题，这意味着我们不一定能求解它，也不一定能找到全局最优的解。在实际操作中，我们实际上是在调整每个$X^j$，使得它们更符合每一次观测$z^j$，也就是使每个误差项都尽量的小。由于这个原因，它也叫做捆集调整（Bundle Adjustment）。</p>
+<p>　　BA很容易表述成图优化的形式。在这个双视图BA中，一种有两种结点：</p>
+<ul>
+<li>相机位姿结点：表达两个相机所在的位置，是一个$SE(3)$里的元素。</li>
+<li>特征点的空间位置结点：是一个XYZ坐标。</li>
+
+</ul>
+<p>　　相应的，边主要表示<span style="color: rgba(128, 0, 0, 1)">空间点到像素坐标的投影关系</span>。也就是</p>
+<p>\[\lambda \left[ \begin{array}{l}<br>{z^j}\\<br>1<br>\end{array} \right] = C\left( {R{X^j} + t} \right)\] 这件事情喽。</p>
+<hr>
+<h2>&nbsp;实现</h2>
+<p>　　下面我们来用g2o实现一下BA。选取的结点和边如下：</p>
+<ul>
+<li>结点1：相机位姿结点：g2o::VertexSE3Expmap，来自<span class="pl-pds">&lt;g2o/types/sba/types_six_dof_expmap.h<span class="pl-pds">&gt;；</span></span></li>
+<li>结点2：特征点空间坐标结点：g2o::VertexSBAPointXYZ，来自&lt;g2o/types/sba/types_sba.h&gt;；</li>
+<li>边：重投影误差：g2o::EdgeProjectXYZ2UV，来自&lt;g2o/types/sba/types_six_dof_expmap.h<span class="pl-pds">&gt;；</span></li>
+
+</ul>
+<p>　　为了给读者更深刻的印象，我们显示一下边的源码（也请读者最好亲自打开g2o下这几个文件看一下顶点和边的定义）：</p>
+<p><img src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160322120203089-2089929193.png" alt=""></p>
+<p>　　这个是 EdgeProjectXYZ2UV 边的定义。它是一个Binary Edge，后面的模板参数表示，它的数据是2维的，来自Eigen::Vector2D，它连接的两个顶点必须是 VertexSBAPointXYZ， VertexSE3Expmap。 我们还能看到它的 computeError 定义，和前面给出的公式是一致的。注意到计算Error时，它调用了 g2o::CameraParameters 作为参数，所以我们在设置这条边时也需要给定一个相机参数。</p>
+<p>　　铺垫了那么多之后，给出我们的源码：</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 128, 1)">  1</span> <span style="color: rgba(0, 128, 0, 1)">/*</span><span style="color: rgba(0, 128, 0, 1)">*
+</span><span style="color: rgba(0, 128, 128, 1)">  2</span> <span style="color: rgba(0, 128, 0, 1)"> * BA Example 
+</span><span style="color: rgba(0, 128, 128, 1)">  3</span> <span style="color: rgba(0, 128, 0, 1)"> * Author: Xiang Gao
+</span><span style="color: rgba(0, 128, 128, 1)">  4</span> <span style="color: rgba(0, 128, 0, 1)"> * Date: 2016.3
+</span><span style="color: rgba(0, 128, 128, 1)">  5</span> <span style="color: rgba(0, 128, 0, 1)"> * Email: gaoxiang12@mails.tsinghua.edu.cn
+</span><span style="color: rgba(0, 128, 128, 1)">  6</span> <span style="color: rgba(0, 128, 0, 1)"> * 
+</span><span style="color: rgba(0, 128, 128, 1)">  7</span> <span style="color: rgba(0, 128, 0, 1)"> * 在这个程序中，我们读取两张图像，进行特征匹配。然后根据匹配得到的特征，计算相机运动以及特征点的位置。这是一个典型的Bundle Adjustment，我们用g2o进行优化。
+</span><span style="color: rgba(0, 128, 128, 1)">  8</span>  <span style="color: rgba(0, 128, 0, 1)">*/</span>
+<span style="color: rgba(0, 128, 128, 1)">  9</span> 
+<span style="color: rgba(0, 128, 128, 1)"> 10</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> for std</span>
+<span style="color: rgba(0, 128, 128, 1)"> 11</span> #include &lt;iostream&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 12</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> for opencv </span>
+<span style="color: rgba(0, 128, 128, 1)"> 13</span> #include &lt;opencv2/core/core.hpp&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 14</span> #include &lt;opencv2/highgui/highgui.hpp&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 15</span> #include &lt;opencv2/features2d/features2d.hpp&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 16</span> #include &lt;boost/concept_check.hpp&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 17</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> for g2o</span>
+<span style="color: rgba(0, 128, 128, 1)"> 18</span> #include &lt;g2o/core/sparse_optimizer.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 19</span> #include &lt;g2o/core/block_solver.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 20</span> #include &lt;g2o/core/robust_kernel.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 21</span> #include &lt;g2o/core/robust_kernel_impl.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 22</span> #include &lt;g2o/core/optimization_algorithm_levenberg.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 23</span> #include &lt;g2o/solvers/cholmod/linear_solver_cholmod.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 24</span> #include &lt;g2o/types/slam3d/se3quat.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 25</span> #include &lt;g2o/types/sba/types_six_dof_expmap.h&gt;
+<span style="color: rgba(0, 128, 128, 1)"> 26</span> 
+<span style="color: rgba(0, 128, 128, 1)"> 27</span> 
+<span style="color: rgba(0, 128, 128, 1)"> 28</span> <span style="color: rgba(0, 0, 255, 1)">using</span> <span style="color: rgba(0, 0, 255, 1)">namespace</span><span style="color: rgba(0, 0, 0, 1)"> std;
+</span><span style="color: rgba(0, 128, 128, 1)"> 29</span> 
+<span style="color: rgba(0, 128, 128, 1)"> 30</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 寻找两个图像中的对应点，像素坐标系
+</span><span style="color: rgba(0, 128, 128, 1)"> 31</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 输入：img1, img2 两张图像
+</span><span style="color: rgba(0, 128, 128, 1)"> 32</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 输出：points1, points2, 两组对应的2D点</span>
+<span style="color: rgba(0, 128, 128, 1)"> 33</span> <span style="color: rgba(0, 0, 255, 1)">int</span>     findCorrespondingPoints( <span style="color: rgba(0, 0, 255, 1)">const</span> cv::Mat&amp; img1, <span style="color: rgba(0, 0, 255, 1)">const</span> cv::Mat&amp; img2, vector&lt;cv::Point2f&gt;&amp; points1, vector&lt;cv::Point2f&gt;&amp;<span style="color: rgba(0, 0, 0, 1)"> points2 );
+</span><span style="color: rgba(0, 128, 128, 1)"> 34</span> 
+<span style="color: rgba(0, 128, 128, 1)"> 35</span> <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 相机内参</span>
+<span style="color: rgba(0, 128, 128, 1)"> 36</span> <span style="color: rgba(0, 0, 255, 1)">double</span> cx = <span style="color: rgba(128, 0, 128, 1)">325.5</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)"> 37</span> <span style="color: rgba(0, 0, 255, 1)">double</span> cy = <span style="color: rgba(128, 0, 128, 1)">253.5</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)"> 38</span> <span style="color: rgba(0, 0, 255, 1)">double</span> fx = <span style="color: rgba(128, 0, 128, 1)">518.0</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)"> 39</span> <span style="color: rgba(0, 0, 255, 1)">double</span> fy = <span style="color: rgba(128, 0, 128, 1)">519.0</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)"> 40</span> 
+<span style="color: rgba(0, 128, 128, 1)"> 41</span> <span style="color: rgba(0, 0, 255, 1)">int</span> main( <span style="color: rgba(0, 0, 255, 1)">int</span> argc, <span style="color: rgba(0, 0, 255, 1)">char</span>**<span style="color: rgba(0, 0, 0, 1)"> argv )
+</span><span style="color: rgba(0, 128, 128, 1)"> 42</span> <span style="color: rgba(0, 0, 0, 1)">{
+</span><span style="color: rgba(0, 128, 128, 1)"> 43</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 调用格式：命令 [第一个图] [第二个图]</span>
+<span style="color: rgba(0, 128, 128, 1)"> 44</span>     <span style="color: rgba(0, 0, 255, 1)">if</span> (argc != <span style="color: rgba(128, 0, 128, 1)">3</span><span style="color: rgba(0, 0, 0, 1)">)
+</span><span style="color: rgba(0, 128, 128, 1)"> 45</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)"> 46</span>         cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">Usage: ba_example img1, img2</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)"> 47</span>         exit(<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)"> 48</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)"> 49</span>     
+<span style="color: rgba(0, 128, 128, 1)"> 50</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 读取图像</span>
+<span style="color: rgba(0, 128, 128, 1)"> 51</span>     cv::Mat img1 = cv::imread( argv[<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">] ); 
+</span><span style="color: rgba(0, 128, 128, 1)"> 52</span>     cv::Mat img2 = cv::imread( argv[<span style="color: rgba(128, 0, 128, 1)">2</span><span style="color: rgba(0, 0, 0, 1)">] ); 
+</span><span style="color: rgba(0, 128, 128, 1)"> 53</span>     
+<span style="color: rgba(0, 128, 128, 1)"> 54</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 找到对应点</span>
+<span style="color: rgba(0, 128, 128, 1)"> 55</span>     vector&lt;cv::Point2f&gt;<span style="color: rgba(0, 0, 0, 1)"> pts1, pts2;
+</span><span style="color: rgba(0, 128, 128, 1)"> 56</span>     <span style="color: rgba(0, 0, 255, 1)">if</span> ( findCorrespondingPoints( img1, img2, pts1, pts2 ) == <span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)"> 57</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)"> 58</span>         cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">匹配点不够！</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)"> 59</span>         <span style="color: rgba(0, 0, 255, 1)">return</span> <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)"> 60</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)"> 61</span>     cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">找到了</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;pts1.size()&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">组对应特征点。</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)"> 62</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 构造g2o中的图
+</span><span style="color: rgba(0, 128, 128, 1)"> 63</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 先构造求解器</span>
+<span style="color: rgba(0, 128, 128, 1)"> 64</span> <span style="color: rgba(0, 0, 0, 1)">    g2o::SparseOptimizer    optimizer;
+</span><span style="color: rgba(0, 128, 128, 1)"> 65</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 使用Cholmod中的线性方程求解器</span>
+<span style="color: rgba(0, 128, 128, 1)"> 66</span>     g2o::BlockSolver_6_3::LinearSolverType* linearSolver = <span style="color: rgba(0, 0, 255, 1)">new</span>  g2o::LinearSolverCholmod&lt;g2o::BlockSolver_6_3::PoseMatrixType&gt;<span style="color: rgba(0, 0, 0, 1)"> ();
+</span><span style="color: rgba(0, 128, 128, 1)"> 67</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 6*3 的参数</span>
+<span style="color: rgba(0, 128, 128, 1)"> 68</span>     g2o::BlockSolver_6_3* block_solver = <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::BlockSolver_6_3( linearSolver );
+</span><span style="color: rgba(0, 128, 128, 1)"> 69</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> L-M 下降 </span>
+<span style="color: rgba(0, 128, 128, 1)"> 70</span>     g2o::OptimizationAlgorithmLevenberg* algorithm = <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::OptimizationAlgorithmLevenberg( block_solver );
+</span><span style="color: rgba(0, 128, 128, 1)"> 71</span>     
+<span style="color: rgba(0, 128, 128, 1)"> 72</span> <span style="color: rgba(0, 0, 0, 1)">    optimizer.setAlgorithm( algorithm );
+</span><span style="color: rgba(0, 128, 128, 1)"> 73</span>     optimizer.setVerbose( <span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)"> );
+</span><span style="color: rgba(0, 128, 128, 1)"> 74</span>     
+<span style="color: rgba(0, 128, 128, 1)"> 75</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 添加节点
+</span><span style="color: rgba(0, 128, 128, 1)"> 76</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 两个位姿节点</span>
+<span style="color: rgba(0, 128, 128, 1)"> 77</span>     <span style="color: rgba(0, 0, 255, 1)">for</span> ( <span style="color: rgba(0, 0, 255, 1)">int</span> i=<span style="color: rgba(128, 0, 128, 1)">0</span>; i&lt;<span style="color: rgba(128, 0, 128, 1)">2</span>; i++<span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)"> 78</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)"> 79</span>         g2o::VertexSE3Expmap* v = <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::VertexSE3Expmap();
+</span><span style="color: rgba(0, 128, 128, 1)"> 80</span>         v-&gt;<span style="color: rgba(0, 0, 0, 1)">setId(i);
+</span><span style="color: rgba(0, 128, 128, 1)"> 81</span>         <span style="color: rgba(0, 0, 255, 1)">if</span> ( i == <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">)
+</span><span style="color: rgba(0, 128, 128, 1)"> 82</span>             v-&gt;setFixed( <span style="color: rgba(0, 0, 255, 1)">true</span> ); <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 第一个点固定为零
+</span><span style="color: rgba(0, 128, 128, 1)"> 83</span>         <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 预设值为单位Pose，因为我们不知道任何信息</span>
+<span style="color: rgba(0, 128, 128, 1)"> 84</span>         v-&gt;<span style="color: rgba(0, 0, 0, 1)">setEstimate( g2o::SE3Quat() );
+</span><span style="color: rgba(0, 128, 128, 1)"> 85</span> <span style="color: rgba(0, 0, 0, 1)">        optimizer.addVertex( v );
+</span><span style="color: rgba(0, 128, 128, 1)"> 86</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)"> 87</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 很多个特征点的节点
+</span><span style="color: rgba(0, 128, 128, 1)"> 88</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 以第一帧为准</span>
+<span style="color: rgba(0, 128, 128, 1)"> 89</span>     <span style="color: rgba(0, 0, 255, 1)">for</span> ( size_t i=<span style="color: rgba(128, 0, 128, 1)">0</span>; i&lt;pts1.size(); i++<span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)"> 90</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)"> 91</span>         g2o::VertexSBAPointXYZ* v = <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::VertexSBAPointXYZ();
+</span><span style="color: rgba(0, 128, 128, 1)"> 92</span>         v-&gt;setId( <span style="color: rgba(128, 0, 128, 1)">2</span> +<span style="color: rgba(0, 0, 0, 1)"> i );
+</span><span style="color: rgba(0, 128, 128, 1)"> 93</span>         <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 由于深度不知道，只能把深度设置为1了</span>
+<span style="color: rgba(0, 128, 128, 1)"> 94</span>         <span style="color: rgba(0, 0, 255, 1)">double</span> z = <span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)"> 95</span>         <span style="color: rgba(0, 0, 255, 1)">double</span> x = ( pts1[i].x - cx ) * z /<span style="color: rgba(0, 0, 0, 1)"> fx; 
+</span><span style="color: rgba(0, 128, 128, 1)"> 96</span>         <span style="color: rgba(0, 0, 255, 1)">double</span> y = ( pts1[i].y - cy ) * z /<span style="color: rgba(0, 0, 0, 1)"> fy; 
+</span><span style="color: rgba(0, 128, 128, 1)"> 97</span>         v-&gt;setMarginalized(<span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)"> 98</span>         v-&gt;<span style="color: rgba(0, 0, 0, 1)">setEstimate( Eigen::Vector3d(x,y,z) );
+</span><span style="color: rgba(0, 128, 128, 1)"> 99</span> <span style="color: rgba(0, 0, 0, 1)">        optimizer.addVertex( v );
+</span><span style="color: rgba(0, 128, 128, 1)">100</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)">101</span>     
+<span style="color: rgba(0, 128, 128, 1)">102</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 准备相机参数</span>
+<span style="color: rgba(0, 128, 128, 1)">103</span>     g2o::CameraParameters* camera = <span style="color: rgba(0, 0, 255, 1)">new</span> g2o::CameraParameters( fx, Eigen::Vector2d(cx, cy), <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)"> );
+</span><span style="color: rgba(0, 128, 128, 1)">104</span>     camera-&gt;setId(<span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)">105</span> <span style="color: rgba(0, 0, 0, 1)">    optimizer.addParameter( camera );
+</span><span style="color: rgba(0, 128, 128, 1)">106</span>     
+<span style="color: rgba(0, 128, 128, 1)">107</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 准备边
+</span><span style="color: rgba(0, 128, 128, 1)">108</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 第一帧</span>
+<span style="color: rgba(0, 128, 128, 1)">109</span>     vector&lt;g2o::EdgeProjectXYZ2UV*&gt;<span style="color: rgba(0, 0, 0, 1)"> edges;
+</span><span style="color: rgba(0, 128, 128, 1)">110</span>     <span style="color: rgba(0, 0, 255, 1)">for</span> ( size_t i=<span style="color: rgba(128, 0, 128, 1)">0</span>; i&lt;pts1.size(); i++<span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)">111</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)">112</span>         g2o::EdgeProjectXYZ2UV*  edge = <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::EdgeProjectXYZ2UV();
+</span><span style="color: rgba(0, 128, 128, 1)">113</span>         edge-&gt;setVertex( <span style="color: rgba(128, 0, 128, 1)">0</span>, dynamic_cast&lt;g2o::VertexSBAPointXYZ*&gt;   (optimizer.vertex(i+<span style="color: rgba(128, 0, 128, 1)">2</span><span style="color: rgba(0, 0, 0, 1)">)) );
+</span><span style="color: rgba(0, 128, 128, 1)">114</span>         edge-&gt;setVertex( <span style="color: rgba(128, 0, 128, 1)">1</span>, dynamic_cast&lt;g2o::VertexSE3Expmap*&gt;     (optimizer.vertex(<span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">)) );
+</span><span style="color: rgba(0, 128, 128, 1)">115</span>         edge-&gt;<span style="color: rgba(0, 0, 0, 1)">setMeasurement( Eigen::Vector2d(pts1[i].x, pts1[i].y ) );
+</span><span style="color: rgba(0, 128, 128, 1)">116</span>         edge-&gt;<span style="color: rgba(0, 0, 0, 1)">setInformation( Eigen::Matrix2d::Identity() );
+</span><span style="color: rgba(0, 128, 128, 1)">117</span>         edge-&gt;setParameterId(<span style="color: rgba(128, 0, 128, 1)">0</span>, <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)">118</span>         <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 核函数</span>
+<span style="color: rgba(0, 128, 128, 1)">119</span>         edge-&gt;setRobustKernel( <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::RobustKernelHuber() );
+</span><span style="color: rgba(0, 128, 128, 1)">120</span> <span style="color: rgba(0, 0, 0, 1)">        optimizer.addEdge( edge );
+</span><span style="color: rgba(0, 128, 128, 1)">121</span> <span style="color: rgba(0, 0, 0, 1)">        edges.push_back(edge);
+</span><span style="color: rgba(0, 128, 128, 1)">122</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)">123</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 第二帧</span>
+<span style="color: rgba(0, 128, 128, 1)">124</span>     <span style="color: rgba(0, 0, 255, 1)">for</span> ( size_t i=<span style="color: rgba(128, 0, 128, 1)">0</span>; i&lt;pts2.size(); i++<span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)">125</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)">126</span>         g2o::EdgeProjectXYZ2UV*  edge = <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::EdgeProjectXYZ2UV();
+</span><span style="color: rgba(0, 128, 128, 1)">127</span>         edge-&gt;setVertex( <span style="color: rgba(128, 0, 128, 1)">0</span>, dynamic_cast&lt;g2o::VertexSBAPointXYZ*&gt;   (optimizer.vertex(i+<span style="color: rgba(128, 0, 128, 1)">2</span><span style="color: rgba(0, 0, 0, 1)">)) );
+</span><span style="color: rgba(0, 128, 128, 1)">128</span>         edge-&gt;setVertex( <span style="color: rgba(128, 0, 128, 1)">1</span>, dynamic_cast&lt;g2o::VertexSE3Expmap*&gt;     (optimizer.vertex(<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">)) );
+</span><span style="color: rgba(0, 128, 128, 1)">129</span>         edge-&gt;<span style="color: rgba(0, 0, 0, 1)">setMeasurement( Eigen::Vector2d(pts2[i].x, pts2[i].y ) );
+</span><span style="color: rgba(0, 128, 128, 1)">130</span>         edge-&gt;<span style="color: rgba(0, 0, 0, 1)">setInformation( Eigen::Matrix2d::Identity() );
+</span><span style="color: rgba(0, 128, 128, 1)">131</span>         edge-&gt;setParameterId(<span style="color: rgba(128, 0, 128, 1)">0</span>,<span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)">132</span>         <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 核函数</span>
+<span style="color: rgba(0, 128, 128, 1)">133</span>         edge-&gt;setRobustKernel( <span style="color: rgba(0, 0, 255, 1)">new</span><span style="color: rgba(0, 0, 0, 1)"> g2o::RobustKernelHuber() );
+</span><span style="color: rgba(0, 128, 128, 1)">134</span> <span style="color: rgba(0, 0, 0, 1)">        optimizer.addEdge( edge );
+</span><span style="color: rgba(0, 128, 128, 1)">135</span> <span style="color: rgba(0, 0, 0, 1)">        edges.push_back(edge);
+</span><span style="color: rgba(0, 128, 128, 1)">136</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)">137</span>     
+<span style="color: rgba(0, 128, 128, 1)">138</span>     cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">开始优化</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)">139</span>     optimizer.setVerbose(<span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)">140</span> <span style="color: rgba(0, 0, 0, 1)">    optimizer.initializeOptimization();
+</span><span style="color: rgba(0, 128, 128, 1)">141</span>     optimizer.optimize(<span style="color: rgba(128, 0, 128, 1)">10</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)">142</span>     cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">优化完毕</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)">143</span>     
+<span style="color: rgba(0, 128, 128, 1)">144</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">我们比较关心两帧之间的变换矩阵</span>
+<span style="color: rgba(0, 128, 128, 1)">145</span>     g2o::VertexSE3Expmap* v = dynamic_cast&lt;g2o::VertexSE3Expmap*&gt;( optimizer.vertex(<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">) );
+</span><span style="color: rgba(0, 128, 128, 1)">146</span>     Eigen::Isometry3d pose = v-&gt;<span style="color: rgba(0, 0, 0, 1)">estimate();
+</span><span style="color: rgba(0, 128, 128, 1)">147</span>     cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">Pose=</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;endl&lt;&lt;pose.matrix()&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)">148</span>     
+<span style="color: rgba(0, 128, 128, 1)">149</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 以及所有特征点的位置</span>
+<span style="color: rgba(0, 128, 128, 1)">150</span>     <span style="color: rgba(0, 0, 255, 1)">for</span> ( size_t i=<span style="color: rgba(128, 0, 128, 1)">0</span>; i&lt;pts1.size(); i++<span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)">151</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)">152</span>         g2o::VertexSBAPointXYZ* v = dynamic_cast&lt;g2o::VertexSBAPointXYZ*&gt; (optimizer.vertex(i+<span style="color: rgba(128, 0, 128, 1)">2</span><span style="color: rgba(0, 0, 0, 1)">));
+</span><span style="color: rgba(0, 128, 128, 1)">153</span>         cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">vertex id </span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;i+<span style="color: rgba(128, 0, 128, 1)">2</span>&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">, pos = </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)">154</span>         Eigen::Vector3d pos = v-&gt;<span style="color: rgba(0, 0, 0, 1)">estimate();
+</span><span style="color: rgba(0, 128, 128, 1)">155</span>         cout&lt;&lt;pos(<span style="color: rgba(128, 0, 128, 1)">0</span>)&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">,</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;pos(<span style="color: rgba(128, 0, 128, 1)">1</span>)&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">,</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;pos(<span style="color: rgba(128, 0, 128, 1)">2</span>)&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)">156</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)">157</span>     
+<span style="color: rgba(0, 128, 128, 1)">158</span>     <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 估计inlier的个数</span>
+<span style="color: rgba(0, 128, 128, 1)">159</span>     <span style="color: rgba(0, 0, 255, 1)">int</span> inliers = <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)">160</span>     <span style="color: rgba(0, 0, 255, 1)">for</span><span style="color: rgba(0, 0, 0, 1)"> ( auto e:edges )
+</span><span style="color: rgba(0, 128, 128, 1)">161</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)">162</span>         e-&gt;<span style="color: rgba(0, 0, 0, 1)">computeError();
+</span><span style="color: rgba(0, 128, 128, 1)">163</span>         <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> chi2 就是 error*\Omega*error, 如果这个数很大，说明此边的值与其他边很不相符</span>
+<span style="color: rgba(0, 128, 128, 1)">164</span>         <span style="color: rgba(0, 0, 255, 1)">if</span> ( e-&gt;chi2() &gt; <span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)">165</span> <span style="color: rgba(0, 0, 0, 1)">        {
+</span><span style="color: rgba(0, 128, 128, 1)">166</span>             cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">error = </span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;e-&gt;chi2()&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)">167</span> <span style="color: rgba(0, 0, 0, 1)">        }
+</span><span style="color: rgba(0, 128, 128, 1)">168</span>         <span style="color: rgba(0, 0, 255, 1)">else</span> 
+<span style="color: rgba(0, 128, 128, 1)">169</span> <span style="color: rgba(0, 0, 0, 1)">        {
+</span><span style="color: rgba(0, 128, 128, 1)">170</span>             inliers++<span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)">171</span> <span style="color: rgba(0, 0, 0, 1)">        }
+</span><span style="color: rgba(0, 128, 128, 1)">172</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)">173</span>     
+<span style="color: rgba(0, 128, 128, 1)">174</span>     cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">inliers in total points: </span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;inliers&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">/</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;pts1.size()+pts2.size()&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)">175</span>     optimizer.save(<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">ba.g2o</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)">176</span>     <span style="color: rgba(0, 0, 255, 1)">return</span> <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)">177</span> <span style="color: rgba(0, 0, 0, 1)">}
+</span><span style="color: rgba(0, 128, 128, 1)">178</span> 
+<span style="color: rgba(0, 128, 128, 1)">179</span> 
+<span style="color: rgba(0, 128, 128, 1)">180</span> <span style="color: rgba(0, 0, 255, 1)">int</span>     findCorrespondingPoints( <span style="color: rgba(0, 0, 255, 1)">const</span> cv::Mat&amp; img1, <span style="color: rgba(0, 0, 255, 1)">const</span> cv::Mat&amp; img2, vector&lt;cv::Point2f&gt;&amp; points1, vector&lt;cv::Point2f&gt;&amp;<span style="color: rgba(0, 0, 0, 1)"> points2 )
+</span><span style="color: rgba(0, 128, 128, 1)">181</span> <span style="color: rgba(0, 0, 0, 1)">{
+</span><span style="color: rgba(0, 128, 128, 1)">182</span> <span style="color: rgba(0, 0, 0, 1)">    cv::ORB orb;
+</span><span style="color: rgba(0, 128, 128, 1)">183</span>     vector&lt;cv::KeyPoint&gt;<span style="color: rgba(0, 0, 0, 1)"> kp1, kp2;
+</span><span style="color: rgba(0, 128, 128, 1)">184</span> <span style="color: rgba(0, 0, 0, 1)">    cv::Mat desp1, desp2;
+</span><span style="color: rgba(0, 128, 128, 1)">185</span> <span style="color: rgba(0, 0, 0, 1)">    orb( img1, cv::Mat(), kp1, desp1 );
+</span><span style="color: rgba(0, 128, 128, 1)">186</span> <span style="color: rgba(0, 0, 0, 1)">    orb( img2, cv::Mat(), kp2, desp2 );
+</span><span style="color: rgba(0, 128, 128, 1)">187</span>     cout&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">分别找到了</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;kp1.size()&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">和</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;kp2.size()&lt;&lt;<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">个特征点</span><span style="color: rgba(128, 0, 0, 1)">"</span>&lt;&lt;<span style="color: rgba(0, 0, 0, 1)">endl;
+</span><span style="color: rgba(0, 128, 128, 1)">188</span>     
+<span style="color: rgba(0, 128, 128, 1)">189</span>     cv::Ptr&lt;cv::DescriptorMatcher&gt;  matcher = cv::DescriptorMatcher::create( <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">BruteForce-Hamming</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">);
+</span><span style="color: rgba(0, 128, 128, 1)">190</span>     
+<span style="color: rgba(0, 128, 128, 1)">191</span>     <span style="color: rgba(0, 0, 255, 1)">double</span> knn_match_ratio=<span style="color: rgba(128, 0, 128, 1)">0.8</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)">192</span>     vector&lt; vector&lt;cv::DMatch&gt; &gt;<span style="color: rgba(0, 0, 0, 1)"> matches_knn;
+</span><span style="color: rgba(0, 128, 128, 1)">193</span>     matcher-&gt;knnMatch( desp1, desp2, matches_knn, <span style="color: rgba(128, 0, 128, 1)">2</span><span style="color: rgba(0, 0, 0, 1)"> );
+</span><span style="color: rgba(0, 128, 128, 1)">194</span>     vector&lt; cv::DMatch &gt;<span style="color: rgba(0, 0, 0, 1)"> matches;
+</span><span style="color: rgba(0, 128, 128, 1)">195</span>     <span style="color: rgba(0, 0, 255, 1)">for</span> ( size_t i=<span style="color: rgba(128, 0, 128, 1)">0</span>; i&lt;matches_knn.size(); i++<span style="color: rgba(0, 0, 0, 1)"> )
+</span><span style="color: rgba(0, 128, 128, 1)">196</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)">197</span>         <span style="color: rgba(0, 0, 255, 1)">if</span> (matches_knn[i][<span style="color: rgba(128, 0, 128, 1)">0</span>].distance &lt; knn_match_ratio * matches_knn[i][<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">].distance )
+</span><span style="color: rgba(0, 128, 128, 1)">198</span>             matches.push_back( matches_knn[i][<span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">] );
+</span><span style="color: rgba(0, 128, 128, 1)">199</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)">200</span>     
+<span style="color: rgba(0, 128, 128, 1)">201</span>     <span style="color: rgba(0, 0, 255, 1)">if</span> (matches.size() &lt;= <span style="color: rgba(128, 0, 128, 1)">20</span>) <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">匹配点太少</span>
+<span style="color: rgba(0, 128, 128, 1)">202</span>         <span style="color: rgba(0, 0, 255, 1)">return</span> <span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)">203</span>     
+<span style="color: rgba(0, 128, 128, 1)">204</span>     <span style="color: rgba(0, 0, 255, 1)">for</span><span style="color: rgba(0, 0, 0, 1)"> ( auto m:matches )
+</span><span style="color: rgba(0, 128, 128, 1)">205</span> <span style="color: rgba(0, 0, 0, 1)">    {
+</span><span style="color: rgba(0, 128, 128, 1)">206</span> <span style="color: rgba(0, 0, 0, 1)">        points1.push_back( kp1[m.queryIdx].pt );
+</span><span style="color: rgba(0, 128, 128, 1)">207</span> <span style="color: rgba(0, 0, 0, 1)">        points2.push_back( kp2[m.trainIdx].pt );
+</span><span style="color: rgba(0, 128, 128, 1)">208</span> <span style="color: rgba(0, 0, 0, 1)">    }
+</span><span style="color: rgba(0, 128, 128, 1)">209</span>     
+<span style="color: rgba(0, 128, 128, 1)">210</span>     <span style="color: rgba(0, 0, 255, 1)">return</span> <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 128, 128, 1)">211</span> }</pre>
+</div>
+<p>&nbsp;　　在这个程序中，我们从命令行参数读取两个图像所在的位置，然后构建一个图估计图像间运动和特征点的空间位置。</p>
+<p>　　整个工程的编译方式使用cmake，<span style="color: rgba(128, 0, 0, 1)">请参考 github 工程进行编译</span>，这里就不详细说明了。（因为肯定又要提一堆Cmake方面的事情。）</p>
+<p>　　编译完成后，可以运行此程序，结果如下：</p>
+<p><img src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160322121040948-2123920617.png" alt="" width="1069" height="583"></p>
+<p>　　我们显示了特征点的数量，估计的位姿变换，以及各特征点的空间位置。最后，还显示了inliers的数量（我们把误差太大的边认为是outlier）：</p>
+<p><img src="https://images2015.cnblogs.com/blog/606958/201603/606958-20160322121236011-569154082.png" alt="" width="1069" height="583"></p>
+<p>　　在652条边中有614条边是inlier，说明匹配还是挺正确的。</p>
+<hr>
+<h2>讨论</h2>
+<p>　　关于单目BA还有一点要说，就是 scale 不确定性。由于投影公式中的$\lambda$存在，我们只能推得一个相对的深度，而无法确切的知道特征点离我们有多少距离。如果我们把所有特征点的坐标放大一倍，把平移量$t$也乘以二，得到的结果是完全一样的。</p>
+<p>　　比方说：看奥特曼时，我们并不知道这其实是人类演员在模型里打架。这就是单目带来的尺度不确定性。</p>
+<p>　　小萝卜：师兄你现在才知道吗？我小时候就知道了啊！</p>
+<hr>
+<h2>小结</h2>
+<p>　　本节介绍了g2o的大致框架，并提供了一个计算单目双视图Bundle Adjustment的例程供读者练习。</p>
+<p>　　</p>
+<p>　　如果你觉得我的博客有帮助，可以进行几块钱的小额赞助，帮助我把博客写得更好。</p>
+<p>　　<img src="https://images2015.cnblogs.com/blog/606958/201512/606958-20151213183423341-388071682.jpg" alt="" width="233" height="313"></p>
+<p>&nbsp;</p>
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+    <div id="blog_post_info"></div>
+    <div class="clear"></div>
+    <div id="post_next_prev"></div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2016-03-22 12:20</span>&nbsp;
+<a href="https://www.cnblogs.com/gaoxiang12/">半闲居士</a>&nbsp;
+阅读(<span id="post_view_count">101370</span>)&nbsp;
+评论(<span id="post_comment_count">21</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=5304272" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(5304272);return false;">收藏</a>&nbsp;
+<a href="javascript:void(0)" onclick="reportManager.report({ currentUserId: '', targetType: 'blogPost', targetId: '5304272', targetLink: 'https://www.cnblogs.com/gaoxiang12/p/5304272.html', title: '深入理解图优化与g2o：g2o篇' })">举报</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+
+<script src="https://common.cnblogs.com/highlight/10.3.1/highlight.min.js" async onload="markdown_highlight()"></script>
+<script>
+    var allowComments = true, cb_blogId = 176897, cb_blogApp = 'gaoxiang12', cb_blogUserGuid = 'ce568638-379d-e311-8d02-90b11c0b17d6';
+    var cb_entryId = 5304272, cb_entryCreatedDate = '2016-03-22 12:20', cb_postType = 1;
+    updatePostStats(
+        [cb_entryId],
+        function(id, count) { $("#post_view_count").text(count) },
+        function(id, count) { $("#post_comment_count").text(count) })
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+</script>
+
+<a name="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="#" onclick="return RefreshPage();">刷新页面</a><a href="#top">返回顶部</a></div>
+    <div id="comment_form_container"></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="cnblogs_ch"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+             <a onclick="ga('send', 'event', 'banner', 'click', 'Pangle-C1')" target="_blank" rel="nofollow" href="https://c.gridsumdissector.com/r/?gid=gad_545_mzyfo0un&ck=46&adk=566&autorefresh=__AUTOREFRESH__">
+                <img style="width: 300px; height: 250px;" src="https://img2020.cnblogs.com/blog/35695/202110/35695-20211008160624813-1694591598.jpg" alt="" onload="impressC1()" />
+             </a>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+            <script>loadBlogNews();</script>
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright &copy; 2021 半闲居士
+<br /><span id="poweredby">Powered by .NET 6 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8FO3GXnjClZGrNGr2Ic8Z1qpHiz8iwSF9i22Z6inGLzuxnHNsLpMnfguN_dnFF-etmdVp-sju302bKQLV9PHeighIBOINIdvZsZ0zyt_Own66k-T1DsxfK4smOh5qxr31goMMpSr6EPQVhk0uEH7Z9M" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-476124-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    var kv = getGACustom();
+    if (kv) {
+        gtag('set', kv);
+    }
+    gtag('config', 'UA-476124-1');
+    </script>
+    <script defer src="https://hm.baidu.com/hm.js?866c9be12d4a814454792b1fd0fed295"></script>
+</body>
+</html>

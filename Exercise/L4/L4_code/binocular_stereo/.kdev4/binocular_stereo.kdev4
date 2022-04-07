@@ -1,0 +1,31 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00 \x00b\x00i\x00n\x00o\x00c\x00u\x00l\x00a\x00r\x00_\x00s\x00t\x00e\x00r\x00e\x00o)
+
+[CMake]
+Build Directory Count=1
+Current Build Directory Index-Host System=0
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=/home/jindong/SLAM/Chap4/L4_code/binocular_stereo/build
+Build Type=Debug
+CMake Binary=/usr/local/bin/cmake
+CMake Executable=/usr/local/bin/cmake
+Environment Profile=
+Extra Arguments=
+Install Directory=
+Runtime=Host System
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=disparity
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Configured from ProjectItem=binocular_stereo,disparity
+Project Target=binocular_stereo,disparity
+Working Directory=file:///home/jindong/SLAM/Chap4/L4_code/binocular_stereo/build/
+isExecutable=false

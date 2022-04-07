@@ -1,0 +1,2333 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <link rel="canonical" href="https://blog.csdn.net/robinhjwy/article/details/78189096"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="report" content='{"pid": "blog", "spm":"1001.2101"}'>
+    <meta name="referrer" content="always">
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><link rel="alternate" media="handheld" href="#" />
+    <meta name="shenma-site-verification" content="5a59773ab8077d4a62bf469ab966a63b_1497598848">
+    <meta name="applicable-device" content="pc">
+    <link  href="https://g.csdnimg.cn/static/logo/favicon32.ico"  rel="shortcut icon" type="image/x-icon" />
+    <title>第十章g2ocustombundle/common/BALProblem类_robinhjwy的博客-CSDN博客</title>
+    <script>
+      (function(){ 
+        var el = document.createElement("script"); 
+        el.src = "https://s3a.pstatp.com/toutiao/push.js?1abfa13dfe74d72d41d83c86d240de427e7cac50c51ead53b2e79d40c7952a23ed7716d05b4a0f683a653eab3e214672511de2457e74e99286eb2c33f4428830"; 
+        el.id = "ttzz"; 
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(el, s);
+      })(window)
+    </script>
+        <meta name="keywords" content="第十章g2ocustombundle/common/BALProblem类">
+        <meta name="csdn-baidu-search"  content='{"autorun":true,"install":true,"keyword":"第十章g2ocustombundle/common/BALProblem类"}'>
+    <meta name="description" content="第十章代码解读">
+    <script src="//g.csdnimg.cn/tingyun/1.8.5/blog.js" type='text/javascript'></script>
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/css/detail_enter-58f5fbcf9b.min.css">
+    <script type="application/ld+json">{"@context":"https://ziyuan.baidu.com/contexts/cambrian.jsonld","@id":"https://blog.csdn.net/robinhjwy/article/details/78189096","appid":"1638831770136827","pubDate":"2017-10-10T09:39:35","title":"第十章g2ocustombundle/common/BALProblem类_robinhjwy的博客-CSDN博客","upDate":"2017-10-10T09:39:35"}</script>
+        <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-yellow/skin-yellow-28d34ab5fa.min.css">
+    <script src="https://csdnimg.cn/public/common/libs/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var isCorporate = false;//注释删除enterprise
+        var username =  "robinhjwy";
+        var skinImg = "white";
+        var blog_address = "https://blog.csdn.net/robinhjwy";
+        var currentUserName = "weixin_46326425";
+        var isOwner = false;
+        var loginUrl = "http://passport.csdn.net/account/login?from=https://blog.csdn.net/robinhjwy/article/details/78189096";
+        var blogUrl = "https://blog.csdn.net/";
+        var avatar = "https://profile.csdnimg.cn/2/B/2/3_robinhjwy";
+        var articleTitle = "第十章g2ocustombundle/common/BALProblem类";
+        var articleDesc = "第十章代码解读";
+        var articleTitles = "第十章g2ocustombundle/common/BALProblem类_robinhjwy的博客-CSDN博客";
+        var nickName = "robinhjwy";
+        var articleDetailUrl = "https://blog.csdn.net/robinhjwy/article/details/78189096";
+        if(window.location.host.split('.').length == 3) {
+            blog_address = blogUrl + username;
+        }
+        var skinStatus = "White";
+        var blogStaticHost = "https://csdnimg.cn/release/blogv2/"
+    </script>
+    <script src="https://g.csdnimg.cn/??fixed-sidebar/1.1.6/fixed-sidebar.js" type="text/javascript"></script>
+    <script src='//g.csdnimg.cn/common/csdn-report/report.js' type='text/javascript'></script>
+    <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/public/sandalstrap/1.4/css/sandalstrap.min.css">
+    <style>
+        .MathJax, .MathJax_Message, .MathJax_Preview{
+            display: none
+        }
+    </style>
+    <script src="https://dup.baidustatic.com/js/ds.js"></script>
+</head>
+<body class="nodata " style="">
+        <script>
+            var toolbarSearchExt = '{"landingWord":[],"queryWord":"","tag":["g2o"],"title":"第十章g2ocustombundle/common/BALProblem类"}';
+        </script>
+    <script src="https://g.csdnimg.cn/common/csdn-toolbar/csdn-toolbar.js" type="text/javascript"></script>
+    <script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+    </script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/pc/css/blog_code-01256533b5.min.css">
+<link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/chart-3456820cac.css" />
+<div class="main_father clearfix d-flex justify-content-center" style="height:100%;"> 
+    <div class="container clearfix" id="mainBox">
+        <main>
+<script type="text/javascript">
+    function getQueryString(name) {   
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象  
+      var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+      if( r != null ) return decodeURIComponent( r[2] ); return '';   
+    }
+    function stripscript(s){ 
+      var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%]") 
+      var rs = ""; 
+      for (var i = 0; i < s.length; i++) { 
+        rs = rs+s.substr(i, 1).replace(pattern, ''); 
+      } 
+      return rs; 
+    }
+    var blogHotWords = stripscript(getQueryString('utm_term')).length > 1 ? stripscript(getQueryString('utm_term')) : ''
+</script>
+<div class="blog-content-box">
+        <div class="article-header-box">
+        <div class="article-header">
+            <div class="article-title-box">
+                <h1 class="title-article" id="articleContentId">第十章g2ocustombundle/common/BALProblem类</h1>
+            </div>
+            <div class="article-info-box">
+                <div class="article-bar-top">
+                    <img class="article-type-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/original.png" alt="">
+                    <div class="bar-content">
+                    <a class="follow-nickName " href="https://blog.csdn.net/robinhjwy" target="_blank" rel="noopener">robinhjwy</a>
+                    <span class="time">2017-10-10 09:39:35</span>
+                    <img class="article-read-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes.png" alt="">
+                    <span class="read-count">1210</span>
+                    <a id="blog_detail_zk_collection" class="un-collection" data-report-click='{"mod":"popu_823","spm":"1001.2101.3001.4232","ab":"new"}'>
+                        <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect.png" alt="">
+                        <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive.png" alt="">
+                        <span class="name">收藏</span>
+                        <span class="get-collection">
+                            3
+                        </span>
+                    </a>
+                    </div>
+                </div>
+                <div class="blog-tags-box">
+                    <div class="tags-box artic-tag-box">
+                            <span class="label">分类专栏：</span>
+                                <a class="tag-link" href="https://blog.csdn.net/robinhjwy/category_7301364.html" target="_blank" rel="noopener">14讲程序注释</a>
+                            <span class="label">文章标签：</span>
+                                <a data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"g2o","ab":"new"}' class="tag-link" href="https://so.csdn.net/so/search/s.do?q=g2o&amp;t=blog&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=" target="_blank" rel="noopener">g2o</a>
+                    </div>
+                </div>
+                <div class="slide-content-box">
+                    <div class="article-copyright">
+                        <div class="creativecommons">
+                            版权声明：本文为博主原创文章，遵循<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。
+                        </div>
+                        <div class="article-source-link">
+                            本文链接：<a href="https://blog.csdn.net/robinhjwy/article/details/78189096" target="_blank">https://blog.csdn.net/robinhjwy/article/details/78189096</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="operating">
+                    <a class="href-article-edit slide-toggle">版权</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div id="blogColumnPayAdvert">
+            <div class="column-group">
+                <div class="column-group-item column-group0 column-group-item-one">
+                    <div class="item-l">
+                        <a class="item-target" href="https://blog.csdn.net/robinhjwy/category_7301364.html" target="_blank" title="14讲程序注释"
+                        data-report-view='{"spm":"1001.2101.3001.6332"}'
+                        data-report-click='{"spm":"1001.2101.3001.6332"}'>
+                            <img class="item-target" src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="">
+                            <span class="title item-target">14讲程序注释</span>
+                        </a>
+                        <span class="dec">专栏收录该内容</span>
+                    </div>
+                    <div class="item-m">
+                        <span>26 篇文章</span>
+                        <span>54 订阅</span>
+                    </div>
+                    <div class="item-r">
+                            <a class="item-target article-column-bt articleColumnFreeBt" data-id="7301364">订阅专栏</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <article class="baidu_pl">
+        <div id="article_content" class="article_content clearfix">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-1a85854398.css">
+                <div id="content_views" class="markdown_views prism-atom-one-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                        <path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></path>
+                    </svg>
+                    <p>这个类包含BALProblem.h和BALProblem.cpp两部分&#xff0c;写在一起。 <br /> 这整个类的功能就是对原始的txt数据进行分割存储&#xff0c;然后提供对txt数据的读取写入和生成PLY文件功能。</p> 
+<p>BALProblem.h&#xff1a;</p> 
+<pre class="prettyprint"><code class=" hljs cpp"><span class="hljs-preprocessor">#ifndef BALPROBLEM_H</span>
+<span class="hljs-preprocessor">#define BALPROBLEM_H</span>
+
+<span class="hljs-preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="hljs-preprocessor">#include &lt;string&gt;</span>
+<span class="hljs-preprocessor">#include &lt;iostream&gt;</span>
+
+<span class="hljs-comment">/**
+ * 对比BundleParams.h用来存储程序需要的所有参数&#xff0c;这里的BALProblem.h用于存储程序需要优化的数据。
+ * 整个头文件中就定义了一个class BALProblem{}类
+ * 宏观的功能有存储了相机和路标点之间的关联&#xff0c;相机和路标的初始值&#xff0c;数据导出为PLY文件等功能。
+ *
+ */</span>
+
+
+
+<span class="hljs-keyword">class</span> BALProblem
+{
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">explicit</span> BALProblem(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; filename, <span class="hljs-keyword">bool</span> use_quaternions &#61; <span class="hljs-keyword">false</span>);
+    ~BALProblem()
+    {
+        <span class="hljs-keyword">delete</span>[] point_index_;
+        <span class="hljs-keyword">delete</span>[] camera_index_;
+        <span class="hljs-keyword">delete</span>[] observations_;
+        <span class="hljs-keyword">delete</span>[] parameters_;
+    }
+
+    <span class="hljs-keyword">void</span> WriteToFile(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; filename)<span class="hljs-keyword">const</span>;
+    <span class="hljs-keyword">void</span> WriteToPLYFile(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; filename)<span class="hljs-keyword">const</span>;
+
+    <span class="hljs-keyword">void</span> Normalize();
+
+    <span class="hljs-keyword">void</span> Perturb(<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> rotation_sigma,
+                 <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> translation_sigma,
+                 <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> point_sigma);
+
+
+    <span class="hljs-comment">//返回相机维度&#xff0c;如果用四元数的话就是10维&#xff0c;旋转向量的话就是9维</span>
+    <span class="hljs-keyword">int</span> camera_block_size()             <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> use_quaternions_? <span class="hljs-number">10</span> : <span class="hljs-number">9</span>;  }
+    <span class="hljs-comment">//返回路标维度&#xff0c;肯定是3维</span>
+    <span class="hljs-keyword">int</span> point_block_size()              <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">3</span>;                         }
+    <span class="hljs-comment">//这些函数都是用来查看下方private成员的&#xff0c;很简单&#xff0c;直接return相应成员。</span>
+    <span class="hljs-keyword">int</span> num_cameras()                   <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> num_cameras_;              }
+    <span class="hljs-keyword">int</span> num_points()                    <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> num_points_;               }
+    <span class="hljs-keyword">int</span> num_observations()              <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> num_observations_;         }
+    <span class="hljs-keyword">int</span> num_parameters()                <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> num_parameters_;           }
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>* point_index()            <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> point_index_;              }
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span>* camera_index()           <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> camera_index_;             }
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* observations()        <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> observations_;             }
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* parameters()          <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> parameters_;               }
+
+    <span class="hljs-comment">//从这里可以看出来parameters_[]这个数组存储就是待优化的所有值&#xff0c;用法也是当个纯指针在用&#xff0c;因为下方用法全是指针加偏移量</span>
+    <span class="hljs-comment">//排列方式就是16个9维相机&#61;144个数码一列&#xff0c;这些就是相机的值</span>
+    <span class="hljs-comment">//返回数据中相机位姿数据列的开头位置</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* cameras()             <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> parameters_;               }
+    <span class="hljs-comment">//紧接着下面&#xff0c;从parameters_开始&#xff0c;加上上方的144偏移量&#xff0c;就到了路标的数据。</span>
+    <span class="hljs-comment">//返回路标点数据列的开头位置</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* points()              <span class="hljs-keyword">const</span>{ <span class="hljs-keyword">return</span> parameters_ &#43; camera_block_size() * num_cameras_; }
+    <span class="hljs-comment">//返回第i个观测中的相机数据</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* camera_for_observation(<span class="hljs-keyword">int</span> i)<span class="hljs-keyword">const</span> {<!-- --><span class="hljs-keyword">return</span> cameras() &#43; camera_index_[i] * camera_block_size();}
+    <span class="hljs-comment">//返回第i个观测中的路标数据</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* point_for_observation(<span class="hljs-keyword">int</span> i)<span class="hljs-keyword">const</span> {<!-- --><span class="hljs-keyword">return</span> points() &#43; point_index_[i] * point_block_size();}
+
+    <span class="hljs-comment">//上方的类型是const&#xff0c;从后面用法上看是用于原始数据(例如初始值txt文件)读取&#xff0c;txt数据读进类中。</span>
+    <span class="hljs-comment">//而下面同样的一套去掉const之后&#xff0c;用于优化后的数据的传导&#xff0c;整个流程从optimizer中的顶点开始&#xff0c;传给类&#xff0c;再从类写入txt文件和PLY文件。</span>
+    <span class="hljs-comment">//整个过程数据被处理&#xff0c;是变化的&#xff0c;所以添加mutable_用于可变数据。原理都是一样的。只是没了const</span>
+    <span class="hljs-keyword">double</span>* mutable_cameras()                { <span class="hljs-keyword">return</span> parameters_;               }
+    <span class="hljs-keyword">double</span>* mutable_points()                 { <span class="hljs-keyword">return</span> parameters_ &#43; camera_block_size() * num_cameras_; }
+    <span class="hljs-keyword">double</span>* mutable_camera_for_observation(<span class="hljs-keyword">int</span> i){<!-- --><span class="hljs-keyword">return</span> mutable_cameras() &#43; camera_index_[i] * camera_block_size();}
+    <span class="hljs-keyword">double</span>* mutable_point_for_observation(<span class="hljs-keyword">int</span> i){<!-- --><span class="hljs-keyword">return</span> mutable_points() &#43; point_index_[i] * point_block_size();}
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-keyword">void</span> CameraToAngelAxisAndCenter(<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* camera,
+                                    <span class="hljs-keyword">double</span>* angle_axis,
+                                    <span class="hljs-keyword">double</span>* center)<span class="hljs-keyword">const</span>;
+
+    <span class="hljs-keyword">void</span> AngleAxisAndCenterToCamera(<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* angle_axis,
+                                    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* center,
+                                    <span class="hljs-keyword">double</span>* camera)<span class="hljs-keyword">const</span>;
+
+    <span class="hljs-comment">/**
+     * 这几个参数就是将txt数据分块读取和写入的承接变量和数组。
+     * 分法小复杂。可以画张图
+     */</span>
+    <span class="hljs-comment">//数据中相机位姿个数</span>
+    <span class="hljs-keyword">int</span> num_cameras_;
+    <span class="hljs-comment">//数据数据中路标点个数</span>
+    <span class="hljs-keyword">int</span> num_points_;
+    <span class="hljs-comment">//数据中的观测个数</span>
+    <span class="hljs-keyword">int</span> num_observations_;
+    <span class="hljs-comment">//这个从后方定义来看是待优化变量的具体的参数的个数:</span>
+    <span class="hljs-comment">//num_parameters_ &#61; 9 * num_cameras_ &#43; 3 * num_points_;</span>
+    <span class="hljs-keyword">int</span> num_parameters_;
+
+    <span class="hljs-keyword">bool</span> use_quaternions_;
+
+    <span class="hljs-comment">//这三个存储了相机与路标之间的关联</span>
+    <span class="hljs-comment">//观测中路标的索引数组</span>
+    <span class="hljs-keyword">int</span>* point_index_;
+    <span class="hljs-comment">//观测中相机的索引数组</span>
+    <span class="hljs-keyword">int</span>* camera_index_;
+    <span class="hljs-comment">//观测的索引数组</span>
+    <span class="hljs-keyword">double</span>* observations_;
+    <span class="hljs-comment">//优化参数值数组&#xff0c;其实这里就是个指针&#xff0c;指向txt的后半部分参数的开头&#xff0c;具体也就是83720行开始的待优化参数值。</span>
+    <span class="hljs-comment">//从后面的用法可以看出来&#xff0c;全是当指针用&#xff0c;加上偏移量用作寻址。</span>
+    <span class="hljs-comment">//这个就是存取了相机与路标的数据</span>
+    <span class="hljs-keyword">double</span>* parameters_; 
+
+};
+
+<span class="hljs-preprocessor">#endif <span class="hljs-comment">// BALProblem.h</span></span>
+</code></pre> 
+<p>BALProblem.cpp:</p> 
+<pre class="prettyprint"><code class=" hljs cpp"><span class="hljs-preprocessor">#include &#34;BALProblem.h&#34;</span>
+
+<span class="hljs-preprocessor">#include &lt;cstdio&gt;</span>
+<span class="hljs-preprocessor">#include &lt;fstream&gt;</span>
+<span class="hljs-preprocessor">#include &lt;string&gt;</span>
+<span class="hljs-preprocessor">#include &lt;vector&gt;</span>
+
+<span class="hljs-preprocessor">#include &lt;Eigen/Core&gt;</span>
+
+
+<span class="hljs-preprocessor">#include &#34;tools/random.h&#34;</span>
+<span class="hljs-preprocessor">#include &#34;tools/rotation.h&#34;</span>
+
+
+<span class="hljs-keyword">typedef</span> Eigen::Map&lt;Eigen::VectorXd&gt; VectorRef;
+<span class="hljs-keyword">typedef</span> Eigen::Map&lt;<span class="hljs-keyword">const</span> Eigen::VectorXd&gt; ConstVectorRef;
+
+<span class="hljs-comment">//这个函数从fptr文件中读出一个format类型的值&#xff0c;赋值给参数value&#xff0c;从开头开始&#xff0c;找到一个合适的就停止。</span>
+<span class="hljs-comment">//这个函数主要是给BALProblem()构造函数读取txt数据文件用的&#xff0c;比较简陋</span>
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">void</span> FscanfOrDie(FILE *fptr, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *format, T *value)
+{
+    <span class="hljs-comment">//主要用的就是个fscanf()函数&#xff0c;从fptr文件中读出format类型的数据输入进value中。</span>
+    <span class="hljs-keyword">int</span> num_scanned &#61; <span class="hljs-built_in">fscanf</span>(fptr, format, value);
+    <span class="hljs-comment">//这里如果失败的话&#xff0c;就报警了。</span>
+    <span class="hljs-keyword">if</span>(num_scanned !&#61; <span class="hljs-number">1</span>)
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cerr</span>&lt;&lt; <span class="hljs-string">&#34;Invalid UW data file. &#34;</span>;
+}
+
+<span class="hljs-comment">//给一个三维向量加入噪声&#xff0c;很简单xyz依次加入随机值就好了。定义这个的目的是为了后面的Perturb()函数在增加噪声时&#xff0c;</span>
+<span class="hljs-comment">// 是分开对路标点&#xff0c;相机的旋转&#xff0c;相机的平移分别加入噪声的&#xff0c;并且这三个量都是三维的&#xff0c;所以定义一个三维向量添加噪声的函数</span>
+<span class="hljs-keyword">void</span> PerturbPoint3(<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> sigma, <span class="hljs-keyword">double</span>* point)
+{
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; &#43;&#43;i)
+        point[i] &#43;&#61; RandNormal()*sigma;
+}
+
+<span class="hljs-comment">//取一个数组的中位数&#xff0c;主要用在Normalize()函数中。</span>
+<span class="hljs-keyword">double</span> Median(<span class="hljs-built_in">std</span>::<span class="hljs-stl_container"><span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">double</span>&gt;</span>* data)
+{
+    <span class="hljs-keyword">int</span> n &#61; data-&gt;size();
+    <span class="hljs-built_in">std</span>::<span class="hljs-stl_container"><span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">double</span>&gt;</span>::iterator mid_point &#61; data-&gt;begin() &#43; n/<span class="hljs-number">2</span>;
+    <span class="hljs-comment">//nth_element作用为求第n小的元素&#xff0c;并把它放在第n位置上:</span>
+    <span class="hljs-comment">/**
+     * inline void
+     * nth_element(_RandomAccessIterator __first, _RandomAccessIterator __nth,
+     *             _RandomAccessIterator __last)
+     * 这个函数有点半排序的感觉&#xff0c;它能够让第n个大小的值在第n个位置&#xff0c;左边的都比它小&#xff0c;右边的都比它大&#xff0c;但是不保证其他的顺序。
+     */</span>
+    <span class="hljs-comment">//由于这里mid_point指向数组的中间位置&#xff0c;所以下一句的*mid_point肯定就是一个数组的中位数了。</span>
+    <span class="hljs-built_in">std</span>::nth_element(data-&gt;begin(),mid_point,data-&gt;end());
+    <span class="hljs-keyword">return</span> *mid_point;
+}
+
+<span class="hljs-comment">//构造函数&#xff0c;主要是把优化数据读进程序</span>
+BALProblem::BALProblem(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; filename, <span class="hljs-keyword">bool</span> use_quaternions){
+    <span class="hljs-comment">//只读模式打开名为filename的数据文件&#xff0c;并将文件地址赋值给文件指针fptr</span>
+    FILE* fptr &#61; fopen(filename.c_str(), <span class="hljs-string">&#34;r&#34;</span>);
+
+    <span class="hljs-comment">//防呆&#xff0c;文件为空的话报警</span>
+    <span class="hljs-keyword">if</span> (fptr &#61;&#61; NULL) {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cerr</span> &lt;&lt; <span class="hljs-string">&#34;Error: unable to open file &#34;</span> &lt;&lt; filename;
+        <span class="hljs-keyword">return</span>;
+    };
+
+    <span class="hljs-comment">//这里就是上面读取数据函数FscanfOrDie()函数了&#xff0c;操作上就是直接读取文件的前三个double类型的值&#xff0c;所以文件格式和数据一定要对&#xff0c;</span>
+    <span class="hljs-comment">//不然很容易崩溃&#xff0c;这里也就是problem-16-22106-pre.txt文件中的头三个数字&#xff0c;表征了相机数&#xff0c;路标点数&#xff0c;观测数。</span>
+    <span class="hljs-comment">//这里就直接读进类成员中去了&#xff1a;num_cameras_、 num_points_、 num_observations_</span>
+    <span class="hljs-comment">// This wil die horribly on invalid files. Them&#39;s the breaks.</span>
+    FscanfOrDie(fptr, <span class="hljs-string">&#34;%d&#34;</span>, &amp;num_cameras_);
+    FscanfOrDie(fptr, <span class="hljs-string">&#34;%d&#34;</span>, &amp;num_points_);
+    FscanfOrDie(fptr, <span class="hljs-string">&#34;%d&#34;</span>, &amp;num_observations_);
+
+    <span class="hljs-comment">//读出后输出显示</span>
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&#34;Header: &#34;</span> &lt;&lt; num_cameras_
+              &lt;&lt; <span class="hljs-string">&#34; &#34;</span> &lt;&lt; num_points_
+              &lt;&lt; <span class="hljs-string">&#34; &#34;</span> &lt;&lt; num_observations_;
+
+    <span class="hljs-comment">//.txt中相机索引那一列&#xff0c;存在point_index_数组&#xff0c;大小肯定是观测个数</span>
+    point_index_ &#61; <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[num_observations_];
+    <span class="hljs-comment">//.txt中路标点索引那一列&#xff0c;存在camera_index_数组&#xff0c;大小肯定是观测个数</span>
+    camera_index_ &#61; <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[num_observations_];
+    <span class="hljs-comment">//后面的观测值的话&#xff0c;由于每个观测是个二维的坐标&#xff0c;所以大小要2倍</span>
+    observations_ &#61; <span class="hljs-keyword">new</span> <span class="hljs-keyword">double</span>[<span class="hljs-number">2</span> * num_observations_];
+
+    <span class="hljs-comment">//所有要优化的参数量&#xff0c;相机个数*9维&#xff0c;路标点个数*3维。所以这里的num_parameters_就指所有要优化的值了。</span>
+    num_parameters_ &#61; <span class="hljs-number">9</span> * num_cameras_ &#43; <span class="hljs-number">3</span> * num_points_;
+    <span class="hljs-comment">//将这些值存进parameters_数组中。这里也就是优化变量的值&#xff0c;只不过全部一列码开&#xff0c;在txt中也就是后半部分&#xff0c;所有优化变量的初始值</span>
+    parameters_ &#61; <span class="hljs-keyword">new</span> <span class="hljs-keyword">double</span>[num_parameters_];
+
+    <span class="hljs-comment">//这里开始对.txt文件读取了&#xff0c;按文件中数据循序读&#xff0c;第i个相机&#xff0c;第j个路标&#xff0c;然后两个像素坐标。循环读完所有观测。</span>
+    <span class="hljs-comment">//用num_observations控制循环读取所有观测&#xff0c;每次读取一行。</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_observations_; &#43;&#43;i)
+    {
+        <span class="hljs-comment">//循环内部这几个FscanfOrDie()其实就是读取了txt里的一行</span>
+        FscanfOrDie(fptr, <span class="hljs-string">&#34;%d&#34;</span>, camera_index_ &#43; i);
+        FscanfOrDie(fptr, <span class="hljs-string">&#34;%d&#34;</span>, point_index_ &#43; i);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j &#61; <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">2</span>; &#43;&#43;j)
+        {
+            FscanfOrDie(fptr, <span class="hljs-string">&#34;%lf&#34;</span>, observations_ &#43; <span class="hljs-number">2</span>*i &#43; j);
+        }
+    }
+
+    <span class="hljs-comment">//这里就读到了txt的后半部分&#xff0c;就是所有优化变量的具体值&#xff0c;当然这里也就是初始值了。发现在txt中是列成了一列</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_parameters_; &#43;&#43;i) {
+        FscanfOrDie(fptr, <span class="hljs-string">&#34;%lf&#34;</span>, parameters_ &#43; i);
+    }
+
+    <span class="hljs-comment">//读完后&#xff0c;关闭文件。</span>
+    fclose(fptr);
+
+    <span class="hljs-comment">//上述我们的文件使用旋转向量表示旋转的&#xff0c;这里添加了一个四元数表示的旋转&#xff0c;让用四元数的数据也能读进来</span>
+    <span class="hljs-comment">//具体过程就不说了。</span>
+    use_quaternions_ &#61; use_quaternions;
+    <span class="hljs-keyword">if</span> (use_quaternions) {
+        <span class="hljs-comment">// Switch the angle-axis rotations to quaternions.</span>
+        num_parameters_ &#61; <span class="hljs-number">10</span> * num_cameras_ &#43; <span class="hljs-number">3</span> * num_points_;
+        <span class="hljs-keyword">double</span>* quaternion_parameters &#61; <span class="hljs-keyword">new</span> <span class="hljs-keyword">double</span>[num_parameters_];
+        <span class="hljs-keyword">double</span>* original_cursor &#61; parameters_;
+        <span class="hljs-keyword">double</span>* quaternion_cursor &#61; quaternion_parameters;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_cameras_; &#43;&#43;i) {
+            AngleAxisToQuaternion(original_cursor, quaternion_cursor);
+            quaternion_cursor &#43;&#61; <span class="hljs-number">4</span>;
+            original_cursor &#43;&#61; <span class="hljs-number">3</span>;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j &#61; <span class="hljs-number">4</span>; j &lt; <span class="hljs-number">10</span>; &#43;&#43;j) {
+                *quaternion_cursor&#43;&#43; &#61; *original_cursor&#43;&#43;;
+            }
+        }
+        <span class="hljs-comment">// Copy the rest of the points.</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span> * num_points_; &#43;&#43;i) {
+            *quaternion_cursor&#43;&#43; &#61; *original_cursor&#43;&#43;;
+        }
+        <span class="hljs-comment">// Swap in the quaternion parameters.</span>
+        <span class="hljs-keyword">delete</span> []parameters_;
+        parameters_ &#61; quaternion_parameters;
+    }
+}
+
+<span class="hljs-comment">//&#xff1f;&#xff1f;构造函数读入数据txt&#xff0c;将数据存入类成员中。猜测这里是反向过程&#xff0c;由类成员中存储的数据&#xff0c;生成一个待优化数据.txt。</span>
+<span class="hljs-keyword">void</span> BALProblem::WriteToFile(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; filename)<span class="hljs-keyword">const</span>
+{
+    <span class="hljs-comment">//这里注意一下c_str()&#xff0c;它返回指向字符串常量的指针&#xff0c;这里主要作用是为了兼容c&#xff0c;</span>
+    <span class="hljs-comment">// 因为fopen需要的参数是指针&#xff0c;但是这里的filename类型是string类型&#xff0c;用这个函数返回文件名字符串的指针。</span>
+    <span class="hljs-comment">// 模式肯定是write</span>
+    FILE* fptr &#61; fopen(filename.c_str(),<span class="hljs-string">&#34;w&#34;</span>);
+
+    <span class="hljs-comment">//防呆&#xff0c;没有打开文件失败报警。</span>
+    <span class="hljs-keyword">if</span>(fptr &#61;&#61; NULL)
+    {
+        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cerr</span>&lt;&lt;<span class="hljs-string">&#34;Error: unable to open file &#34;</span>&lt;&lt; filename;
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">//这一句就能明显的看出来功能就是输出一个待优化数据文件</span>
+    <span class="hljs-comment">//对比data中txt文件的第一行&#xff1a;相机个数&#xff0c;路标个数&#xff0c;观测个数</span>
+    <span class="hljs-comment">//问题来了&#xff0c;为什么要输出两次相机个数&#xff1f;&#xff1f;</span>
+    <span class="hljs-comment">//注意最后有回车换行</span>
+    <span class="hljs-built_in">fprintf</span>(fptr, <span class="hljs-string">&#34;%d %d %d %d\n&#34;</span>, num_cameras_, num_cameras_, num_points_, num_observations_);
+
+    <span class="hljs-comment">//紧接着这里中间部分的相机路标观测值部分</span>
+    <span class="hljs-comment">//这个循环是每行循环&#xff0c;每行四部分&#xff0c;相机&#xff0c;路标&#xff0c;两维的观测</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_observations_; &#43;&#43;i)
+    {
+        <span class="hljs-comment">//前两个是相机和路标</span>
+        <span class="hljs-built_in">fprintf</span>(fptr, <span class="hljs-string">&#34;%d %d&#34;</span>, camera_index_[i], point_index_[i]);
+        <span class="hljs-comment">//紧接着二维的观测&#xff0c;用i控制行&#xff0c;j控制二维的x和y</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j &#61; <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">2</span>; &#43;&#43;j)
+        {
+            <span class="hljs-built_in">fprintf</span>(fptr, <span class="hljs-string">&#34; %g&#34;</span>, observations_[<span class="hljs-number">2</span>*i &#43; j]);
+        }
+        <span class="hljs-comment">//一行结束添加回车</span>
+        <span class="hljs-built_in">fprintf</span>(fptr,<span class="hljs-string">&#34;\n&#34;</span>);
+    }
+
+    <span class="hljs-comment">//这里应该到了输出9维的相机参数</span>
+    <span class="hljs-comment">//用相机个数控制总循环</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_cameras(); &#43;&#43;i)
+    {
+        <span class="hljs-comment">//构建9维相机参数数组&#xff0c;用于输出至文件</span>
+        <span class="hljs-keyword">double</span> angleaxis[<span class="hljs-number">9</span>];
+        <span class="hljs-keyword">if</span>(use_quaternions_){
+            <span class="hljs-comment">//OutPut in angle-axis format.</span>
+            QuaternionToAngleAxis(parameters_ &#43; <span class="hljs-number">10</span> * i, angleaxis);
+            <span class="hljs-built_in">memcpy</span>(angleaxis &#43; <span class="hljs-number">3</span>, parameters_ &#43; <span class="hljs-number">10</span> * i &#43; <span class="hljs-number">4</span>, <span class="hljs-number">6</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">double</span>));
+        }<span class="hljs-keyword">else</span>{
+            <span class="hljs-comment">//这里用memcpy()函数进行复制&#xff0c;长度为9&#xff0c;步长也为9&#xff0c;将parameters_数组中的数据&#xff0c;每次9个放到angleaxis中</span>
+            <span class="hljs-built_in">memcpy</span>(angleaxis, parameters_ &#43; <span class="hljs-number">9</span> * i, <span class="hljs-number">9</span> * <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">double</span>));
+        }
+        <span class="hljs-comment">//每个9维相机参数的循环控制输出&#xff0c;注意每个值有个换行</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j &#61; <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">9</span>; &#43;&#43;j)
+        {
+            <span class="hljs-built_in">fprintf</span>(fptr, <span class="hljs-string">&#34;%.16g\n&#34;</span>,angleaxis[j]);
+        }
+    }
+
+    <span class="hljs-comment">//这里输出3维的路标参数</span>
+    <span class="hljs-comment">//这里用points指针&#xff0c;跳过相机参数部分&#xff0c;指向路标的首位置</span>
+    <span class="hljs-comment">//那么问题来了&#xff0c;为什么不用points()直接定位&#xff1f;&#xff1f;</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* points &#61; parameters_ &#43; camera_block_size() * num_cameras_;
+    <span class="hljs-comment">//路标个数控制总循环输出</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_points(); &#43;&#43;i)
+    {
+        <span class="hljs-comment">//每个路标3维&#xff0c;这里的3维用的是point_block_size()的维度值&#xff0c;上方的相机参数输出时&#xff0c;用的直接就是9.有点小乱</span>
+        <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* point &#61; points &#43; i * point_block_size();
+        <span class="hljs-comment">//维度循环输出一个路标&#xff0c;也是每个值都有一个换行</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j &#61; <span class="hljs-number">0</span>; j &lt; point_block_size(); &#43;&#43;j)
+        {
+            <span class="hljs-built_in">fprintf</span>(fptr,<span class="hljs-string">&#34;%.16g\n&#34;</span>,point[j]);
+        }
+    }
+
+    <span class="hljs-comment">//输出完毕&#xff0c;关闭文件</span>
+    fclose(fptr);
+}
+
+<span class="hljs-comment">// Write the problem to a PLY file for inspection in Meshlab or CloudCompare</span>
+<span class="hljs-comment">//将相机位姿和路标点写入文件&#xff0c;这里也就是生成.PLY文件</span>
+<span class="hljs-keyword">void</span> BALProblem::WriteToPLYFile(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; filename)<span class="hljs-keyword">const</span>{
+    <span class="hljs-comment">//创建一个文件输出流对象&#xff0c;输出至文件名</span>
+    <span class="hljs-built_in">std</span>::ofstream of(filename.c_str());
+
+    <span class="hljs-comment">//这里是写入一些头字符&#xff0c;一般是文件的一些说明&#xff0c;比如有顶点数量&#xff0c;表示方式xyz&#xff0c;rgb颜色等</span>
+    of&lt;&lt; <span class="hljs-string">&#34;ply&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;format ascii 1.0&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;element vertex &#34;</span> &lt;&lt; num_cameras_ &#43; num_points_
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;property float x&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;property float y&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;property float z&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;property uchar red&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;property uchar green&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;property uchar blue&#34;</span>
+      &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span> &lt;&lt; <span class="hljs-string">&#34;end_header&#34;</span> &lt;&lt; <span class="hljs-built_in">std</span>::endl;
+
+    <span class="hljs-comment">// Export extrinsic data (i.e. camera centers) as green points.</span>
+    <span class="hljs-comment">//创建两个数组&#xff0c;用于承接CameraToAngelAxisAndCenter()解析出来的相机旋转姿态和相机位置中心</span>
+    <span class="hljs-keyword">double</span> angle_axis[<span class="hljs-number">3</span>];
+    <span class="hljs-keyword">double</span> center[<span class="hljs-number">3</span>];
+    <span class="hljs-comment">//循环写入&#xff0c;首先写入的相机中心点参数&#xff0c;个数控制肯定是相机数据个数</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_cameras(); &#43;&#43;i){
+        <span class="hljs-comment">//从cameras头指针开始&#xff0c;每次步进相机维度&#xff0c;这里为9&#xff0c;就读到了每个相机参数</span>
+        <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* camera &#61; cameras() &#43; camera_block_size() * i;
+        <span class="hljs-comment">//用CameraToAngelAxisAndCenter()函数将从相机参数中解析出来相机姿势和相机位置。当然这里只用位置了。</span>
+        CameraToAngelAxisAndCenter(camera, angle_axis, center);
+        <span class="hljs-comment">//坐标依次写入文件&#xff0c;再加上颜色数据&#xff0c;最后来个回车。</span>
+        of &lt;&lt; center[<span class="hljs-number">0</span>] &lt;&lt; <span class="hljs-string">&#39; &#39;</span> &lt;&lt; center[<span class="hljs-number">1</span>] &lt;&lt; <span class="hljs-string">&#39; &#39;</span> &lt;&lt; center[<span class="hljs-number">2</span>]
+           &lt;&lt; <span class="hljs-string">&#34;0 255 0&#34;</span> &lt;&lt; <span class="hljs-string">&#39;\n&#39;</span>;
+    }
+
+    <span class="hljs-comment">// Export the structure (i.e. 3D Points) as white points.</span>
+    <span class="hljs-comment">//相机写完是路标点&#xff0c;用路标个数控制循环次数</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_points(); &#43;&#43;i){
+        <span class="hljs-comment">//同样&#xff0c;从路标数据开头位置处&#xff0c;依次偏移路标维度</span>
+        <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* point &#61; points() &#43; point_block_size() * i;
+        <span class="hljs-comment">//维度循环&#xff0c;写入xyz</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j &#61; <span class="hljs-number">0</span>; j &lt; point_block_size(); &#43;&#43;j){of &lt;&lt; point[j] &lt;&lt; <span class="hljs-string">&#39; &#39;</span>;}
+        <span class="hljs-comment">//加上颜色&#xff0c;最后要有回车</span>
+        of &lt;&lt; <span class="hljs-string">&#34;255 255 255\n&#34;</span>;
+    }
+    <span class="hljs-comment">//写完文件关闭</span>
+    of.close();
+}
+
+<span class="hljs-comment">/**
+ * 由camera数据中的旋转向量和平移向量解析出相机世界坐标系下的姿态(依旧是旋转向量)和位置(世界坐标系下的xyz)&#xff0c;也是用于生成点云用的
+ * &#64;param camera 要解析的相机参数&#xff0c;前三维旋转&#xff0c;接着三维平移&#xff0c;这里指用到这6维
+ * &#64;param angle_axis 解析出的相机姿态承接数组&#xff0c;也是旋转向量形式
+ * &#64;param center 解析出来的相机原点在世界坐标系下的坐标承接数组&#xff0c;XYZ
+ */</span>
+<span class="hljs-keyword">void</span> BALProblem::CameraToAngelAxisAndCenter(<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* camera,
+                                            <span class="hljs-keyword">double</span>* angle_axis,
+                                            <span class="hljs-keyword">double</span>* center) <span class="hljs-keyword">const</span>
+{
+    <span class="hljs-comment">//先将数组变成矩阵&#xff0c;用angle_axis数组构造angle_axis_ref矩阵&#xff0c;用于承接</span>
+    VectorRef angle_axis_ref(angle_axis,<span class="hljs-number">3</span>);
+    <span class="hljs-keyword">if</span>(use_quaternions_)
+    {
+        QuaternionToAngleAxis(camera, angle_axis);
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        <span class="hljs-comment">//姿态没啥说的&#xff0c;还是旋转向量&#xff0c;直接将camera的前3维赋值过去。</span>
+        angle_axis_ref &#61; ConstVectorRef(camera,<span class="hljs-number">3</span>);
+    }
+
+    <span class="hljs-comment">// center &#61; - R^(-1)*t</span>
+    <span class="hljs-comment">/**
+     * 这里解释一下center的计算逻辑&#xff1a;
+     * center是指相机原点在世界坐标系下的坐标&#xff0c;那么定义一下&#xff1a;
+     * PW_center, 世界坐标系下相机原点的坐标
+     * PC_center, 相机坐标系下的相机原点坐标&#xff0c;很明显就是(0,0,0)
+     * 它俩的关系是什么呢&#xff1f;
+     * PW_center*R&#43;t &#61; PC_center
+     * 因为PC_center &#61; (0,0,0)&#xff0c;所以求一下PW_center &#61; - R^(-1)*t
+     */</span>
+    <span class="hljs-comment">//由旋转向量形式表示的旋转&#xff0c;反向过程(也就是求逆)就是旋转向量取负即可。</span>
+    Eigen::VectorXd inverse_rotation &#61; -angle_axis_ref;
+    <span class="hljs-comment">//这个函数在tool文件中的ratation.h中&#xff1a;</span>
+    <span class="hljs-comment">//inline void AngleAxisRotatePoint(const T angle_axis[3], const T pt[3], T result[3])</span>
+    <span class="hljs-comment">//就是计算的R*p过程&#xff0c;结果承接在result中。</span>
+    <span class="hljs-comment">//当然在这里的计算过程就是&#xff1a;R^(-1)*t了:</span>
+    <span class="hljs-comment">//inverse_rotation.data()为R^(-1)</span>
+    <span class="hljs-comment">//camera &#43; camera_block_size() - 6为t</span>
+    <span class="hljs-comment">//center就是计算值PW_center了&#xff0c;只是差了最后的取反</span>
+    <span class="hljs-comment">//这里用指针偏移取得t的值&#xff0c;有点蛋疼&#xff0c;先偏移到末尾&#xff0c;再往后倒数第6个&#xff0c;为平移数据的开始</span>
+    AngleAxisRotatePoint(inverse_rotation.data(),
+                         camera &#43; camera_block_size() - <span class="hljs-number">6</span>,
+                         center);
+    <span class="hljs-comment">//最后加上负号。记住&#xff0c;map类型构造的是引用&#xff0c;能直接对原构造数组进行操作的。</span>
+    <span class="hljs-comment">//说一下这句&#xff0c;这句还是&#xff0c;用center数组的前3维&#xff0c;去构造一个无名的map类型矩阵&#xff0c;并且后面直接跟上*-1操作。</span>
+    <span class="hljs-comment">//VectorRef是Map的一个define。</span>
+    <span class="hljs-comment">//记住Map构造出来是引用&#xff0c;能对原始值直接操作。</span>
+    VectorRef(center,<span class="hljs-number">3</span>) *&#61; -<span class="hljs-number">1.0</span>;
+}
+
+<span class="hljs-comment">/**
+ * 反向过程&#xff0c;由世界坐标系下的相机姿态和原点位置&#xff0c;生成一个camera数据
+ * &#64;param angle_axis 旋转向量数据
+ * &#64;param center 相机中心在世界坐标系下的位置坐标
+ * &#64;param camera 承接数据的camera数组&#xff0c;由于这里只是生成旋转和平移&#xff0c;所以是camera的前6维
+ */</span>
+<span class="hljs-keyword">void</span> BALProblem::AngleAxisAndCenterToCamera(<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* angle_axis,
+                                            <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span>* center,
+                                            <span class="hljs-keyword">double</span>* camera) <span class="hljs-keyword">const</span>{
+    ConstVectorRef angle_axis_ref(angle_axis,<span class="hljs-number">3</span>);
+    <span class="hljs-keyword">if</span>(use_quaternions_)
+    {
+        <span class="hljs-comment">//四元数表示方式的话&#xff0c;调用一个函数转化</span>
+        AngleAxisToQuaternion(angle_axis,camera);
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        <span class="hljs-comment">//这里也比较清楚的体现了&#xff0c;在camera指针所指处往后3维&#xff0c;也就是前三维&#xff0c;将旋转向量值传进去。</span>
+        VectorRef(camera, <span class="hljs-number">3</span>) &#61; angle_axis_ref;
+    }
+
+    <span class="hljs-comment">// t &#61; -R * center</span>
+    <span class="hljs-comment">/**
+     * 这里再说一下&#xff0c;同样是上面的过程&#xff1a;
+     * PW_center*R&#43;t &#61; PC_center
+     * PC_center &#61; (0,0,0)&#xff0c;所以这里求t &#61; -PW_center*R
+     * angle_axis为R
+     * center为PW_center
+     * 结果t放在camera&#43;camera_block_size()-6位置&#xff0c;也就是camera中的平移位置。
+     */</span>
+    AngleAxisRotatePoint(angle_axis,center,camera&#43;camera_block_size() - <span class="hljs-number">6</span>);
+    <span class="hljs-comment">//最后再取个反&#xff0c;OK</span>
+    VectorRef(camera &#43; camera_block_size() - <span class="hljs-number">6</span>,<span class="hljs-number">3</span>) *&#61; -<span class="hljs-number">1.0</span>;
+}
+
+
+<span class="hljs-comment">//有点数据初始化的意思&#xff0c;功能上看就是对待优化的point和camera数据进行了一下处理&#xff0c;</span>
+<span class="hljs-comment">//用法上也是在读入了数据后&#xff0c;直接调用此程序进行处理。</span>
+<span class="hljs-comment">//至于为什么这么处理一下&#xff0c;不得而知</span>
+<span class="hljs-keyword">void</span> BALProblem::Normalize()
+{
+    <span class="hljs-comment">// Compute the marginal median of the geometry</span>
+    <span class="hljs-comment">//这里不是计算路标的质心&#xff0c;质心的话是各维的平局值。这里用的是Median()函数&#xff0c;此函数返回的是中位值&#xff01;</span>
+    <span class="hljs-built_in">std</span>::<span class="hljs-stl_container"><span class="hljs-built_in">vector</span>&lt;<span class="hljs-keyword">double</span>&gt;</span> tmp(num_points_);
+    <span class="hljs-comment">//最后计算出来的中值承接在median中&#xff0c;很明显类型就是个3维空间点</span>
+    Eigen::Vector3d median;
+    <span class="hljs-keyword">double</span>* points &#61; mutable_points();
+    <span class="hljs-comment">//外圈循环控制xyz</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; &#43;&#43;i)
+    {
+        <span class="hljs-comment">//内圈循环控制将所有的x值(y,z)相加</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j &#61; <span class="hljs-number">0</span>; j &lt; num_points_; &#43;&#43;j)
+        {
+            tmp[j] &#61; points[<span class="hljs-number">3</span> * j &#43; i];
+        }
+        <span class="hljs-comment">//用Median()函数取得x、y、z的中值</span>
+        median(i) &#61; Median(&amp;tmp);
+    }
+    <span class="hljs-comment">//问题&#xff0c;这里用一个中值点搞啥子用&#xff1f;&#xff1f;</span>
+
+
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_points_; &#43;&#43;i)
+    {
+        VectorRef point(points &#43; <span class="hljs-number">3</span> * i, <span class="hljs-number">3</span>);
+        <span class="hljs-comment">//关于.lpNorm&lt;1&gt;()参见下面网址帖子&#xff0c;是一个范数模板函数</span>
+        <span class="hljs-comment">//http://blog.csdn.net/skybirdhua1989/article/details/17584797</span>
+        <span class="hljs-comment">//这里用的是L1范数:||x||为x向量各个元素绝对值之和。</span>
+        <span class="hljs-comment">//简单数一下p范数&#xff1a;向量各元素绝对值的p阶和的p阶根</span>
+        <span class="hljs-comment">//lpNorm&lt;&gt;()函数定义是这么说的&#xff1a;returns the p-th root of the sum of the p-th powers of the absolute values</span>
+        <span class="hljs-comment">//很明显&#xff0c;p为1的话就是各元素绝对值之和&#xff0c;为2就是模长</span>
+        tmp[i] &#61; (point - median).lpNorm&lt;<span class="hljs-number">1</span>&gt;();
+    }
+    <span class="hljs-comment">//这步完成之后&#xff0c;空间点相对于中值点的偏差的L1范数被求出来了&#xff0c;放在tmp[]数组中。然后&#xff1f;&#xff1f;搞啥用&#xff1f;&#xff1f;</span>
+
+    <span class="hljs-comment">//然后再对tmp[]求中值&#xff0c;命名为绝对偏差的中值</span>
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> median_absolute_deviation &#61; Median(&amp;tmp);
+
+    <span class="hljs-comment">// Scale so that the median absolute deviation of the resulting</span>
+    <span class="hljs-comment">// reconstruction is 100</span>
+
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> scale &#61; <span class="hljs-number">100.0</span> / median_absolute_deviation;
+
+    <span class="hljs-comment">// X &#61; scale * (X - median)</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_points_; &#43;&#43;i)
+    {
+        VectorRef point(points &#43; <span class="hljs-number">3</span> * i, <span class="hljs-number">3</span>);
+        point &#61; scale * (point - median);
+    }
+    <span class="hljs-comment">//直到这一步结束&#xff0c;发现到这里目的就是对路标点坐标做一些处理&#xff0c;为啥处理&#xff1f;为啥这么处理&#xff1f;</span>
+
+
+    <span class="hljs-comment">//由原始camera数据取出center&#xff0c;再用center&#61;scale*(center-median)处理一下&#xff0c;然后再用处理过的center去重构camera</span>
+    <span class="hljs-comment">//干啥子&#xff1f;</span>
+    <span class="hljs-keyword">double</span>* cameras &#61; mutable_cameras();
+    <span class="hljs-keyword">double</span> angle_axis[<span class="hljs-number">3</span>];
+    <span class="hljs-keyword">double</span> center[<span class="hljs-number">3</span>];
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_cameras_ ; &#43;&#43;i)
+    {
+        <span class="hljs-keyword">double</span>* camera &#61; cameras &#43; camera_block_size() * i;
+        CameraToAngelAxisAndCenter(camera, angle_axis, center);
+        <span class="hljs-comment">// center &#61; scale * (center - median)</span>
+        VectorRef(center,<span class="hljs-number">3</span>) &#61; scale * (VectorRef(center,<span class="hljs-number">3</span>)-median);
+        AngleAxisAndCenterToCamera(angle_axis, center,camera);
+    }
+}
+
+<span class="hljs-comment">//添加噪声</span>
+<span class="hljs-keyword">void</span> BALProblem::Perturb(<span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> rotation_sigma,
+                         <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> translation_sigma,
+                         <span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> point_sigma)
+{
+    <span class="hljs-comment">//也是有防呆&#xff0c;在随机种子为0时报警</span>
+    assert(point_sigma &gt;&#61; <span class="hljs-number">0.0</span>);
+    assert(rotation_sigma &gt;&#61; <span class="hljs-number">0.0</span>);
+    assert(translation_sigma &gt;&#61; <span class="hljs-number">0.0</span>);
+
+    <span class="hljs-comment">//先添加路标点&#xff0c;用到了前面定义的PerturbPoint3()函数</span>
+    <span class="hljs-keyword">double</span>* points &#61; mutable_points();
+    <span class="hljs-keyword">if</span>(point_sigma &gt; <span class="hljs-number">0</span>)
+    {
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_points_; &#43;&#43;i)
+        {
+            PerturbPoint3(point_sigma, points &#43; <span class="hljs-number">3</span> * i);
+        }
+    }
+
+    <span class="hljs-comment">//这里相机是被分成两块&#xff0c;旋转和平移&#xff0c;</span>
+    <span class="hljs-comment">//旋转是考虑到四元数形式&#xff0c;增加了一步用CameraToAngelAxisAndCenter()从camera中取出三维的angle_axis,</span>
+    <span class="hljs-comment">//然后添加噪声&#xff0c;添加完后再用AngleAxisAndCenterToCamera()重构camera参数</span>
+    <span class="hljs-comment">//平移部分就直接用PerturbPoint3()添加了</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i &#61; <span class="hljs-number">0</span>; i &lt; num_cameras_; &#43;&#43;i)
+    {
+        <span class="hljs-keyword">double</span>* camera &#61; mutable_cameras() &#43; camera_block_size() * i;
+
+        <span class="hljs-keyword">double</span> angle_axis[<span class="hljs-number">3</span>];
+        <span class="hljs-keyword">double</span> center[<span class="hljs-number">3</span>];
+        <span class="hljs-comment">// Perturb in the rotation of the camera in the angle-axis</span>
+        <span class="hljs-comment">// representation</span>
+        <span class="hljs-comment">//取出angle_axis</span>
+        CameraToAngelAxisAndCenter(camera, angle_axis, center);
+        <span class="hljs-keyword">if</span>(rotation_sigma &gt; <span class="hljs-number">0.0</span>)
+        {
+            <span class="hljs-comment">//添加噪声</span>
+            PerturbPoint3(rotation_sigma, angle_axis);
+        }
+        <span class="hljs-comment">//重构camera</span>
+        AngleAxisAndCenterToCamera(angle_axis, center,camera);
+
+        <span class="hljs-comment">//平移部分直接添加噪声</span>
+        <span class="hljs-keyword">if</span>(translation_sigma &gt; <span class="hljs-number">0.0</span>)
+            PerturbPoint3(translation_sigma, camera &#43; camera_block_size() - <span class="hljs-number">6</span>);
+    }
+}</code></pre>
+                </div>
+                <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/markdown_views-d7a94ec6ab.css" rel="stylesheet">
+                <link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/style-49037e4d27.css" rel="stylesheet">
+        </div>
+    </article>
+</div>
+<div class="more-toolbox-new" id="toolBarBox">
+    <div class="left-toolbox">
+        <div class="toolbox-left">
+            <div class="profile-box"><a class="profile-href" target="_blank" href="https://blog.csdn.net/robinhjwy"><img class="profile-img" src="https://profile.csdnimg.cn/2/B/2/3_robinhjwy"><span class="profile-name">robinhjwy</span></a></div>
+            <div class="profile-attend">
+                    <a class="tool-attend tool-bt-button tool-bt-attend" href="javascript:;" data-report-view='{"mod":"1592215036_002","spm":"1001.2101.3001.4232","extend1":"关注"}'>关注</a>
+                <a class="tool-item-follow active-animation" style="display:none;">关注</a>
+            </div>
+        </div>
+        <div class="toolbox-middle">
+        <ul class="toolbox-list">
+            <li class="tool-item tool-item-size tool-active is-like" id="is-like">
+            <a class="tool-item-href">
+                <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt="">
+                <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2021Active.png" alt="">
+                <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2021White.png" alt="">  
+                <span id="spanCount" class="count ">
+                        4
+                </span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">点赞</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike">
+            <a class="tool-item-href">
+                <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newUnHeart2021Active.png" alt="">
+                <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newUnHeart2021White.png" alt="">
+                <span id="unlikeCount" class="count "></span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">踩</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-item-comment">
+            <a class="tool-item-href" href="#commentBox">
+                <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newComment2021White.png" alt="">
+                <span class="count">
+                    2
+                </span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">评论</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-collection ">
+            <a class="tool-item-href" href="javascript:;" data-report-click='{"mod":"popu_824","spm":"1001.2101.3001.4130","ab":"new"}'>
+                <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive.png" alt="">
+                <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectWhite.png" alt="">
+                <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt="">
+                <span class="count get-collection " id="get-collection">
+                    3
+                </span>
+            </a>
+            <div class="tool-hover-tip"><span class="text space">收藏</span></div>
+            </li>
+            <li class="tool-item tool-active">
+                <a class="" href="javascript:;">
+                    <img class="company active" id="health-companies" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHealthCompanies1Active.gif" alt="一键三连">
+                </a>
+                <div class="tool-hover-tip three-click"><span class="text">一键三连</span></div>
+            </li>
+            <li class="tool-item tool-item-bar">
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-QRcode" id="tool-share">
+                <a class="tool-item-href" href="javascript:;" data-report-click='{"mod":"1582594662_002","spm":"1001.2101.3001.4129","ab":"new"}'>
+                    <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newShareWhite.png" alt="">
+                </a>
+                <div class="QRcode" id="tool-QRcode">
+                    <p class="title">
+                    扫一扫，分享海报
+                    </p>
+                    <div id='shareCode'></div>
+                </div>
+            </li>
+        </ul>
+        </div>
+        <div class="toolbox-right">
+                <div class="tool-directory">
+                    <a class="bt-columnlist-show"
+                    data-id="7301364"
+                    data-free="true"
+                    data-subscribe="false"
+                    data-title="14讲程序注释"
+                    data-img="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64"
+                    data-url="https://blog.csdn.net/robinhjwy/category_7301364.html"
+                    data-sum="26"
+                    data-people="54"
+                    data-price="0"
+                    data-oldprice="0"
+                    data-join="false"
+                    data-studyvip="false"
+                    data-studysubscribe="false"
+                    data-report-view='{"spm":"1001.2101.3001.6334","extend1":"专栏目录"}'
+                    data-report-click='{"spm":"1001.2101.3001.6334","extend1":"专栏目录"}'
+                    >专栏目录</a>
+                </div>
+        </div>
+    </div>  
+</div>
+<script type=text/javascript crossorigin src="https://csdnimg.cn/release/phoenix/production/qrcode-7c90a92189.min.js"></script>
+<script src="//g.csdnimg.cn/??sharewx/1.2.1/sharewx.js" type="text/javascript"></script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/user-login/3.0.1/user-login.js"></script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/collection-box/2.0.6/collection-box.js"></script>
+                <div id="dmp_ad_58" style="width:100%;overflow-x:hidden"><div id="kp_box_58" data-pid="58"><iframe  src="https://kunpeng-sc.csdnimg.cn/?timestamp=1623163941/#/preview/8353?positionId=58&queryWord=&spm=1001.2101.3001.5002" frameborder="0" width= "100%"  height= "75px" scrolling="no" ></iframe><img class="pre-img-lasy"  data-src="https://kunyu.csdn.net/1.png?p=58&a=5096&c=8353&k=&spm=1001.2101.3001.5002&d=1&t=3&u=c080be9c782e4688ba425beffc4bf3bf" style="display: block;width: 0px;height: 0px;"></div></div>
+            <div class="second-recommend-box recommend-box">
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/JohnnyYeh/article/details/82315543"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"1","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/JohnnyYeh/article/details/82315543" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"1","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543"}'  data-report-query='spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">《视觉SLAM十四讲》中<em>第十章</em>代码中雅克比的具体形式推导</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/JohnnyYeh" target="_blank"><span class="blog-title">JohnnyYeh的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-03</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					2643
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/JohnnyYeh/article/details/82315543" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.1","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-1.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"1","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/JohnnyYeh/article/details/82315543"}'  data-report-query='spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">在上一篇文章《视觉SLAM十四讲》<em>第十章</em><em>g2o</em>代码的简化中，求解<em>BA</em>的雅克比矩阵，我直接使用了<em>g2o</em>的数值导，因为这个雅克比矩阵自己写还真的很容易出错，不过还是有一些小伙伴想要了解具体的形式，所以在这一篇文章中会具体进行推导。
+
+1 雅克比矩阵数学推导
+
+    如果对数学推导不感兴趣的，可以直接跳到代码那里看，另外这里会使用李群和李代数的知识，不清楚的可以看一下《...</div>
+			</a>
+		</div>
+	</div>
+</div>
+            </div>
+<a id="commentBox" name="commentBox"></a>
+<div class="comment-box">
+	<div class="comment-edit-box d-flex">
+		<a id="commentsedit"></a>
+		<div class="user-img">
+			<a href="https://blog.csdn.net/weixin_46326425" target="_blank">
+				<img class="" src="https://profile.csdnimg.cn/E/9/2/3_weixin_46326425">
+			</a>
+		</div>
+		<form id="commentform">
+			<img class="comment-sofa-flag" src="https://csdnimg.cn/release/blogv2/dist/pc/img/commentFlag@2x.png">
+      <textarea class="comment-content" name="comment_content" id="comment_content" placeholder="请发表有价值的评论， 博客评论不欢迎灌水，良好的社区氛围需大家一起维护。" maxlength="1000"></textarea>
+			<div class="comment-emoticon"><img class="comment-emoticon-img" data-url="https://csdnimg.cn/release/blogv2/dist/pc/img/" src="https://csdnimg.cn/release/blogv2/dist/pc/img/emoticon.png" alt="表情包"></div> 
+      <span class="comment-emoticon-tip">插入表情</span>
+      <div class="comment-emoticon-box">
+        <div class="comment-emoticon-img-box"></div>
+			</div>
+      <div class="opt-box">
+				<div id="ubbtools" class="add_code">
+					<a href="#insertcode" code="code" target="_self"><i class="icon iconfont icon-daima"></i></a>
+				</div>
+				<input type="hidden" id="comment_replyId" name="comment_replyId">
+				<input type="hidden" id="article_id" name="article_id" value="78189096">
+				<input type="hidden" id="comment_userId" name="comment_userId" value="">
+				<input type="hidden" id="commentId" name="commentId" value="">
+				<div class="dropdown" id="myDrap">
+					<a class="dropdown-face d-flex align-items-center" data-toggle="dropdown" role="button"
+						aria-haspopup="true" aria-expanded="false">
+						<div class="txt-selected text-truncate">添加代码片</div>
+						<svg class="icon d-block" width="200px" height="100.00px" viewBox="0 0 2048 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path  d="M597.33333292 298.666667h853.333334L1023.99999992 725.333333 597.33333292 298.666667z"  /></svg>
+					</a>
+					<ul class="dropdown-menu" id="commentCode" aria-labelledby="drop4">
+						<li><a data-code="html">HTML/XML</a></li>
+						<li><a data-code="objc">objective-c</a></li>
+						<li><a data-code="ruby">Ruby</a></li>
+						<li><a data-code="php">PHP</a></li>
+						<li><a data-code="csharp">C</a></li>
+						<li><a data-code="cpp">C++</a></li>
+						<li><a data-code="javascript">JavaScript</a></li>
+						<li><a data-code="python">Python</a></li>
+						<li><a data-code="java">Java</a></li>
+						<li><a data-code="css">CSS</a></li>
+						<li><a data-code="sql">SQL</a></li>
+						<li><a data-code="plain">其它</a></li>
+					</ul>
+				</div>
+				<div class="right-box" id="rightBox" data-type="2">
+							<span id="tip_comment" class="tip">还能输入<em>1000</em>个字符</span>
+							<a data-report-click='{"mod":"1582594662_003","spm":"1001.2101.3001.4227","ab":"new"}'><input type="submit"
+									class="btn btn-sm btn-comment" value="发表评论"></a>
+				</div>
+			</div>
+		</form>
+		<input type="button" class="bt-comment-show" value="评论">
+	</div>
+	<div class="comment-list-container">
+		<a id="comments"></a>
+		<div class="comment-list-box">
+		</div>
+		<div id="commentPage" class="pagination-box d-none"></div>
+		<div class="opt-box text-center">
+			<div class="btn btn-sm btn-link-blue" id="btnMoreComment"></div>
+		</div>
+	</div>
+</div>            <div class="recommend-box insert-baidu-box">
+                <div class="recommend-item-box clearfix" style="display:none"></div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/qq_40213457/article/details/80691908"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"2","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/qq_40213457/article/details/80691908"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/qq_40213457/article/details/80691908" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"2","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/qq_40213457/article/details/80691908"}'  data-report-query='spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>第十</em>讲 <em>g2o</em>_<em>cu</em><em>sto</em>n<em>bundle</em>/<em>common</em>/<em>pr</em>ojection.h和<em>Bundle</em>Params.h</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/qq_40213457" target="_blank"><span class="blog-title">qq_40213457的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">06-14</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					242
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/qq_40213457/article/details/80691908" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.2","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-2.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"2","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/qq_40213457/article/details/80691908"}'  data-report-query='spm=1001.2101.3001.6650.2&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-2.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">这个<em>类</em>实现了整个投影过程，对应书上10.2.1里面一直到图10-2&nbsp;#ifndef <em>PR</em>OJECTION_H
+#define <em>PR</em>OJECTION_H
+
+#include &quot;tools/rotation.h&quot;
+
+/**
+ * 这个头文件中只有一个内联函数:带畸变的相机投影
+ * inline bool Cam<em>Pr</em>ojectionWithDi<em>sto</em>rtion(<em>co</em>n<em>st</em> T* camera, <em>co</em>n...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/robinhjwy/article/details/78189240"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-3.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"3","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78189240"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/robinhjwy/article/details/78189240" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-3.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"3","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78189240"}'  data-report-query='spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>第十章</em><em>g2o</em>_<em>custom</em><em>bundle</em>/<em>g2o</em>_<em>bundle</em>.cpp</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/robinhjwy" target="_blank"><span class="blog-title">robinhjwy的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">10-10</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1535
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/robinhjwy/article/details/78189240" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.3","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-3.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"3","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78189240"}'  data-report-query='spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">代码解读</div>
+			</a>
+		</div>
+	</div>
+</div>
+		<dl id="recommend-item-box-tow" class="recommend-item-box type_blog clearfix">
+			
+		</dl>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/robinhjwy/article/details/78152245"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-4.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"4","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78152245"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/robinhjwy/article/details/78152245" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-4.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"4","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78152245"}'  data-report-query='spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1"><em>第十章</em><em>g2o</em>_<em>custom</em><em>bundle</em>中的<em>common</em>文件夹中的<em>Bundle</em>Params.h</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/robinhjwy" target="_blank"><span class="blog-title">robinhjwy的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">10-02</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					625
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/robinhjwy/article/details/78152245" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.4","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-4.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"4","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78152245"}'  data-report-query='spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-4.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">程序解读</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/CGJustDoIT/article/details/108537503"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-5.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"5","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/CGJustDoIT/article/details/108537503"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/CGJustDoIT/article/details/108537503" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-5.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"5","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/CGJustDoIT/article/details/108537503"}'  data-report-query='spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-5.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-5.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">slam 基本算法 ---  使用【Ceres】进行slam中<em>BA</em>问题求解 （理论+实践）</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/CGJustDoIT" target="_blank"><span class="blog-title">CGJustDoIT的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-11</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					552
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/CGJustDoIT/article/details/108537503" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.5","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-5.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"5","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/CGJustDoIT/article/details/108537503"}'  data-report-query='spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-5.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-5.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">slam 基本算法 ---  使用【Ceres】进行slam中<em>BA</em>问题求解 （理论+实践）注1. 简要2. ceres求解关键步骤2.1 定义误差项结构2.2 构建 <em>BA</em> 问题2.3 配置求解器并求解3.3 代码实践
+注
+ceres 相比<em>g2o</em> 能自动对误差项关于优化变量的导数求导，简易方便很多；
+后续再具体的原理，这里先暂时应用。
+1. 简要
+ceres 解<em>BA</em> 官方链接： http://www.ceres-solver.org/nnls_tutori<em>al</em>.html#<em>bundle</em>-adju<em>st</em>ment
+B</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/qq_34935373/article/details/93494460"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-6.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"6","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/qq_34935373/article/details/93494460"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/qq_34935373/article/details/93494460" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-6.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"6","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/qq_34935373/article/details/93494460"}'  data-report-query='spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">Ceres库，从入门到放弃</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/qq_34935373" target="_blank"><span class="blog-title">工大机器人工作室</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">06-24</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1万+
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/qq_34935373/article/details/93494460" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.6","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-6.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"6","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/qq_34935373/article/details/93494460"}'  data-report-query='spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">前言
+
+首先当然是安装了，安装十分简单。
+
+官网文件有很多人翻译了，例如：https://<em>bl</em>og.csdn.net/wzheng92/article/details/79634069
+
+使用Ceres库主要来求解有界约束的非线性最小二乘问题的形式：
+
+
+
+求和符号后面的我们称之为误差项。这里我们称 &rho;(&middot;)为核函数。一般为恒等的函数（这个函数可以针对不同部分对误差的权重进行调整）；官方文件称之为...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/qq_36170626/article/details/100743411"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-7.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"7","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/qq_36170626/article/details/100743411"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/qq_36170626/article/details/100743411" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-7.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"7","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/qq_36170626/article/details/100743411"}'  data-report-query='spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">视觉SLAM之后端优化（一）</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/qq_36170626" target="_blank"><span class="blog-title">sunshine</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-11</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					925
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/qq_36170626/article/details/100743411" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.7","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-7.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"7","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/qq_36170626/article/details/100743411"}'  data-report-query='spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-7.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1"><em>bundle</em>_adju<em>st</em>ment_ceres.cpp
+
+
+#include &lt;io<em>st</em>ream&gt;
+#include &lt;ceres/ceres.h&gt;
+#include &quot;<em>common</em>.h&quot;
+#include &quot;SnavelyRe<em>pr</em>ojectionError.h&quot;
+
+using namespace <em>st</em>d;
+
+void Solve<em>BA</em>(<em>BALProblem</em> &amp;<em>ba</em>...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/pj18862486309/article/details/108374415"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-8.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"8","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/pj18862486309/article/details/108374415"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/pj18862486309/article/details/108374415" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-8.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"8","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/pj18862486309/article/details/108374415"}'  data-report-query='spm=1001.2101.3001.6650.8&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">视觉十四讲:<em>BA</em>优化_<em>g2o</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/pj18862486309" target="_blank"><span class="blog-title">penuel</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-02</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					513
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/pj18862486309/article/details/108374415" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.8","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-8.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"8","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/pj18862486309/article/details/108374415"}'  data-report-query='spm=1001.2101.3001.6650.8&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-8.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">1.投影模型和<em>BA</em>代价函数
+
+这个流程就是观测方程
+之前抽象的记为：  \(z = h（x, y）\)
+现在给出具体的参数话过程，x指此时相机的位姿R,t，它对应的李代数为\(\xi\)。路标y即为这里的三维点p，而观测数据则是像素坐标(u,v)。
+此次观测的误差为：  \(e = z - h(\xi, p)\)
+如果把其他时刻的观测量也考虑进来，则整体的代价函数为：
+
+相当于对位姿和3...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/yongniao9185/article/details/112299843"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-9.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"9","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/yongniao9185/article/details/112299843"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/yongniao9185/article/details/112299843" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-9.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"9","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/yongniao9185/article/details/112299843"}'  data-report-query='spm=1001.2101.3001.6650.9&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-9.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-9.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">《视觉SLAM十四讲》<em>第十</em>讲<em>g2o</em>求解<em>BA</em>问题报错解决办法</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/yongniao9185" target="_blank"><span class="blog-title">yongniao9185的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">01-06</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					435
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/yongniao9185/article/details/112299843" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.9","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-9.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"9","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/yongniao9185/article/details/112299843"}'  data-report-query='spm=1001.2101.3001.6650.9&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-9.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-9.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">问题描述：
+编译报错如下：
+/h<em>om</em>e/xxx/sla<em>mb</em>ook/ch10/<em>g2o</em>_<em>custom</em><em>bundle</em>/<em>g2o</em>_<em>bundle</em>.cpp: In function &lsquo;void SetMinimizerOptions(<em>st</em>d::shared_ptr&lt;<em>g2o</em>::<em>Bl</em><em>oc</em>kSolver&lt;<em>g2o</em>::<em>Bl</em><em>oc</em>kSolverTraits&lt;9, 3&gt; &gt; &gt;&amp;, <em>co</em>n<em>st</em> <em>Bundle</em>Params&amp;, <em>g2o</em>::SparseOptimizer*)&rsquo;:
+/h<em>om</em>e/x</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/windxf/article/details/107942915"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-10.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"10","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/windxf/article/details/107942915"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/windxf/article/details/107942915" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-10.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"10","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/windxf/article/details/107942915"}'  data-report-query='spm=1001.2101.3001.6650.10&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-10.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-10.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">SLAM14讲-ch10/<em>g2o</em>_<em>custom</em><em>Bundle</em></div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/windxf" target="_blank"><span class="blog-title">南北粉面馆</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">08-11</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					96
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/windxf/article/details/107942915" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.10","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~CTRLIST~default-10.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"10","strategy":"2~default~CTRLIST~default","dest":"https://blog.csdn.net/windxf/article/details/107942915"}'  data-report-query='spm=1001.2101.3001.6650.10&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-10.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-10.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">节点的定义，<em>g2o</em>_<em>ba</em>l_class.h，基本没什么问题
+class VertexCamera<em>BA</em>L : pu<em>bl</em>ic <em>g2o</em>::<em>Ba</em>seVertex&lt;9,Eigen::VectorXd&gt;
+{
+pu<em>bl</em>ic:
+    EIGEN_MAKE_<em>AL</em>IGNED_OPERATOR_NEW;
+    VertexCamera<em>BA</em>L() {}
+
+    virtu<em>al</em> bool read ( <em>st</em>d::i<em>st</em>ream&amp; /*is*/ )
+    {
+        return f<em>al</em>se;
+  </div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/weixin_41394379/article/details/87831026"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-11.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"11","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/weixin_41394379/article/details/87831026"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/weixin_41394379/article/details/87831026" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-11.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"11","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/weixin_41394379/article/details/87831026"}'  data-report-query='spm=1001.2101.3001.6650.11&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-11.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-11.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">SLAM十四讲<em>第十章</em><em>g2o</em>_<em>custom</em><em>bundle</em>注释</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/weixin_41394379" target="_blank"><span class="blog-title">Asgard</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">02-20</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1086
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/weixin_41394379/article/details/87831026" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.11","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-11.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"11","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/weixin_41394379/article/details/87831026"}'  data-report-query='spm=1001.2101.3001.6650.11&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-11.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-11.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1"><em>g2o</em>_<em>custom</em><em>bundle</em>&mdash;<em>g2o</em>自适应求导的<em>BA</em>
+工程组织结构
+包括<em>common</em>，ceres，data以及<em>g2o</em>求解程序<em>g2o</em>_<em>ba</em>l_class和<em>g2o</em>_<em>bundle</em>
+一、 <em>common</em>：
+通用工具模块。
+包含一些通用的基本工具，如命令读取和解析，会用到的简单数学工具（生成随机数、旋转各种形式的转换），参数设置，基本投影模型以及点云数据集文件的读写。
+分别对应五部分：**flags、to...</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/robinhjwy/article/details/78084210"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BLOGCOLUMN~default-12.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"12","strategy":"2~default~BLOGCOLUMN~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78084210"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/robinhjwy/article/details/78084210" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BLOGCOLUMN~default-12.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"12","strategy":"2~default~BLOGCOLUMN~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78084210"}'  data-report-query='spm=1001.2101.3001.6650.12&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-12.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-12.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">关于关于高博3d2d程序报错的改动</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/robinhjwy" target="_blank"><span class="blog-title">robinhjwy的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-25</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					1万+
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/robinhjwy/article/details/78084210" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.12","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BLOGCOLUMN~default-12.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"12","strategy":"2~default~BLOGCOLUMN~default","dest":"https://blog.csdn.net/robinhjwy/article/details/78084210"}'  data-report-query='spm=1001.2101.3001.6650.12&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-12.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-12.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">首先说明主题：没文化真可怕</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/robinhjwy/article/details/77801950"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BLOGCOLUMN~default-13.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"13","strategy":"2~default~BLOGCOLUMN~default","dest":"https://blog.csdn.net/robinhjwy/article/details/77801950"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/robinhjwy/article/details/77801950" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BLOGCOLUMN~default-13.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"13","strategy":"2~default~BLOGCOLUMN~default","dest":"https://blog.csdn.net/robinhjwy/article/details/77801950"}'  data-report-query='spm=1001.2101.3001.6650.13&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-13.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-13.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">3d2d代码中的一些解读</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/robinhjwy" target="_blank"><span class="blog-title">robinhjwy的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-02</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					3794
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/robinhjwy/article/details/77801950" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.13","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BLOGCOLUMN~default-13.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"13","strategy":"2~default~BLOGCOLUMN~default","dest":"https://blog.csdn.net/robinhjwy/article/details/77801950"}'  data-report-query='spm=1001.2101.3001.6650.13&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-13.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBLOGCOLUMN%7Edefault-13.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">SLAM14讲代码阅读</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/Ares_WangZiquan/article/details/114106947"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-14.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"14","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/Ares_WangZiquan/article/details/114106947"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/Ares_WangZiquan/article/details/114106947" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-14.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"14","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/Ares_WangZiquan/article/details/114106947"}'  data-report-query='spm=1001.2101.3001.6650.14&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">编程基础（2）：文件读写</div>
+					<div class="tag">最新发布</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/Ares_WangZiquan" target="_blank"><span class="blog-title">Ares_WangZiquan的博客</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">02-26</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					60
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/Ares_WangZiquan/article/details/114106947" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.14","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-14.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"14","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/Ares_WangZiquan/article/details/114106947"}'  data-report-query='spm=1001.2101.3001.6650.14&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-14.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">编程基础（2）：文件读写前言一、C++文件读写1.基本概念与主要使用函数2.光束法平差文件读取使用案例二、使用步骤2.读入数据总结
+
+前言
+专门列出一章文件读写，主要是因为之前的知识较为零散，想汇总起来以供参考。本文在初稿撰写时只加入了较为简单的C++标准下文件读写，后续会加入较为复杂的目录寻找等Python标准下的写作规范。
+
+提示：以下是本篇文章正文内容，下面案例可供参考
+一、C++文件读写
+1.基本概念与主要使用函数
+提到文件读写，较为简单并且基本够用的做法是使用一下四个函数：
+（1）FILE *fp</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/liangxanhai/article/details/8026496"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-15.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"15","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/liangxanhai/article/details/8026496"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/liangxanhai/article/details/8026496" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-15.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"15","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/liangxanhai/article/details/8026496"}'  data-report-query='spm=1001.2101.3001.6650.15&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">fscanf（）函数详解</div>
+					<div class="tag">热门推荐</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/liangxanhai" target="_blank"><span class="blog-title">liangxanhai的专栏</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">09-27</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					21万+
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/liangxanhai/article/details/8026496" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.15","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-15.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"15","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/liangxanhai/article/details/8026496"}'  data-report-query='spm=1001.2101.3001.6650.15&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-15.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">以前解析有规律的文件的时候要么用正则表达式，要么就是傻傻的自己写程序来解析有规律的文件。今天突然发现c的库函数中有一个现成的可以解析有规律的文件的函数，就是fscanf（）函数。哎 以前自己做了这么多无用功，在这里详细解析一下fscanf函数：
+
+fscanf（）函数（有点像正则表达式）：
+功 能: 从一个流中执行格式化输入,fscanf遇到空格和换行时结束，注意空格时也结束。
+用 法:i</div>
+			</a>
+		</div>
+	</div>
+</div>
+<div class="recommend-item-box type_blog clearfix" data-url="https://blog.csdn.net/HUAJUN998/article/details/76165511"  data-report-view='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-16.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"16","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/HUAJUN998/article/details/76165511"}'>
+	<div class="content-box">
+		<div class="content-blog display-flex">
+			<div class="title-box">
+				<a href="https://blog.csdn.net/HUAJUN998/article/details/76165511" class="tit" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-16.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"16","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/HUAJUN998/article/details/76165511"}'  data-report-query='spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link'>
+					<div class="left ellipsis-online ellipsis-online-1">Ceres-Solver学习笔记(3)</div>
+				</a>
+			</div>
+			<div class="info-box display-flex">
+				<div class="info">
+					<a href="https://blog.csdn.net/HUAJUN998" target="_blank"><span class="blog-title">少年的此间</span></a>
+				</div>
+				<div class="info display-flex">
+					<span class="info-block time">07-26</span>
+					<span class="info-block read"><img class="read-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					6264
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="desc-box">
+			<a href="https://blog.csdn.net/HUAJUN998/article/details/76165511" target="_blank"  data-report-click='{"ab":"new","spm":"1001.2101.3001.6650.16","mod":"popu_387","extra":"{\"highlightScore\":0.0,\"utm_medium\":\"distribute.pc_relevant.none-task-blog-2~default~BlogCommendFromBaidu~default-16.no_search_link\",\"dist_request_id\":\"1636224829446_31859\"}","dist_request_id":"1636224829446_31859","ab_strategy":"ctrlist","index":"16","strategy":"2~default~BlogCommendFromBaidu~default","dest":"https://blog.csdn.net/HUAJUN998/article/details/76165511"}'  data-report-query='spm=1001.2101.3001.6650.16&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-16.no_search_link'>
+				<div class="desc ellipsis-online ellipsis-online-1">Ceres <em>BA</em>的例子</div>
+			</a>
+		</div>
+	</div>
+</div>
+            </div>
+            <div class="template-box">
+                <span>©️2021 CSDN</span>
+                <span>皮肤主题: 编程工作室</span>
+                <span> 设计师:CSDN官方博客</span>
+                <span>
+                    <a href="https://blog.csdn.net/" class="back-home c-blue c-blue-hover c-blue-focus">返回首页</a>
+                </span>
+            </div>
+<div class="blog-footer-bottom" style="margin-top:10px;"></div>
+<script src="https://g.csdnimg.cn/common/csdn-footer/csdn-footer.js" data-isfootertrack="false" type="text/javascript"></script>
+<script type="text/javascript">
+    window.csdn.csdnFooter.options = {
+        el: '.blog-footer-bottom',
+        type: 2
+    }
+</script>        </main>
+<aside class="blog_container_aside">
+	<div id="asideProfile" class="aside-box">
+    <div class="profile-intro d-flex">
+        <div class="avatar-box d-flex justify-content-center flex-column">
+            <a href="https://blog.csdn.net/robinhjwy" data-report-click='{"mod":"popu_379","spm":"1001.2101.3001.4121","dest":"https://blog.csdn.net/robinhjwy","ab":"new"}'>
+                <img src="https://profile.csdnimg.cn/2/B/2/3_robinhjwy" class="avatar_pic">
+            </a>
+        </div>
+        <div class="user-info d-flex flex-column profile-intro-name-box">
+            <div class="profile-intro-name-boxTop">
+                <a href="https://blog.csdn.net/robinhjwy" class="" id="uid" title="robinhjwy" data-report-click='{"mod":"popu_379","spm":"1001.2101.3001.4122","dest":"https://blog.csdn.net/robinhjwy","ab":"new"}'>
+                    <span class="name " username="robinhjwy">robinhjwy</span>
+                </a>
+                <span>
+                </span>
+                <span class="flag expert-blog">
+                <span class="bubble">CSDN认证博客专家</span>
+                </span>
+                <span class="flag company-blog">
+                <span class="bubble">CSDN认证企业博客</span>
+                </span>
+            </div>
+            <div class="profile-intro-name-boxFooter">
+                <span class="personal-home-page personal-home-years">码龄5年</span>
+                    <span class="personal-home-page">
+                    <a class="personal-home-certification" href="https://i.csdn.net/#/uc/profile?utm_source=14998968" target="_blank" title="暂无认证">
+                    <img src="https://csdnimg.cn/identity/nocErtification.png" alt="">
+                    暂无认证
+                    </a>
+                    </span>
+            </div>
+        </div>
+    </div>
+    <div class="data-info d-flex item-tiling">
+        <dl class="text-center" title="83">
+            <a href="https://blog.csdn.net/robinhjwy" data-report-click='{"mod":"1598321000_001","spm":"1001.2101.3001.4310"}' data-report-query="t=1">  
+                <dt><span class="count">83</span></dt>
+                <dd class="font">原创</dd>
+            </a>
+        </dl>
+        <dl class="text-center" data-report-click='{"mod":"1598321000_002","spm":"1001.2101.3001.4311"}' title="135396">
+            <a href="https://blog.csdn.net/rank/list/weekly" target="_blank">
+                <dt><span class="count">13万+</span></dt>
+                <dd class="font">周排名</dd>
+            </a>
+        </dl>
+        <dl class="text-center" title="772133">
+            <a href="https://blog.csdn.net/rank/list/total" data-report-click='{"mod":"1598321000_003","spm":"1001.2101.3001.4312"}' target="_blank">
+                <dt><span class="count">77万+</span></dt>
+                <dd class="font">总排名</dd>
+            </a>
+        </dl>
+        <dl class="text-center" style="min-width:58px" title="300099">  
+            <dt><span class="count">30万+</span></dt>
+            <dd>访问</dd>
+        </dl>
+        <dl class="text-center" title="5级,点击查看等级说明">
+            <dt><a href="https://blog.csdn.net/blogdevteam/article/details/103478461" target="_blank">
+                <img class="level" src="https://csdnimg.cn/identity/blog5.png">
+            </a>
+            </dt>
+            <dd>等级</dd>
+        </dl>
+    </div>
+    <div class="item-rank"></div>
+    <div class="data-info d-flex item-tiling">
+        <dl class="text-center" title="3125">
+            <dt><span class="count">3125</span></dt>
+            <dd>积分</dd>
+        </dl>
+         <dl class="text-center" id="fanBox" title="370">
+            <dt><span class="count" id="fan">370</span></dt>
+            <dd>粉丝</dd>
+        </dl>
+        <dl class="text-center" title="313">
+            <dt><span class="count">313</span></dt>
+            <dd>获赞</dd>
+        </dl>
+        <dl class="text-center" title="160">
+            <dt><span class="count">160</span></dt>
+            <dd>评论</dd>
+        </dl>
+        <dl class="text-center" title="1019">
+            <dt><span class="count">1019</span></dt>
+            <dd>收藏</dd>
+        </dl>
+    </div>
+    <div class="aside-box-footer" data-report-view='{"spm":"3001.4296"}'>
+        <div class="badge-box d-flex">
+            <div class="badge d-flex">
+                <div class="icon-badge" title="持之以恒">
+                    <div class="mouse-box">
+                        <img class="medal-img" data-report-click='{"spm":"3001.4296"}' src="https://csdnimg.cn/medal/chizhiyiheng@240.png" alt="持之以恒">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-intro-name-boxOpration">
+        <div class="opt-letter-watch-box">
+        <a class="bt-button personal-letter" href="https://im.csdn.net/chat/robinhjwy" target="_blank" rel="noopener">私信</a>
+        </div>
+        <div class="opt-letter-watch-box"> 
+            <a class="personal-watch bt-button" id="btnAttent" >关注</a>  
+        </div>
+    </div>
+</div>
+<div id="asideSearchArticle" class="aside-box">
+	<div class="aside-content search-comter">
+    <div class="aside-search aside-search-blog">         
+        <input type="text" class="input-serch-blog" name="" autocomplete="off" value="" id="search-blog-words" placeholder="搜博主文章">
+        <a class="btn-search-blog">
+                    <img src="//csdnimg.cn/cdn/content-toolbar/csdn-sou.png?v=1587021042">
+        </a>
+    </div>
+    </div>
+</div>
+
+
+<div id="asideHotArticle" class="aside-box">
+	<h3 class="aside-title">热门文章</h3>
+	<div class="aside-content">
+		<ul class="hotArticle-list">
+			<li>
+				<a href="https://blog.csdn.net/robinhjwy/article/details/79174914" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/robinhjwy/article/details/79174914","ab":"new"}'>
+				RANSAC算法理解
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">103399</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/robinhjwy/article/details/77620924" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/robinhjwy/article/details/77620924","ab":"new"}'>
+				OpenCV中ORB特征点检测和匹配简单用法
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">20267</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/robinhjwy/article/details/78084210" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/robinhjwy/article/details/78084210","ab":"new"}'>
+				关于关于高博3d2d程序报错的改动
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">14664</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/robinhjwy/article/details/77334189" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/robinhjwy/article/details/77334189","ab":"new"}'>
+				sophus库的一些使用
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">13612</span>
+                </a>
+			</li>
+			<li>
+				<a href="https://blog.csdn.net/robinhjwy/article/details/79660323" target="_blank"  data-report-click='{"mod":"popu_541","spm":"1001.2101.3001.4139","dest":"https://blog.csdn.net/robinhjwy/article/details/79660323","ab":"new"}'>
+				ros_hostname与ros_ip
+					<img src="https://csdnimg.cn/release/blogv2/dist/pc/img/readCountWhite.png" alt="">
+					<span class="read">9561</span>
+                </a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="asideCategory" class="aside-box flexible-box">
+    <h3 class="aside-title">分类专栏</h3>
+    <div class="aside-content">
+        <ul>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_6962821.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_6962821.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756928.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">C++</span>
+                    </span>
+                    <span class="count float-right">4篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7116131.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7116131.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">概率论</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7116134.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7116134.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">SLAM库使用</span>
+                    </span>
+                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7129284.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7129284.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">OpenCV库使用</span>
+                    </span>
+                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7295530.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7295530.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756926.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">OpenCV学习</span>
+                    </span>
+                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7301362.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7301362.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">STL</span>
+                    </span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7301364.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7301364.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">14讲程序注释</span>
+                    </span>
+                    <span class="count float-right">26篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7301377.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7301377.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">c++primerplus</span>
+                    </span>
+                    <span class="count float-right">19篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7310265.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7310265.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">Linux-Ubuntu</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7332138.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7332138.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756738.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">面试问题</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7353054.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7353054.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">鸟哥的Linux私房菜基础篇第三版</span>
+                    </span>
+                    <span class="count float-right">5篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7356828.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7356828.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756923.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">CMake相关</span>
+                    </span>
+                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7420725.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7420725.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">软件安装</span>
+                    </span>
+                    <span class="count float-right">3篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7426475.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7426475.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756780.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">算法相关</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7428981.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7428981.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756928.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">RGDB-SLAM</span>
+                    </span>
+                    <span class="count float-right">6篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7442771.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7442771.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">CLion使用小技巧</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7466831.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7466831.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">ROS</span>
+                    </span>
+                    <span class="count float-right">2篇</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7466832.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7466832.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">Raspberry Pi</span>
+                    </span>
+                </a>
+            </li>
+            <li class="">
+                <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7655554.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7655554.html","ab":"new"}'>
+                    <img src="https://img-blog.csdnimg.cn/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                    <span class="title oneline">
+                        <span class="text">图漾相关</span>
+                    </span>
+                    <span class="count float-right">1篇</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <p class="text-center">
+        <a class="flexible-btn" data-fbox="aside-archive"><img class="look-more" src="https://csdnimg.cn/release/blogv2/dist/pc/img/arrowDownWhite.png" alt=""></a>
+    </p>
+</div>
+<div id="asideNewComments" class="aside-box">
+    <h3 class="aside-title">最新评论</h3>
+    <div class="aside-content">
+        <ul class="newcomment-list">
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/robinhjwy/article/details/80273174#comments_18780491" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/80273174#comments_18780491","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/80273174#comments_18780491","ab":"new"}'>图漾深度摄像头基本使用方法</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/chu_chu_train" class="user-name" target="_blank">讴歌自由之风: </a>
+                    <span class="code-comments">确实，我刚刚发现 复制的代码不好用</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/robinhjwy/article/details/77232158#comments_17884441" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/77232158#comments_17884441","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/77232158#comments_17884441","ab":"new"}'>eigen求特征值和特征向量</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/weixin_52873742" class="user-name" target="_blank">weixin_52873742: </a>
+                    <span class="code-comments">为什么特征向量不正确</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/robinhjwy/article/details/79336084#comments_17852945" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/79336084#comments_17852945","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/79336084#comments_17852945","ab":"new"}'>RGBD-SLAM学习6</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/qq_36738025" class="user-name" target="_blank">qq_36738025: </a>
+                    <span class="code-comments">我想问个问题，在这个过程中，优化的目标函数是（X2-T12）^2+（X3-T12T23）^2+（X4-T12T23T34）+......(  )^2吗</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/robinhjwy/article/details/79251133#comments_17325015" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/79251133#comments_17325015","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/79251133#comments_17325015","ab":"new"}'>文件页面头部This file does not belong to any project target, code insight features might not work properly</a>
+                <p class="comment ellipsis">
+                    <a href="https://wangwq1311.blog.csdn.net" class="user-name" target="_blank">满目星辰wwq: </a>
+                    <span class="code-comments">可以不错，要把include和src都改</span>
+                </p>
+            </li>
+            <li>
+                <a class="title text-truncate" target="_blank" href="https://blog.csdn.net/robinhjwy/article/details/78198106#comments_15545022" data-report-click='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/78198106#comments_15545022","ab":"new"}' data-report-view='{"mod":"popu_542","spm":"1001.2101.3001.4231","dest":"https://blog.csdn.net/robinhjwy/article/details/78198106#comments_15545022","ab":"new"}'>第十章ceres优化部分</a>
+                <p class="comment ellipsis">
+                    <a href="https://blog.csdn.net/weixin_44554973" class="user-name" target="_blank">weixin_44554973: </a>
+                    <span class="code-comments">您好，请问一下common文件夹在哪里？</span>
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="asideNewNps" class="aside-box">
+    <h3 class="aside-title">您愿意向朋友推荐“博客详情页”吗？</h3>
+    <div class="aside-content">
+        <ul class="newnps-list">
+            <li class="newnps-item" data-type="强烈不推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel1.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey1.png" alt="">
+                </div>
+                <div class="newnps-text">强烈不推荐</div>
+            </li>
+            <li class="newnps-item" data-type="不推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel2.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey2.png" alt="">
+                </div>
+                <div class="newnps-text">不推荐</div>
+            </li>
+            <li class="newnps-item" data-type="一般般">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel3.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey3.png" alt="">
+                </div>
+                <div class="newnps-text">一般般</div>
+            </li>
+            <li class="newnps-item" data-type="推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel4.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey4.png" alt="">
+                </div>
+                <div class="newnps-text">推荐</div>
+            </li>
+            <li class="newnps-item" data-type="强烈推荐">
+                <div class="newnps-img-box">
+                    <img class="newnps-img active" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeel5.png" alt="">
+                    <img class="newnps-img default" src="https://csdnimg.cn/release/blogv2/dist/pc/img/npsFeelGrey5.png" alt="">
+                </div>
+                <div class="newnps-text">强烈推荐</div>
+            </li>
+        </ul>
+        <div class="newnps-form-box">
+        <div class="newnps-form">
+            <input type="text" placeholder="请输入建议或反馈后点击提交" class="newnps-input">
+            <span class="newnps-btn">提交</span>
+        </div>
+        </div>
+    </div>
+</div>
+<div id="asideArchive" class="aside-box" style="display:block!important; width:300px;">
+    <h3 class="aside-title">最新文章</h3>
+    <div class="aside-content">
+        <ul class="inf_list clearfix">
+            <li class="clearfix">
+            <a href="https://blog.csdn.net/robinhjwy/article/details/80273174" target="_blank" data-report-click='{"mod":"popu_382","spm":"1001.2101.3001.4136","dest":"https://blog.csdn.net/robinhjwy/article/details/80273174","ab":"new"}' data-report-view='{"mod":"popu_382","dest":"https://blog.csdn.net/robinhjwy/article/details/80273174","ab":"new"}'>图漾深度摄像头基本使用方法</a>
+            </li>
+            <li class="clearfix">
+            <a href="https://blog.csdn.net/robinhjwy/article/details/79969305" target="_blank" data-report-click='{"mod":"popu_382","spm":"1001.2101.3001.4136","dest":"https://blog.csdn.net/robinhjwy/article/details/79969305","ab":"new"}' data-report-view='{"mod":"popu_382","dest":"https://blog.csdn.net/robinhjwy/article/details/79969305","ab":"new"}'>ROS使用注意事项</a>
+            </li>
+            <li class="clearfix">
+            <a href="https://blog.csdn.net/robinhjwy/article/details/79783222" target="_blank" data-report-click='{"mod":"popu_382","spm":"1001.2101.3001.4136","dest":"https://blog.csdn.net/robinhjwy/article/details/79783222","ab":"new"}' data-report-view='{"mod":"popu_382","dest":"https://blog.csdn.net/robinhjwy/article/details/79783222","ab":"new"}'>装双系统的一些记录</a>
+            </li>
+        </ul>
+        <div class="archive-bar"></div>
+        <div class="archive-box">
+                <div class="archive-list-item"><a href="https://blog.csdn.net/robinhjwy/article/month/2018/05" target="_blank" data-report-click='{"mod":"popu_538","spm":"1001.2101.3001.4138","ab":"new","dest":""}'><span class="year">2018年</span><span class="num">16篇</span></a></div>
+                <div class="archive-list-item"><a href="https://blog.csdn.net/robinhjwy/article/month/2017/12" target="_blank" data-report-click='{"mod":"popu_538","spm":"1001.2101.3001.4138","ab":"new","dest":""}'><span class="year">2017年</span><span class="num">71篇</span></a></div>
+        </div>
+    </div>
+</div>
+	<div id="footerRightAds" class="isShowFooterAds">
+		<div class="aside-box">
+			<div id="kp_box_57" data-pid="57"><div class="_d73ej4ar8ao"></div>
+<script type="text/javascript">
+    (window.slotbydup = window.slotbydup || []).push({
+        id: "u3163270",
+        container: "_d73ej4ar8ao",
+        async: true
+    });
+</script>
+<!-- 多条广告如下脚本只需引入一次 -->
+<script type="text/javascript" src="//cpro.baidustatic.com/cpro/ui/cm.js" async="async" defer="defer" >
+</script><img class="pre-img-lasy" data-src="https://kunyu.csdn.net/1.png?p=57&a=77&c=0&k=&spm=1001.2101.3001.5001&d=1&t=3&u=0aa1e72adbfc474c88c0f38fa5e39956" style="display: block;width: 0px;height: 0px;"></div>
+		</div>
+	</div>
+    <!-- 详情页显示目录 -->
+<!--文章目录-->
+<div id="asidedirectory" class="aside-box">
+    <div class='groupfile' id="directory">
+        <h3 class="aside-title">目录</h3>
+        <div class="align-items-stretch group_item">
+            <div class="pos-box">
+            <div class="scroll-box">
+                <div class="toc-box"></div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+</aside>
+<script>
+	$("a.flexible-btn").click(function(){
+		$(this).parents('div.aside-box').removeClass('flexible-box');
+		$(this).parents("p.text-center").remove();
+	})
+</script>
+<script type="text/javascript"  src="https://g.csdnimg.cn/user-tooltip/2.5/user-tooltip.js"></script>
+<script type="text/javascript"  src="https://g.csdnimg.cn/user-medal/1.0.7/user-medal.js"></script>    </div>
+<div class="recommend-right  align-items-stretch clearfix" id="rightAside" data-type="recommend">
+    <aside class="recommend-right_aside">
+        <div id="recommend-right" >
+                        <div class='flex-column aside-box groupfile' id="groupfile">
+                <div class="groupfile-div">
+                <h3 class="aside-title">目录</h3>
+                <div class="align-items-stretch group_item">
+                    <div class="pos-box">
+                        <div class="scroll-box">
+                            <div class="toc-box"></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+                <div id="recommendAdBox">
+                    <div id="kp_box_479" data-pid="479"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- PC-博客详情页-右侧视窗（自适应） -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1076724771190722"
+     data-ad-slot="3484057394"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script><img class="pre-img-lasy" data-src="https://kunyu.csdn.net/1.png?p=479&a=3267&c=0&k=&spm=1001.2101.3001.4834&d=1&t=3&u=9bf86f3fd0f74ad48147bc7342a2d72b" style="display: block;width: 0px;height: 0px;"></div>
+                </div>
+            <div class='aside-box kind_person d-flex flex-column'>
+                    <h3 class="aside-title">分类专栏</h3>
+                    <div class="align-items-stretch kindof_item" id="kind_person_column">
+                        <div class="aside-content">
+                            <ul>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_6962821.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_6962821.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756928.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">C++</span>
+                                        </span>
+                                        <span class="count float-right">4篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7116131.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7116131.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">概率论</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7116134.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7116134.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">SLAM库使用</span>
+                                        </span>
+                                        <span class="count float-right">5篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7129284.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7129284.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">OpenCV库使用</span>
+                                        </span>
+                                        <span class="count float-right">6篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7295530.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7295530.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756926.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">OpenCV学习</span>
+                                        </span>
+                                        <span class="count float-right">2篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7301362.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7301362.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">STL</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7301364.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7301364.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">14讲程序注释</span>
+                                        </span>
+                                        <span class="count float-right">26篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7301377.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7301377.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756754.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">c++primerplus</span>
+                                        </span>
+                                        <span class="count float-right">19篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7310265.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7310265.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">Linux-Ubuntu</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7332138.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7332138.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756738.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">面试问题</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7353054.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7353054.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">鸟哥的Linux私房菜基础篇第三版</span>
+                                        </span>
+                                        <span class="count float-right">5篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7356828.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7356828.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756923.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">CMake相关</span>
+                                        </span>
+                                        <span class="count float-right">2篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7420725.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7420725.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756925.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">软件安装</span>
+                                        </span>
+                                        <span class="count float-right">3篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7426475.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7426475.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756780.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">算法相关</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7428981.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7428981.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756928.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">RGDB-SLAM</span>
+                                        </span>
+                                        <span class="count float-right">6篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7442771.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7442771.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">CLion使用小技巧</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7466831.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7466831.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756927.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">ROS</span>
+                                        </span>
+                                        <span class="count float-right">2篇</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7466832.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7466832.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756919.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">Raspberry Pi</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a class="clearfix" target="_blank" href="https://blog.csdn.net/robinhjwy/category_7655554.html" data-report-click='{"mod":"popu_537","spm":"1001.2101.3001.4137","strategy":"pc付费专栏左侧入口","dest":"https://blog.csdn.net/robinhjwy/category_7655554.html","ab":"new"}'>
+                                        <img src="https://img-blog.csdnimg.cn/20201014180756913.png?x-oss-process=image/resize,m_fixed,h_64,w_64" alt="" onerror="this.src='https://img-blog.csdnimg.cn/20201014180756922.png?x-oss-process=image/resize,m_fixed,h_64,w_64'">
+                                        <span class="title oneline">
+                                            <span class="text">图漾相关</span>
+                                        </span>
+                                        <span class="count float-right">1篇</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
+</div>
+<div class="mask-dark"></div>
+<script>
+    var articleId = 78189096;
+    var commentscount = 2;
+    var curentUrl = "https://blog.csdn.net/robinhjwy/article/details/78189096";
+    var myUrl = "https://my.csdn.net/";
+    var highlight = ["balproblem","g2ocustombundle","problem","common","custom","comm","prob","bundle","sto","lpr","com","ble","g2o","pr","oc","st","dl","mb","bl","co","und","cu","al","类","ob","ba","g2","om","lp","mon","第十章","第十","十章"];//高亮数组
+    var isRecommendModule = true;
+    var isBaiduPre = true;
+    var baiduCount = 2;
+    var share_card_url = "https://app-blog.csdn.net/share?article_id=78189096&username=robinhjwy"
+	var articleType = 1;
+    var baiduKey = "第十章g2ocustombundle/common/BALProblem类";
+    var userNewReport = false;
+    var needInsertBaidu = true;
+    var recommendRegularDomainArr = ["blog.csdn.net/.+/article/details/","download.csdn.net/download/","edu.csdn.net/course/detail/","ask.csdn.net/questions/","bbs.csdn.net/topics/","www.csdn.net/gather_.+/"]
+    var codeStyle = "";
+    var baiduSearchType = "title";
+    var canRead = true;
+    var blogMoveHomeArticle = false;
+    var showPcWindowAd = false;
+    var showHeadWord = true;
+    var showSearchText = "";
+    var linkPage = true;
+    var articleSource = 1;
+    var articleReport = '{"pid": "blog", "spm":"1001.2101"}';
+    var isShowToQuestion = false;
+    var baiduSearchChannel = 'pc_relevant'
+    var baiduSearchIdentification = '.no_search_link'
+    var distRequestId = '1636224829446_31859'
+    var initRewardObject = {
+        giver: "weixin_46326425",
+        anchor: "robinhjwy",
+        articleId: "78189096",
+        sign: "d746e258e98c37b811a09325a59d3a64",
+    }
+    var isLikeStatus = false;
+    var isUnLikeStatus = false;
+    var studyLearnWord = "赠3个月"
+</script>
+<script src="https://csdnimg.cn/public/sandalstrap/1.4/js/sandalstrap.min.js"></script>
+<div class="skin-boxshadow"></div>
+<div class="directory-boxshadow"></div>
+<div class="pay-code">
+    <div class="pay-money">实付<span class="pay-money-span" data-nowprice='' data-oldprice=''>元</span></div>
+    <div class="content-blance"><a class="blance-bt" href="javascript:;">使用余额支付</a></div>
+    <div class="content-code">
+    <div id="payCode" data-id="">
+            <div class="renovate">
+                <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-time-out.png">
+                <span>点击重新获取</span>
+            </div>
+        </div>
+        <div class="pay-style"><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/weixin.png"></span><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/zhifubao.png"></span><span><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/jingdong.png"></span><span class="text">扫码支付</span></div>
+    </div>
+    <div class="bt-close"><svg t="1567152543821" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10924" xmlns:xlink="http://www.w3.org/1999/xlink" width="12" height="12"><defs><style type="text/css"></style></defs><path d="M512 438.378667L806.506667 143.893333a52.032 52.032 0 1 1 73.6 73.621334L585.621333 512l294.485334 294.485333a52.074667 52.074667 0 0 1-73.6 73.642667L512 585.621333 217.514667 880.128a52.053333 52.053333 0 1 1-73.621334-73.642667L438.378667 512 143.893333 217.514667a52.053333 52.053333 0 1 1 73.621334-73.621334L512 438.378667z" fill="" p-id="10925"></path></svg></div>
+    <!-- <p style="margin-top: 8px;font-size: 14px;" class="text-center">支付成功即可阅读</p> -->
+    <div class="pay-balance">
+    <input type="radio" class="pay-code-radio" data-type="details"> 
+    <span class="span">钱包余额</span>
+    <span class="balance" style="color:#FC5531;font-size:14px;">0</span>  
+    <div class="pay-code-tile">
+        <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/pay-help.png" alt="">
+        <div class="pay-code-content">
+            <div class="span">
+                <p class="title">抵扣说明：</p>
+                <p> 1.余额是钱包充值的虚拟货币，按照1:1的比例进行支付金额的抵扣。<br> 2.余额无法直接购买下载，可以购买VIP、C币套餐、付费专栏及课程。</p>
+            </div>
+        </div>
+    </div>
+    </div>
+    <a class="pay-balance-con" href="https://i.csdn.net/#/wallet/balance/recharge" target="_blank"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/recharge.png" alt=""><span  >余额充值</span></a>
+</div>
+<div style="display:none;">
+	<img src="" onerror='setTimeout(function(){if(!/(csdn.net|iteye.com|baiducontent.com|googleusercontent.com|360webcache.com|sogoucdn.com|bingj.com|baidu.com)$/.test(window.location.hostname)){window.location.href="\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x63\x73\x64\x6e\x2e\x6e\x65\x74"}},3000);'>
+</div>
+</body>
+<script src="https://csdnimg.cn/release/blogv2/dist/components/js/pc_wap_highlight-a6777dccd0.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/components/js/pc_wap_common-48322534fc.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/components/js/edit_copy_code-1320dfe85c.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://csdnimg.cn/release/blog_editor_html/release1.6.12/ckeditor/plugins/codesnippet/lib/highlight/styles/atom-one-light.css">
+<script>
+ // 全局声明
+ if (window.csdn === undefined) {
+      window.csdn = {};
+    }
+    window.csdn.sideToolbar = {
+        options: {
+            report:{
+                isShow: true,
+            },
+            qr: {
+                isShow: false,
+            },
+            guide: {
+                isShow: true
+            }
+        }
+    }
+    $(function(){
+        $(document).on('click',"a.option-box[data-type='report']",function() {
+            window.csdn.userLogin.loadAjax(function(res){
+                if(userNewReport){
+                     window.csdn.feedback({
+                        "type":'blog',
+                        "rtype":'article',
+                        "rid":articleId,
+                        "reportedName":username,
+                        "submitOptions":{
+                            "title":articleTitle,
+                            "contentUrl":articleDetailUrl
+                        },
+                        "callback":function(){
+                            showToast({
+                                text: "感谢您的举报，我们会尽快审核！",
+                                bottom: '10%', //toast距离页面底部的距离
+                                zindex: 9000, //为了防止被其他控件遮盖，z-index默认为2
+                                speed: 500, //toast的显示速度
+                                time: 1500//toast显示多久以后消失
+                            });
+                        }
+                     })
+                }else{
+                    showReport(false,articleTitles);
+                }
+            })
+        });
+    })
+</script>
+    <script src="https://g.csdnimg.cn/baidu-search/1.0.9/baidu-search.js"  type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/download/old_static/js/qrcode.js"></script>
+<script src="https://g.csdnimg.cn/lib/qrcode/1.0.0/qrcode.min.js"></script>
+<script src="https://g.csdnimg.cn/user-ordercart/3.0.0/user-ordercart.js" type="text/javascript"></script>
+<script src="https://g.csdnimg.cn/user-ordertip/4.1.3/user-ordertip.js" type="text/javascript" ></script>
+<script src="https://g.csdnimg.cn/order-payment/3.0.2/order-payment.js" type="text/javascript" ></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/pc/js/common-8738548423.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/pc/js/detail-af0503e895.min.js" type="text/javascript"></script>
+<script src="https://csdnimg.cn/release/blogv2/dist/pc/js/column-c7621afc01.min.js" type="text/javascript"></script>
+<script src="https://g.csdnimg.cn/side-toolbar/3.0/side-toolbar.js" type="text/javascript"></script>
+<script src="https://g.csdnimg.cn/copyright/1.0.4/copyright.js" type="text/javascript"></script>
+<script>
+    $(".MathJax").remove();
+    if ($('div.markdown_views pre.prettyprint code.hljs').length > 0) {
+        $('div.markdown_views')[0].className = 'markdown_views';
+    }
+</script>
+<script type="text/javascript" src="https://csdnimg.cn/release/blog_mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            "HTML-CSS": {
+                    linebreaks: { automatic: true, width: "94%container" },
+                    imageFont: null
+            },
+            tex2jax: {
+                preview: "none",
+                ignoreClass:"title-article"
+            },
+            mml2jax: {
+                preview: 'none'
+            }
+    });
+</script>
+<script type="text/javascript" crossorigin src="https://g.csdnimg.cn/common/csdn-login-box/csdn-login-box.js"></script></html>

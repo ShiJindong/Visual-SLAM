@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/geometry_exercise.dir/geometry_exercise.cpp.o  -o geometry_exercise 

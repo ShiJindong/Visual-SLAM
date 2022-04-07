@@ -1,0 +1,5 @@
+旋转变量求导
+https://jinyu.li/2018/07/10/jacobian-of-rotation/
+
+SO3，so3，SE3和se3初始化以及相互转换关系
+https://blog.csdn.net/fb_941219/article/details/86154093

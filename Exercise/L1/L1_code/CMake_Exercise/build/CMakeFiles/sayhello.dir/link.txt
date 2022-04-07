@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/sayhello.dir/useHello.cpp.o  -o sayhello  -Wl,-rpath,/home/jindong/SLAM/Chap1/L1_code/CMake_Exercise/build: libhello.so 

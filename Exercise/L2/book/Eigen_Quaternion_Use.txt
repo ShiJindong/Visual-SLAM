@@ -1,0 +1,2 @@
+Eigen_四元数笔记
+https://www.cxyzjd.com/article/fb_941219/91381083
